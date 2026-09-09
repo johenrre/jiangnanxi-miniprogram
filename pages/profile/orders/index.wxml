@@ -1,0 +1,162 @@
+<theme-provider>
+<view class="orders-page">
+  <page-header title="我的订单" />
+
+  <scroll-view class="order-filters" scroll-x="{{true}}" show-scrollbar="{{false}}">
+    <view class="order-filters__track">
+      <button
+        class="order-filter {{activeFilter === item.id ? 'order-filter--active' : ''}}"
+        wx:for="{{filters}}"
+        wx:key="id"
+        data-filter="{{item.id}}"
+        bindtap="handleFilterChange"
+      >{{item.label}}</button>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{status === 'ready'}}" class="order-list">
+    <view
+      class="order-card"
+      wx:for="{{orders}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      hover-class="order-card--pressed"
+      hover-stay-time="120"
+      bindtap="handleOpenDetail"
+    >
+      <view class="order-card__header">
+        <text class="order-card__number">订单 {{item.orderNo}}</text>
+        <text class="order-card__status">{{item.statusLabel}}</text>
+      </view>
+      <view class="order-card__body">
+        <view
+          wx:if="{{item.pattern.length > 0}}"
+          class="order-card__image order-card__image--diy"
+        >
+          <image
+            class="order-card__tray"
+            src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+            mode="aspectFit"
+            binderror="handleTrayError"
+          />
+          <view class="order-card__bracelet">
+            <bracelet-preview
+              pattern="{{item.pattern}}"
+              materials="{{item.materialMap}}"
+              beadSize="{{item.beadSize}}"
+              containerSize="{{62}}"
+              preserveOnPageHide="{{true}}"
+            />
+          </view>
+        </view>
+        <image
+          wx:elif="{{item.coverUrl && !failedImages[item.id]}}"
+          class="order-card__image"
+          src="{{item.coverUrl}}"
+          mode="aspectFill"
+          data-id="{{item.id}}"
+          binderror="handleImageError"
+        />
+        <view wx:else class="order-card__image order-card__image--fallback">
+          <view class="order-card__ring"></view>
+        </view>
+        <view class="order-card__copy">
+          <text class="order-card__title">{{item.title}}</text>
+          <text class="order-card__date">{{item.createdAtText}}</text>
+          <text wx:if="{{item.itemCount > 1}}" class="order-card__item-count">共 {{item.itemCount}} 件商品</text>
+          <text wx:if="{{item.receiverText}}" class="order-card__receiver">{{item.receiverText}}</text>
+        </view>
+        <text class="order-card__amount">{{item.amountText}}</text>
+      </view>
+      <view class="order-card__footer {{item.canConfirmReceipt ? 'order-card__footer--receipt' : ''}}">
+        <text class="order-card__hint">{{item.canPay ? '订单尚未付款，可继续支付或取消' : item.canConfirmReceipt ? '收到商品后，请通过微信官方页面确认收货' : item.isAfterSale ? (item.refundReason || '售后处理中') : '订单进度持续更新'}}</text>
+        <view wx:if="{{item.canPay}}" class="order-card__actions">
+          <button
+            class="order-card__action order-card__action--muted"
+            data-id="{{item.id}}"
+            disabled="{{busyOrderId !== ''}}"
+            catchtap="handleCancelOrder"
+          >取消订单</button>
+          <button
+            class="order-card__action order-card__action--primary"
+            data-id="{{item.id}}"
+            loading="{{busyOrderId === item.id}}"
+            disabled="{{busyOrderId !== ''}}"
+            catchtap="handleContinuePayment"
+          >继续支付</button>
+          <button
+            class="order-card__action order-card__action--contact"
+            catchtap="handleContactService"
+          >联系客服</button>
+        </view>
+        <view wx:else class="order-card__actions">
+          <button
+            wx:if="{{item.hasLogistics}}"
+            class="order-card__action order-card__action--muted"
+            data-id="{{item.id}}"
+            data-order-no="{{item.orderNo}}"
+            catchtap="handleLogistics"
+          >查看物流</button>
+          <button
+            wx:if="{{item.canConfirmReceipt}}"
+            class="order-card__action order-card__action--primary"
+            data-id="{{item.id}}"
+            loading="{{busyOrderId === item.id}}"
+            disabled="{{busyOrderId !== ''}}"
+            catchtap="handleConfirmReceipt"
+          >确认收货</button>
+          <button
+            wx:if="{{item.canApplyAfterSale}}"
+            class="order-card__action"
+            data-order-no="{{item.orderNo}}"
+            catchtap="handleAfterSale"
+          >申请售后</button>
+          <button
+            class="order-card__action order-card__action--contact"
+            catchtap="handleContactService"
+          >联系客服</button>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{loadingMore}}" class="order-list__loading-more">
+      <view class="order-list__loading-dot"></view>
+      <text>正在加载更多订单</text>
+    </view>
+  </view>
+
+  <content-state
+    wx:elif="{{status === 'loading'}}"
+    status="loading"
+    title="正在加载订单"
+    description="正在同步最新交易状态"
+  />
+  <content-state
+    wx:elif="{{status === 'empty'}}"
+    status="empty"
+    title="当前没有订单"
+    description="切换其他状态，或完成下单后再来查看。"
+  />
+  <content-state
+    wx:elif="{{status === 'login'}}"
+    status="login"
+    title="登录后查看订单"
+    description="付款、制作、发货和售后进度会显示在这里。"
+    actionText="登录"
+    bindaction="handleGoLogin"
+  />
+  <content-state
+    wx:else
+    status="error"
+    title="订单加载失败"
+    description="{{errorMessage}}"
+    actionText="重新加载"
+    bindaction="handleRetry"
+  />
+
+  <customer-service-float
+    id="ordersCustomerService"
+    show-float="{{false}}"
+  />
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

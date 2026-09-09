@@ -1,0 +1,63 @@
+<view
+  wx:if="{{showFloat && qrUrls.length > 0 && floatImageUrl && (!draggableY || floatPositionReady)}}"
+  class="customer-float {{draggableY ? 'customer-float--draggable' : ''}}"
+  style="{{draggableY ? 'top: ' + floatTopPx + 'px;' : ''}}"
+  bindtap="handleFloatTap"
+  bindtouchstart="handleFloatTouchStart"
+  catchtouchmove="handleFloatTouchMove"
+  bindtouchend="handleFloatTouchEnd"
+  bindtouchcancel="handleFloatTouchEnd"
+  hover-class="customer-float--pressed"
+  hover-stay-time="90"
+  role="button"
+  aria-label="{{draggableY ? '添加客服，可上下拖动' : '添加客服'}}"
+>
+  <image
+    class="customer-float__image"
+    src="{{floatImageUrl}}"
+    mode="aspectFit"
+    binderror="handleFloatImageError"
+  />
+</view>
+
+<view
+  wx:if="{{showModal && qrUrls.length > 0}}"
+  class="customer-modal-layer"
+  catchtouchmove="handleNoop"
+>
+  <view class="customer-modal-layer__backdrop" bindtap="handleClose"></view>
+  <view
+    class="customer-modal"
+    catchtap="handleNoop"
+    role="dialog"
+    aria-label="添加客服"
+  >
+    <view
+      class="customer-modal__close"
+      bindtap="handleClose"
+      hover-class="customer-modal__close--pressed"
+      role="button"
+      aria-label="关闭"
+    >×</view>
+    <text class="customer-modal__eyebrow">CUSTOM SERVICE</text>
+    <text class="customer-modal__title">添加客服</text>
+    <text class="customer-modal__tip">长按识别二维码添加客服</text>
+
+    <view class="customer-modal__qr-shell">
+      <image
+        wx:if="{{qrUrl && !qrLoadFailed}}"
+        class="customer-modal__qr"
+        src="{{qrUrl}}"
+        mode="aspectFit"
+        show-menu-by-longpress="{{true}}"
+        binderror="handleQrError"
+      />
+      <view wx:else class="customer-modal__empty">
+        <view class="customer-modal__empty-mark">
+          <view></view><view></view><view></view>
+        </view>
+        <text>客服二维码暂未配置</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/index",
+    "phone-login-modal": "/components/phone-login-modal/index"
+  }
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <defs>
+    <linearGradient id="a" x1="32" y1="26" x2="128" y2="137" gradientUnits="userSpaceOnUse"><stop stop-color="#FAF3EF"/><stop offset="1" stop-color="#E7D6D0"/></linearGradient>
+    <linearGradient id="b" x1="54" y1="53" x2="120" y2="110" gradientUnits="userSpaceOnUse"><stop stop-color="#BC8D80"/><stop offset="1" stop-color="#9D6E63"/></linearGradient>
+  </defs>
+  <circle cx="82" cy="81" r="57" fill="url(#a)"/>
+  <circle cx="31" cy="52" r="5" fill="#DFC3BA"/>
+  <circle cx="130" cy="119" r="7" fill="#C7A99F" fill-opacity=".55"/>
+  <path d="M43 58.5c0-7.5 6-13.5 13.5-13.5h50C114 45 120 51 120 58.5v43c0 7.5-6 13.5-13.5 13.5h-50C49 115 43 109 43 101.5v-43Z" fill="#FFFEFB" stroke="#A9796E" stroke-width="3"/>
+  <path d="M43 66h77" stroke="#D8B7AE" stroke-width="8"/>
+  <path d="M91 88h30v16H91a8 8 0 0 1 0-16Z" fill="url(#b)"/>
+  <circle cx="96" cy="96" r="3.5" fill="#FFF9F5"/>
+  <path d="M56 98h18" stroke="#C49B90" stroke-width="3" stroke-linecap="round"/>
+  <path d="m117 37 3.5 7.5L128 48l-7.5 3.5L117 59l-3.5-7.5L106 48l7.5-3.5L117 37Z" fill="#C89588"/>
+</svg>

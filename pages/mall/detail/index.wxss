@@ -1,0 +1,336 @@
+.mall-detail-page {
+  min-height: 100vh;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+.mall-detail-gallery {
+  position: relative;
+  height: 730rpx;
+  overflow: hidden;
+  background: var(--color-bg-media);
+}
+
+.mall-detail-gallery__swiper,
+.mall-detail-gallery__image {
+  width: 100%;
+  height: 100%;
+}
+
+.mall-detail-gallery__counter {
+  position: absolute;
+  z-index: 3;
+  right: 24rpx;
+  bottom: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 76rpx;
+  height: 38rpx;
+  padding: 0 13rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 12rpx;
+  background: rgba(248, 247, 243, 0.92);
+  box-shadow: 0 5rpx 14rpx var(--color-shadow-soft);
+  -webkit-backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(10rpx);
+}
+
+.mall-detail-gallery__counter-text {
+  color: var(--color-primary);
+  font-size: 17rpx;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mall-detail-summary {
+  position: relative;
+  z-index: 2;
+  margin-top: -30rpx;
+  padding: 34rpx 32rpx 30rpx;
+  border-radius: 30rpx 30rpx 0 0;
+  background: var(--color-bg-page);
+}
+
+.mall-detail-summary__meta,
+.mall-detail-summary__price-row,
+.mall-detail-summary__discount-price,
+.mall-detail-assurance {
+  display: flex;
+  align-items: center;
+}
+
+.mall-detail-summary__meta {
+  justify-content: space-between;
+  color: #89938f;
+  font-size: 18rpx;
+}
+
+.mall-detail-summary__category {
+  color: var(--color-primary-light);
+  font-weight: 600;
+}
+
+.mall-detail-summary__title,
+.mall-detail-summary__subtitle {
+  display: block;
+}
+
+.mall-detail-summary__title {
+  margin-top: 17rpx;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 39rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+  line-height: 1.35;
+}
+
+.mall-detail-summary__subtitle {
+  margin-top: 11rpx;
+  color: var(--color-text-secondary);
+  font-size: 21rpx;
+  line-height: 1.65;
+}
+
+.mall-detail-summary__price-row {
+  align-items: flex-end;
+  margin-top: 22rpx;
+  color: var(--color-accent-blush-strong);
+  gap: 14rpx;
+}
+
+.mall-detail-summary__discount-price {
+  align-items: baseline;
+}
+
+.mall-detail-summary__discount-label {
+  height: 30rpx;
+  margin-right: 8rpx;
+  padding: 0 9rpx;
+  border-radius: 8rpx;
+  background: rgba(217, 163, 154, 0.15);
+  color: var(--color-accent-blush-strong);
+  font-size: 15rpx;
+  font-weight: 600;
+  line-height: 30rpx;
+}
+
+.mall-detail-summary__currency {
+  margin-right: 5rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.mall-detail-summary__price {
+  font-size: 43rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mall-detail-summary__original-price {
+  padding-bottom: 2rpx;
+  color: #a2a8a5;
+  font-size: 20rpx;
+  text-decoration: line-through;
+}
+
+.mall-detail-assurance {
+  margin-top: 28rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx solid var(--color-border-soft);
+  color: var(--color-text-secondary);
+  font-size: 18rpx;
+  gap: 15rpx;
+}
+
+.mall-detail-assurance__dot {
+  width: 5rpx;
+  height: 5rpx;
+  border-radius: 50%;
+  background: var(--color-accent-jade);
+}
+
+.mall-detail-content {
+  padding: 34rpx 24rpx 0;
+  background: #fbfaf6;
+}
+
+.mall-detail-content__heading {
+  padding: 0 8rpx 28rpx;
+}
+
+.mall-detail-content__eyebrow,
+.mall-detail-content__title,
+.mall-detail-content__description {
+  display: block;
+}
+
+.mall-detail-content__eyebrow {
+  color: #9b817b;
+  font-size: 13rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.mall-detail-content__title {
+  margin-top: 11rpx;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 32rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.mall-detail-content__description {
+  max-width: 610rpx;
+  margin-top: 12rpx;
+  color: var(--color-text-secondary);
+  font-size: 20rpx;
+  line-height: 1.65;
+}
+
+.mall-detail-content__image {
+  display: block;
+  width: 100%;
+  margin-bottom: 18rpx;
+  border-radius: 22rpx;
+  background: var(--color-bg-media);
+}
+
+.mall-detail-safe-space {
+  height: calc(142rpx + env(safe-area-inset-bottom));
+  background: #fbfaf6;
+}
+
+.mall-detail-actions {
+  position: fixed;
+  z-index: 40;
+  right: 20rpx;
+  bottom: calc(18rpx + env(safe-area-inset-bottom));
+  left: 20rpx;
+  display: flex;
+  padding: 12rpx;
+  border: 1rpx solid var(--color-border-soft);
+  border-radius: 24rpx;
+  background: var(--color-surface-glass-strong);
+  box-shadow: 0 14rpx 36rpx var(--color-shadow);
+  gap: 12rpx;
+  -webkit-backdrop-filter: blur(18rpx);
+  backdrop-filter: blur(18rpx);
+}
+
+.mall-detail-actions__button {
+  height: 78rpx;
+  margin: 0;
+  width: 0;
+  min-width: 0;
+  flex: 1 1 0;
+  border-radius: 18rpx;
+  font-size: 23rpx;
+  font-weight: 600;
+  line-height: 78rpx;
+  transition: opacity 100ms ease, transform 100ms ease;
+}
+
+.mall-detail-actions__cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  min-width: 80rpx;
+  max-width: 80rpx;
+  height: 78rpx;
+  margin: 0;
+  padding: 0;
+  flex: 0 0 80rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 18rpx;
+  background: var(--color-bg-section);
+  flex-direction: column;
+  gap: 4rpx;
+  transition: opacity 100ms ease, transform 100ms ease;
+}
+
+.mall-detail-actions__cart-icon {
+  width: 31rpx;
+  height: 31rpx;
+}
+
+.mall-detail-actions__cart-label {
+  color: var(--color-primary);
+  font-size: 14rpx;
+  line-height: 1;
+}
+
+.mall-detail-actions__cart::after,
+.mall-detail-actions__button::after,
+.mall-detail-empty__button::after {
+  display: none;
+}
+
+.mall-detail-actions__button--secondary {
+  border: 1rpx solid var(--color-border-strong);
+  background: var(--color-bg-section);
+  color: var(--color-primary);
+}
+
+.mall-detail-actions__button--primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 9rpx 22rpx var(--color-shadow-primary);
+}
+
+.mall-detail-actions__button--pressed {
+  opacity: 0.78;
+  transform: scale(0.985);
+}
+
+.mall-detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72vh;
+  padding: 80rpx 56rpx;
+  flex-direction: column;
+  text-align: center;
+}
+
+.mall-detail-empty__ring {
+  width: 104rpx;
+  height: 104rpx;
+  border: 16rpx solid rgba(111, 143, 136, 0.12);
+  border-radius: 50%;
+}
+
+.mall-detail-empty__title {
+  margin-top: 28rpx;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 30rpx;
+}
+
+.mall-detail-empty__description {
+  margin-top: 12rpx;
+  color: var(--color-text-secondary);
+  font-size: 21rpx;
+}
+
+.mall-detail-empty__button {
+  height: 70rpx;
+  margin-top: 30rpx;
+  padding: 0 32rpx;
+  border-radius: 18rpx;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 22rpx;
+  line-height: 70rpx;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mall-detail-actions__cart,
+  .mall-detail-actions__button {
+    transition: none;
+  }
+}

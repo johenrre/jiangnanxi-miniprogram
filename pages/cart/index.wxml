@@ -1,0 +1,160 @@
+<theme-provider>
+<view class="cart-page">
+  <page-header title="购物车" theme="warm" fallbackUrl="/pages/profile/index" />
+
+  <view class="cart-header">
+    <text class="cart-header__eyebrow">YOUR SELECTION</text>
+    <text class="cart-header__description">把喜欢的设计留在这里，确认细节后再从容下单。</text>
+  </view>
+
+  <view class="cart-loading" wx:if="{{status === 'loading'}}">
+    <view class="cart-loading__card" wx:for="{{[1, 2]}}" wx:key="*this">
+      <view class="cart-loading__preview"></view>
+      <view class="cart-loading__copy">
+        <view class="cart-loading__line cart-loading__line--title"></view>
+        <view class="cart-loading__line"></view>
+        <view class="cart-loading__line cart-loading__line--short"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="cart-state" wx:elif="{{status === 'login'}}">
+    <text class="cart-state__mark">人</text>
+    <text class="cart-state__title">登录后查看购物车</text>
+    <text class="cart-state__description">登录后可同步已选设计，并继续确认商品和结算。</text>
+    <button class="cart-state__button" bindtap="handleLogin">登录</button>
+  </view>
+
+  <view class="cart-state" wx:elif="{{status === 'error'}}">
+    <text class="cart-state__mark">!</text>
+    <text class="cart-state__title">购物车加载失败</text>
+    <text class="cart-state__description">{{errorMessage}}</text>
+    <button class="cart-state__button" bindtap="handleRetry">重新加载</button>
+  </view>
+
+  <view class="cart-state" wx:elif="{{status === 'empty'}}">
+    <image class="cart-state__icon" src="/assets/icons/nav-cart-muted.svg" mode="aspectFit" />
+    <text class="cart-state__title">购物车还是空的</text>
+    <text class="cart-state__description">去灵感页挑选设计，或在商城加入喜欢的商品。</text>
+    <button class="cart-state__button" bindtap="handleGoDiscover">去看灵感</button>
+  </view>
+
+  <view class="cart-list" wx:else>
+    <view class="cart-card" wx:for="{{cartItems}}" wx:key="id">
+      <button
+        class="cart-card__selector"
+        data-id="{{item.id}}"
+        catchtap="handleToggleItem"
+        disabled="{{updatingItemId !== ''}}"
+        aria-role="checkbox"
+        aria-checked="{{item.checked}}"
+        aria-label="{{item.checked ? '取消选择' : '选择商品'}}"
+      >
+        <view class="cart-check {{item.checked ? 'cart-check--checked' : ''}}" aria-hidden="true">
+          <view class="cart-check__mark" wx:if="{{item.checked}}"></view>
+        </view>
+      </button>
+
+      <view
+        class="cart-card__main"
+        data-id="{{item.id}}"
+        bindtap="handleOpenCartItem"
+        aria-role="button"
+        aria-label="{{item.itemType === 'diy_design' ? '查看结算预览' : '查看商品详情'}}"
+      >
+        <view class="cart-card__preview">
+          <bracelet-preview
+            wx:if="{{item.pattern.length > 0}}"
+            pattern="{{item.pattern}}"
+            materials="{{item.materialMap}}"
+            beadSize="{{item.beadSize}}"
+            containerSize="{{80}}"
+            preserveOnPageHide="{{true}}"
+          />
+          <image
+            wx:elif="{{item.coverUrl}}"
+            class="cart-card__image {{item.itemType === 'mall_product' ? 'cart-card__image--mall' : ''}}"
+            src="{{item.coverUrl}}"
+            mode="{{item.itemType === 'mall_product' ? 'aspectFill' : 'aspectFit'}}"
+          />
+          <view wx:else class="cart-card__fallback">{{item.itemType === 'mall_product' ? '商' : '设'}}</view>
+        </view>
+
+        <view class="cart-card__content">
+          <view class="cart-card__heading">
+            <text class="cart-card__type">{{item.typeLabel}}</text>
+            <button
+              class="cart-card__remove"
+              data-id="{{item.id}}"
+              catchtap="handleRemoveItem"
+            >删除</button>
+          </view>
+          <text class="cart-card__name">{{item.name}}</text>
+          <text class="cart-card__subtitle" wx:if="{{item.subtitle}}">{{item.subtitle}}</text>
+          <view class="cart-card__wrist" wx:if="{{item.itemType === 'diy_design'}}">
+            <text class="cart-card__wrist-label">建议净手围</text>
+            <text class="cart-card__wrist-value">{{item.wristRangeText}}</text>
+          </view>
+
+          <view class="cart-card__footer">
+            <view>
+              <text class="cart-card__price">¥{{item.lineTotalText}}</text>
+            </view>
+            <view class="cart-quantity">
+              <button
+                class="cart-quantity__button {{item.quantity <= 1 ? 'cart-quantity__button--disabled' : ''}}"
+                data-id="{{item.id}}"
+                data-delta="{{-1}}"
+                disabled="{{item.quantity <= 1 || updatingItemId === item.id}}"
+                catchtap="handleChangeQuantity"
+              >−</button>
+              <text class="cart-quantity__value">{{item.quantity}}</text>
+              <button
+                class="cart-quantity__button {{item.quantity >= 99 ? 'cart-quantity__button--disabled' : ''}}"
+                data-id="{{item.id}}"
+                data-delta="{{1}}"
+                disabled="{{item.quantity >= 99 || updatingItemId === item.id}}"
+                catchtap="handleChangeQuantity"
+              >＋</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="cart-list__safe-space"></view>
+  </view>
+
+  <view class="cart-summary" wx:if="{{status === 'ready'}}">
+    <button
+      class="cart-summary__select"
+      catchtap="handleToggleAll"
+      disabled="{{updatingItemId !== ''}}"
+      aria-role="checkbox"
+      aria-checked="{{summary.selectedLineCount === cartItems.length}}"
+      aria-label="{{summary.selectedLineCount === cartItems.length ? '取消全选' : '全选商品'}}"
+    >
+      <view
+        class="cart-check {{summary.selectedLineCount === cartItems.length ? 'cart-check--checked' : (summary.selectedLineCount > 0 ? 'cart-check--partial' : '')}}"
+        aria-hidden="true"
+      >
+        <view class="cart-check__mark" wx:if="{{summary.selectedLineCount === cartItems.length}}"></view>
+        <view class="cart-check__partial" wx:elif="{{summary.selectedLineCount > 0}}"></view>
+      </view>
+      <text>全选</text>
+    </button>
+    <view class="cart-summary__amount">
+      <text class="cart-summary__label">合计</text>
+      <text class="cart-summary__price">¥{{payableAmountText}}</text>
+      <text class="cart-summary__note">已选 {{summary.selectedQuantity}} 件</text>
+    </view>
+    <button
+      class="cart-summary__button {{summary.selectedLineCount > 0 ? '' : 'cart-summary__button--disabled'}}"
+      disabled="{{summary.selectedLineCount === 0}}"
+      bindtap="handleCheckout"
+    >结算</button>
+  </view>
+
+  <phone-login-modal id="phone-login-modal" />
+
+</view>
+</theme-provider>

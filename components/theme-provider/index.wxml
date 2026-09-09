@@ -1,0 +1,3 @@
+<view class="theme-root theme-provider {{themeClass}}">
+  <slot />
+</view>

@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "bracelet-preview": "/components/bracelet-preview/index",
+    "page-header": "/components/page-header/index",
+    "phone-login-modal": "/components/phone-login-modal/index"
+  }
+}

@@ -1,0 +1,107 @@
+<theme-provider>
+<view class="mall-detail-page">
+  <page-header title="商品详情" fallbackUrl="/pages/mall/index" />
+
+  <block wx:if="{{status === 'ready' && product}}">
+    <view class="mall-detail-gallery">
+      <swiper
+        class="mall-detail-gallery__swiper"
+        current="{{currentGalleryIndex}}"
+        circular="{{product.images.length > 1}}"
+        bindchange="handleGalleryChange"
+      >
+        <swiper-item wx:for="{{product.images}}" wx:key="*this">
+          <image class="mall-detail-gallery__image" src="{{item}}" mode="aspectFill" />
+        </swiper-item>
+      </swiper>
+      <view wx:if="{{galleryCounterText}}" class="mall-detail-gallery__counter">
+        <text class="mall-detail-gallery__counter-text">{{galleryCounterText}}</text>
+      </view>
+    </view>
+
+    <view class="mall-detail-summary">
+      <view class="mall-detail-summary__meta">
+        <text class="mall-detail-summary__category">{{product.primaryCategoryName}} · {{product.secondaryCategoryName}}</text>
+        <text class="mall-detail-summary__sold">已售 {{product.soldCount}}</text>
+      </view>
+      <text class="mall-detail-summary__title">{{product.title}}</text>
+      <text class="mall-detail-summary__subtitle">{{product.subtitle}}</text>
+      <view class="mall-detail-summary__price-row">
+        <view class="mall-detail-summary__discount-price">
+          <text class="mall-detail-summary__discount-label">折后</text>
+          <text class="mall-detail-summary__currency">¥</text>
+          <text class="mall-detail-summary__price">{{product.discountPriceText}}</text>
+        </view>
+        <text class="mall-detail-summary__original-price">¥{{product.priceText}}</text>
+      </view>
+      <view class="mall-detail-assurance">
+        <text>天然材质</text>
+        <view class="mall-detail-assurance__dot"></view>
+        <text>手工制作</text>
+        <view class="mall-detail-assurance__dot"></view>
+        <text>单件质检</text>
+      </view>
+    </view>
+
+    <view class="mall-detail-content">
+      <view class="mall-detail-content__heading">
+        <text class="mall-detail-content__eyebrow">PRODUCT NOTES</text>
+        <text class="mall-detail-content__title">商品详情</text>
+        <text class="mall-detail-content__description">自然光记录材质与手作过程，实物会保留天然晶石的细微差异。</text>
+      </view>
+      <image
+        class="mall-detail-content__image"
+        wx:for="{{product.detailImages}}"
+        wx:key="*this"
+        src="{{item}}"
+        mode="widthFix"
+        lazy-load="{{true}}"
+        data-index="{{index}}"
+        bindtap="handleDetailImageTap"
+      />
+    </view>
+
+    <view class="mall-detail-safe-space"></view>
+
+    <view class="mall-detail-actions">
+      <button
+        class="mall-detail-actions__cart"
+        bindtap="handleOpenCart"
+        hover-class="mall-detail-actions__button--pressed"
+        aria-label="打开购物车"
+      >
+        <image class="mall-detail-actions__cart-icon" src="/assets/icons/profile-cart.svg" mode="aspectFit" />
+        <text class="mall-detail-actions__cart-label">购物车</text>
+      </button>
+      <button
+        class="mall-detail-actions__button mall-detail-actions__button--secondary"
+        bindtap="handleAddToCart"
+        loading="{{actionBusy}}"
+        disabled="{{actionBusy}}"
+        hover-class="mall-detail-actions__button--pressed"
+      >加入购物车</button>
+      <button
+        class="mall-detail-actions__button mall-detail-actions__button--primary"
+        bindtap="handleBuyNow"
+        disabled="{{actionBusy}}"
+        hover-class="mall-detail-actions__button--pressed"
+      >立即购买</button>
+    </view>
+  </block>
+
+  <view class="mall-detail-empty" wx:elif="{{status === 'loading'}}">
+    <view class="mall-detail-empty__ring" aria-hidden="true"></view>
+    <text class="mall-detail-empty__title">正在加载商品</text>
+    <text class="mall-detail-empty__description">稍等一下，很快就好。</text>
+  </view>
+
+  <view class="mall-detail-empty" wx:else>
+    <view class="mall-detail-empty__ring" aria-hidden="true"></view>
+    <text class="mall-detail-empty__title">{{emptyTitle}}</text>
+    <text class="mall-detail-empty__description">{{emptyDescription}}</text>
+    <button wx:if="{{status === 'error'}}" class="mall-detail-empty__button" bindtap="handleRetry">重新加载</button>
+    <button wx:else class="mall-detail-empty__button" bindtap="handleReturnMall">返回商城</button>
+  </view>
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

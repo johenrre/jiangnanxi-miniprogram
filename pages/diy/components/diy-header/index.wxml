@@ -1,0 +1,27 @@
+<view class="diy-header">
+  <page-header title="{{title}}" theme="diy" fallbackUrl="/pages/home/index" />
+
+  <view class="diy-summary">
+    <view class="diy-summary__primary">
+      <text class="diy-summary__eyebrow">当前设计</text>
+      <view class="diy-summary__numbers">
+        <text class="diy-summary__price">¥ {{totalPriceText}}</text>
+        <view class="diy-summary__dot"></view>
+        <text class="diy-summary__count">{{beadCount}} 颗</text>
+      </view>
+    </view>
+    <view class="diy-summary__fit">
+      <text class="diy-summary__fit-label">适配手围</text>
+      <text class="diy-summary__wrist">{{wristMessage}}</text>
+    </view>
+    <button
+      class="diy-guide-button"
+      bindtap="handleOpenGuide"
+      hover-class="diy-guide-button--pressed"
+      aria-label="打开 DIY 使用须知"
+    >
+      <view class="diy-guide-button__mark" aria-hidden="{{true}}">!</view>
+      <text>使用须知</text>
+    </button>
+  </view>
+</view>

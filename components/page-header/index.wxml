@@ -1,0 +1,12 @@
+<view class="page-header page-header--{{theme}}" style="padding-top: {{menuTopPx}}px;">
+  <view class="page-header__bar" style="height: {{menuHeightPx}}px;">
+    <view wx:if="{{showBack}}" class="page-header__back" role="button" bindtap="handleBack">
+      <image class="page-header__back-icon" src="/assets/icons/back-dark.svg" mode="aspectFit" />
+    </view>
+    <view wx:else class="page-header__side"></view>
+    <text class="page-header__title">{{title}}</text>
+    <view class="page-header__side">
+      <text class="page-header__badge" wx:if="{{badge}}">{{badge}}</text>
+    </view>
+  </view>
+</view>

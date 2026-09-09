@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/index",
+    "content-state": "/components/content-state/index",
+    "bracelet-preview": "/components/bracelet-preview/index",
+    "customer-service-float": "/components/customer-service-float/index",
+    "phone-login-modal": "/components/phone-login-modal/index"
+  }
+}

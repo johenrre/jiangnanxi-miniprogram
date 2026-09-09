@@ -1,0 +1,40 @@
+/* 日系侘寂风 */
+.theme-root.theme-japanese-wabi-sabi {
+  --color-bg-page: #e9e2d7;
+  --color-bg-surface: #f7f2e9;
+  --color-bg-section: #efe8dd;
+  --color-bg-warm: #f2ebdf;
+  --color-bg-muted: #ded6c9;
+  --color-bg-media: #d5cbbd;
+  --color-bg-primary-soft: #e4ded1;
+  --color-text-heading: #3d3934;
+  --color-text-primary: #4b4640;
+  --color-text-secondary: #756e66;
+  --color-text-muted: #8b8379;
+  --color-text-faint: #a1988d;
+  --color-primary: #746f60;
+  --color-primary-light: #898373;
+  --color-primary-muted: #a19a89;
+  --color-primary-pressed: #5e594d;
+  --color-accent-jade: #9ca18a;
+  --color-accent-blush: #b68472;
+  --color-accent-blush-strong: #986b5b;
+  --color-white: #ffffff;
+  --color-divider: rgba(75, 70, 64, 0.08);
+  --color-border-hairline: rgba(75, 70, 64, 0.09);
+  --color-border-soft: rgba(116, 111, 96, 0.09);
+  --color-border: rgba(116, 111, 96, 0.14);
+  --color-border-strong: rgba(116, 111, 96, 0.22);
+  --color-shadow-soft: rgba(61, 57, 52, 0.07);
+  --color-shadow: rgba(61, 57, 52, 0.11);
+  --color-shadow-primary: rgba(94, 89, 77, 0.16);
+  --color-modal-backdrop: rgba(45, 41, 37, 0.48);
+  --color-modal-shadow: rgba(61, 57, 52, 0.18);
+  --color-surface-glass: rgba(247, 242, 233, 0.84);
+  --color-surface-glass-strong: rgba(247, 242, 233, 0.97);
+  --color-nav-surface: rgba(244, 239, 230, 0.97);
+  --color-nav-indicator: #857e6e;
+  --color-nav-ring: rgba(239, 232, 221, 0.98);
+  --color-nav-shadow: rgba(61, 57, 52, 0.12);
+  --color-nav-shadow-soft: rgba(61, 57, 52, 0.04);
+}

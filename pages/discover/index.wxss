@@ -1,0 +1,169 @@
+.discover-page {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+.discover-header {
+  padding-right: 38rpx;
+  padding-bottom: 26rpx;
+  padding-left: 38rpx;
+  background:
+    radial-gradient(circle at 84% 25%, rgba(215, 163, 154, 0.13), transparent 32%),
+    linear-gradient(180deg, var(--color-bg-warm) 0%, var(--color-bg-page) 100%);
+}
+
+.discover-header__eyebrow,
+.discover-header__title,
+.discover-header__description {
+  display: block;
+}
+
+.discover-header__eyebrow {
+  padding-top: 8rpx;
+  color: #9b817b;
+  font-size: 15rpx;
+  font-weight: 700;
+  letter-spacing: 5rpx;
+}
+
+.discover-header__title {
+  margin-top: 10rpx;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 48rpx;
+  font-weight: 500;
+  letter-spacing: 5rpx;
+  line-height: 1.25;
+}
+
+.discover-header__description {
+  max-width: 580rpx;
+  margin-top: 10rpx;
+  color: var(--color-text-secondary);
+  font-size: 21rpx;
+  line-height: 1.65;
+}
+
+.discover-filters {
+  display: flex;
+  height: 68rpx;
+  margin-top: 26rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  gap: 42rpx;
+}
+
+.discover-filter {
+  position: relative;
+  width: auto;
+  min-width: 0;
+  height: 68rpx;
+  margin: 0;
+  padding: 0 2rpx;
+  border-radius: 0;
+  color: #939b97;
+  font-size: 23rpx;
+  font-weight: 500;
+  line-height: 68rpx;
+}
+
+.discover-filter--active {
+  color: var(--color-primary-pressed);
+  font-weight: 700;
+}
+
+.discover-filter--active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1rpx;
+  left: 0;
+  height: 4rpx;
+  border-radius: 4rpx;
+  background: var(--color-primary-muted);
+  content: "";
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 24rpx 26rpx 180rpx;
+  gap: 32rpx 22rpx;
+}
+
+.discover-skeleton {
+  overflow: hidden;
+  background: transparent;
+}
+
+.discover-skeleton__media,
+.discover-skeleton__line {
+  background: linear-gradient(105deg, #e7e9e4 20%, #f3f2ed 45%, #e7e9e4 70%);
+  background-size: 220% 100%;
+  animation: discover-skeleton 1.25s ease-in-out infinite;
+}
+
+.discover-skeleton__media {
+  height: 326rpx;
+  border-radius: 20rpx;
+}
+
+.discover-skeleton__line {
+  height: 18rpx;
+  margin: 16rpx 4rpx 0;
+  border-radius: 999rpx;
+}
+
+.discover-skeleton__line--short {
+  width: 70%;
+  height: 24rpx;
+}
+
+.discover-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 350rpx;
+  margin: 30rpx 34rpx;
+  padding: 50rpx;
+  flex-direction: column;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.discover-state__title,
+.discover-state__description {
+  display: block;
+}
+
+.discover-state__title {
+  color: #4f5c58;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 29rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+
+.discover-state__description {
+  margin-top: 13rpx;
+  color: var(--color-text-muted);
+  font-size: 21rpx;
+  line-height: 1.65;
+}
+
+.discover-state__button {
+  height: 68rpx;
+  margin-top: 26rpx;
+  padding: 0 32rpx;
+  border-radius: 18rpx;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 22rpx;
+  font-weight: 600;
+  line-height: 68rpx;
+}
+
+@keyframes discover-skeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}

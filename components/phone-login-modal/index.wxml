@@ -1,0 +1,64 @@
+<view
+  wx:if="{{visible}}"
+  class="phone-login-mask"
+  catchtap="handleCancel"
+  catchtouchmove="handleNoop"
+>
+  <view class="phone-login-sheet" catchtap="handleNoop">
+    <view class="phone-login-sheet__handle"></view>
+    <text class="phone-login-sheet__eyebrow">MEMBER ACCESS</text>
+    <text class="phone-login-sheet__title">{{title}}</text>
+    <text class="phone-login-sheet__description">{{content}}</text>
+    <text wx:if="{{phoneLoginRequired}}" class="phone-login-sheet__privacy">首次登录将验证微信绑定手机号，仅用于账号识别、订单通知与售后联系。</text>
+    <text wx:else class="phone-login-sheet__privacy">登录后将恢复你的设计、订单和收货信息。</text>
+
+    <view class="phone-login-sheet__agreement">
+      <checkbox-group
+        class="phone-login-sheet__agreement-check"
+        bindchange="handleAgreementChange"
+      >
+        <label class="phone-login-sheet__agreement-label">
+          <checkbox
+            class="phone-login-sheet__agreement-checkbox"
+            value="accepted"
+            checked="{{agreementAccepted}}"
+            color="#526f67"
+          />
+          <text>我已阅读并同意</text>
+        </label>
+      </checkbox-group>
+      <text class="phone-login-sheet__agreement-link" catchtap="handleOpenUserAgreement">《用户协议》</text>
+      <text class="phone-login-sheet__agreement-separator">和</text>
+      <text class="phone-login-sheet__agreement-link" catchtap="handleOpenPrivacyGuide">《隐私保护指引》</text>
+    </view>
+
+    <view class="phone-login-sheet__actions">
+      <button
+        class="phone-login-sheet__button phone-login-sheet__button--secondary"
+        disabled="{{loginLoading}}"
+        bindtap="handleCancel"
+      >暂不登录</button>
+      <button
+        wx:if="{{phoneLoginRequired && agreementAccepted}}"
+        class="phone-login-sheet__button phone-login-sheet__button--primary"
+        open-type="getPhoneNumber"
+        loading="{{loginLoading}}"
+        disabled="{{loginLoading}}"
+        bindgetphonenumber="handlePhoneLogin"
+      >登录</button>
+      <button
+        wx:elif="{{!phoneLoginRequired && agreementAccepted}}"
+        class="phone-login-sheet__button phone-login-sheet__button--primary"
+        loading="{{loginLoading}}"
+        disabled="{{loginLoading}}"
+        bindtap="handleLogin"
+      >登录</button>
+      <button
+        wx:else
+        class="phone-login-sheet__button phone-login-sheet__button--primary phone-login-sheet__button--agreement-required"
+        disabled="{{loginLoading}}"
+        bindtap="handleAgreementRequired"
+      >登录</button>
+    </view>
+  </view>
+</view>

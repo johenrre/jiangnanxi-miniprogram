@@ -1,0 +1,21 @@
+{
+  "name": "jiangnanxi-miniprogram",
+  "version": "1.0.0",
+  "description": "珠宝小程序",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test:devtools": "node scripts/devtools-smoke.cjs",
+    "upload:check": "npm run typecheck"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "matter-js": "^0.20.0"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^2.8.3-1",
+    "miniprogram-automator": "^0.12.1",
+    "typescript": "^5.9.3"
+  }
+}

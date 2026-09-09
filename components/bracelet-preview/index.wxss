@@ -1,0 +1,54 @@
+.bracelet-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.bracelet-preview__inner {
+  position: relative;
+  flex-shrink: 0;
+  transform-origin: center;
+}
+
+.bracelet-preview__bead {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bracelet-preview__rotator {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bracelet-preview__image {
+  width: 100%;
+  height: 100%;
+}
+
+.bracelet-preview__image--accessory {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.bracelet-preview__image--accessory-center {
+  top: 50%;
+  transform-origin: 50% 50%;
+}
+
+.bracelet-preview__image--accessory-top {
+  top: 0;
+  transform-origin: 50% 0;
+}
+
+.bracelet-preview__fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}

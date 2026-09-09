@@ -1,0 +1,105 @@
+<theme-provider>
+<view class="my-designs-page">
+  <page-header title="我的设计" />
+
+  <view wx:if="{{status === 'ready'}}">
+    <view class="my-designs-summary">
+      <view>
+        <text class="my-designs-summary__eyebrow">SAVED DESIGNS</text>
+        <text class="my-designs-summary__title">已保存 {{total}} / 10</text>
+      </view>
+      <text class="my-designs-summary__description">最多保存 10 个，删除后可继续添加</text>
+    </view>
+
+    <view class="my-designs-grid">
+      <view
+        class="my-design-card"
+        wx:for="{{designs}}"
+        wx:key="id"
+      >
+        <button
+          class="my-design-card__open"
+          data-code="{{item.code}}"
+          bindtap="handleDesignTap"
+          hover-class="my-design-card--pressed"
+          aria-label="打开 {{item.name}}"
+        >
+          <view class="my-design-card__media">
+            <block wx:if="{{item.pattern && item.pattern.length}}">
+              <image
+                class="my-design-card__tray"
+                src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+                mode="aspectFit"
+                binderror="handleTrayError"
+              />
+              <view class="my-design-card__bracelet">
+                <bracelet-preview
+                  pattern="{{item.pattern}}"
+                  materials="{{item.materialMap}}"
+                  beadSize="{{item.beadSize}}"
+                  containerSize="{{122}}"
+                />
+              </view>
+            </block>
+            <image
+              wx:elif="{{item.coverUrl && !failedImages[item.id]}}"
+              class="my-design-card__image"
+              src="{{item.coverUrl}}"
+              mode="aspectFill"
+              data-id="{{item.id}}"
+              binderror="handleImageError"
+            />
+            <view wx:else class="my-design-card__fallback">
+              <view class="my-design-card__ring"></view>
+              <text>暂无预览</text>
+            </view>
+          </view>
+          <view class="my-design-card__body">
+            <text class="my-design-card__name">{{item.name}}</text>
+            <text class="my-design-card__date">{{item.createdAtText}}</text>
+          </view>
+        </button>
+        <button
+          class="my-design-card__delete"
+          data-id="{{item.id}}"
+          data-code="{{item.code}}"
+          data-name="{{item.name}}"
+          bindtap="handleDeleteTap"
+          disabled="{{deletingIds[item.id]}}"
+          aria-label="删除 {{item.name}}"
+        >{{deletingIds[item.id] ? '删除中' : '删除'}}</button>
+      </view>
+    </view>
+  </view>
+
+  <content-state
+    wx:elif="{{status === 'loading'}}"
+    status="loading"
+    title="正在加载我的设计"
+    description="正在同步已保存的方案"
+  />
+  <content-state
+    wx:elif="{{status === 'empty'}}"
+    status="empty"
+    title="还没有保存设计"
+    description="完成并保存一个 DIY 方案后，它会出现在这里。"
+  />
+  <content-state
+    wx:elif="{{status === 'login'}}"
+    status="login"
+    title="登录后查看我的设计"
+    description="已保存方案会跟随账户同步。"
+    actionText="登录"
+    bindaction="handleGoLogin"
+  />
+  <content-state
+    wx:else
+    status="error"
+    title="我的设计加载失败"
+    description="{{errorMessage}}"
+    actionText="重新加载"
+    bindaction="handleRetry"
+  />
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

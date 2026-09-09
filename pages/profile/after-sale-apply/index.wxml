@@ -1,0 +1,81 @@
+<theme-provider>
+<view class="apply-page">
+  <page-header title="{{pageTitle}}" />
+
+  <view wx:if="{{status === 'ready' && order}}" class="apply-content">
+    <view wx:if="{{isReapply}}" class="review-note">
+      <text>上次申请审核未通过</text>
+      <text>{{order.refundAdminRemark || '请补充申请信息后重新提交。'}}</text>
+    </view>
+    <view class="apply-section product-section">
+      <view class="section-title">商品信息</view>
+      <view class="product-row">
+        <image wx:if="{{order.coverUrl}}" class="product-cover" src="{{order.coverUrl}}" mode="aspectFill" />
+        <view wx:else class="product-cover product-cover--empty"><text>饰</text></view>
+        <view class="product-copy">
+          <text class="product-title">{{order.title}}</text>
+          <text class="product-order">订单 {{order.orderNo}}</text>
+        </view>
+        <text class="product-amount">{{order.amountText}}</text>
+      </view>
+    </view>
+
+    <view class="apply-section form-section">
+      <view class="form-row">
+        <text class="form-label">退款类型</text>
+        <view class="type-value"><view class="type-dot"></view><text>{{order.refundTypeLabel}}</text></view>
+      </view>
+      <picker mode="selector" range="{{refundReasons}}" value="{{reasonIndex}}" bindchange="handleReasonChange">
+        <view class="form-row form-row--interactive">
+          <text class="form-label form-label--required">退款原因</text>
+          <view class="form-value {{reason ? '' : 'form-value--placeholder'}}">
+            <text>{{reason || '请选择退款原因'}}</text><view class="chevron"></view>
+          </view>
+        </view>
+      </picker>
+      <view class="form-row">
+        <text class="form-label">退款金额</text>
+        <text class="refund-amount">{{order.amountText}}</text>
+      </view>
+    </view>
+
+    <view class="apply-section description-section">
+      <view class="section-title">申请说明 <text wx:if="{{reason === '其他问题'}}" class="required-note">必填</text></view>
+      <textarea
+        class="description-input"
+        value="{{description}}"
+        maxlength="300"
+        placeholder="请详细说明商品问题，便于商家快速处理"
+        placeholder-class="description-placeholder"
+        bindinput="handleDescriptionInput"
+      />
+      <text class="description-count">{{descriptionLength}}/300</text>
+    </view>
+
+    <view class="apply-section evidence-section">
+      <view class="section-heading">
+        <view><text class="section-title">上传凭证</text><text class="section-subtitle">选填，最多 3 张清晰图片</text></view>
+      </view>
+      <view class="evidence-grid">
+        <view class="evidence-item" wx:for="{{evidenceItems}}" wx:key="url">
+          <image class="evidence-image" src="{{item.localPath}}" mode="aspectFill" data-path="{{item.localPath}}" bindtap="handlePreviewEvidence" />
+          <view class="evidence-remove" data-index="{{index}}" catchtap="handleRemoveEvidence" role="button" aria-label="删除凭证">
+            <text aria-hidden="true">×</text>
+          </view>
+        </view>
+        <button wx:if="{{evidenceItems.length < 3}}" class="evidence-add" disabled="{{uploading}}" bindtap="handleChooseEvidence">
+          <view class="camera-mark"><view class="camera-lens"></view></view>
+          <text>{{uploading ? '上传中' : '添加凭证'}}</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <content-state wx:elif="{{status === 'loading'}}" status="loading" title="正在加载申请信息" description="正在同步订单和售后配置" />
+  <content-state wx:else status="error" title="申请信息加载失败" description="{{errorMessage}}" actionText="重新加载" bindaction="handleRetry" />
+
+  <view wx:if="{{status === 'ready'}}" class="submit-bar">
+    <button class="submit-button" loading="{{submitting}}" disabled="{{submitting || uploading}}" bindtap="handleSubmit">{{submitText}}</button>
+  </view>
+</view>
+</theme-provider>

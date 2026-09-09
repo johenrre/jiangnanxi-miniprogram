@@ -1,0 +1,77 @@
+<view class="diy-toolbar">
+  <view class="diy-tools">
+    <view class="diy-tools__cluster">
+      <button
+        class="tool-button tool-button--wrist"
+        bindtap="handleOpenWrist"
+        hover-class="tool-button--pressed"
+      >
+        <image class="tool-button__icon tool-button__icon--wrist" src="/assets/icons/ruler-dark.svg" mode="aspectFit" />
+        <text class="tool-button__label">{{selectedWristCm ? selectedWristCm + ' cm' : '设置手围'}}</text>
+      </button>
+      <button
+        class="tool-button tool-button--round"
+        bindtap="handleBackground"
+        hover-class="tool-button--pressed"
+        aria-label="切换托盘背景"
+      >
+        <image class="tool-button__icon" src="/assets/icons/bg-dark.svg" mode="aspectFit" />
+        <text class="tool-button__caption">换底</text>
+      </button>
+      <button
+        class="tool-button tool-button--round"
+        bindtap="handleClear"
+        hover-class="tool-button--pressed"
+        aria-label="清空当前设计"
+      >
+        <image class="tool-button__icon" src="/assets/icons/trash-dark.svg" mode="aspectFit" />
+        <text class="tool-button__caption">清空</text>
+      </button>
+      <button
+        class="tool-button tool-button--round tool-button--save {{canSave ? 'tool-button--save-enabled' : ''}}"
+        bindtap="handleSave"
+        disabled="{{!canSave || savingDesign}}"
+        aria-label="保存设计"
+        aria-disabled="{{!canSave || savingDesign}}"
+      >
+        <image class="tool-button__icon" src="/assets/icons/save-dark.svg" mode="aspectFit" />
+        <text class="tool-button__caption">{{savingDesign ? '保存中' : '保存'}}</text>
+      </button>
+    </view>
+
+    <button
+      class="string-button {{isStrung ? 'string-button--active' : ''}} {{stringDisabled ? 'string-button--disabled' : ''}}"
+      bindtap="handleToggleString"
+      disabled="{{stringDisabled}}"
+      hover-class="string-button--pressed"
+      aria-disabled="{{stringDisabled}}"
+    >
+      <view class="string-button__icon-shell">
+        <image class="string-button__icon" src="/assets/icons/string-white.svg" mode="aspectFit" />
+      </view>
+      <text>{{stringButtonText}}</text>
+    </button>
+  </view>
+
+  <view class="diy-search-row">
+    <view class="diy-search">
+      <image class="diy-search__icon" src="/assets/icons/search-muted.svg" mode="aspectFit" />
+      <input
+        class="diy-search__input"
+        value="{{searchQuery}}"
+        placeholder="搜索水晶、配饰或颜色"
+        placeholder-style="color:#9aa39f;font-size:20rpx;"
+        confirm-type="search"
+        bindinput="handleSearchInput"
+      />
+    </view>
+    <button
+      class="cart-button"
+      bindtap="handleAddToCart"
+      hover-class="cart-button--pressed"
+    >
+      <image class="cart-button__icon" src="/assets/icons/cart-white.svg" mode="aspectFit" />
+      <text>结算预览</text>
+    </button>
+  </view>
+</view>

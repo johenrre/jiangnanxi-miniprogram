@@ -1,0 +1,201 @@
+<theme-provider>
+  <view class="order-detail-page">
+    <page-header title="订单详情" />
+
+    <view wx:if="{{status === 'ready' && order}}" class="order-detail-content">
+      <view class="order-hero order-hero--{{order.statusTone}}">
+        <view class="order-hero__wash"></view>
+        <view class="order-hero__copy">
+          <view class="order-hero__kicker">
+            <view class="order-hero__dot"></view>
+            <text class="order-hero__eyebrow">{{order.statusEyebrow}}</text>
+          </view>
+          <text class="order-hero__title">{{order.statusLabel}}</text>
+          <text class="order-hero__description">{{order.statusDescription}}</text>
+          <view class="order-hero__amount">
+            <text>订单金额</text>
+            <text>{{order.totalAmountText}}</text>
+          </view>
+        </view>
+        <view class="order-hero__visual" aria-label="{{order.statusLabel}}状态图标">
+          <image class="order-hero__icon" src="{{order.statusIconUrl}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="detail-section address-section">
+        <view class="detail-section__heading">
+          <text class="detail-section__index">01</text>
+          <text class="detail-section__title">收货地址</text>
+        </view>
+        <view class="address-card">
+          <view class="address-card__mark">
+            <view class="address-card__pin"></view>
+          </view>
+          <view class="address-card__copy">
+            <text class="address-card__receiver">{{order.receiverName}}　{{order.receiverPhone}}</text>
+            <text class="address-card__address">{{order.addressText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="detail-section product-section">
+        <view class="detail-section__heading">
+          <text class="detail-section__index">02</text>
+          <text class="detail-section__title">商品清单</text>
+          <text class="detail-section__meta">共 {{order.totalQuantity}} 件</text>
+        </view>
+        <view class="product-list">
+          <view class="product-row" wx:for="{{order.items}}" wx:key="key">
+            <view wx:if="{{item.isDiy && item.pattern.length > 0}}" class="product-row__media product-row__media--diy">
+              <image
+                class="product-row__tray"
+                src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+                mode="aspectFit"
+                binderror="handleTrayError"
+              />
+              <view class="product-row__bracelet">
+                <bracelet-preview
+                  pattern="{{item.pattern}}"
+                  materials="{{item.materialMap}}"
+                  beadSize="{{item.beadSize}}"
+                  containerSize="{{76}}"
+                  preserveOnPageHide="{{true}}"
+                />
+              </view>
+            </view>
+            <image
+              wx:elif="{{item.coverUrl && !item.imageFailed}}"
+              class="product-row__media"
+              src="{{item.coverUrl}}"
+              mode="aspectFill"
+              data-key="{{item.key}}"
+              binderror="handleProductImageError"
+            />
+            <view wx:else class="product-row__media product-row__media--fallback">
+              <view class="product-row__fallback-ring"></view>
+            </view>
+            <view class="product-row__copy">
+              <text class="product-row__type">{{item.isDiy ? 'DIY CUSTOM' : 'CRYSTAL GOODS'}}</text>
+              <text class="product-row__title">{{item.title}}</text>
+              <text class="product-row__unit">{{item.unitPriceText}} × {{item.quantity}}</text>
+            </view>
+            <text class="product-row__subtotal">{{item.lineTotalText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="detail-section option-section">
+        <view class="detail-section__heading">
+          <text class="detail-section__index">03</text>
+          <text class="detail-section__title">结算选项</text>
+        </view>
+        <view class="option-list">
+          <view class="detail-row" wx:for="{{order.checkoutOptions}}" wx:key="groupCode">
+            <text class="detail-row__label">{{item.groupTitle}}</text>
+            <view class="detail-row__value-wrap">
+              <text class="detail-row__value">{{item.optionTitle}}</text>
+              <text class="detail-row__fee">{{item.amountText}}</text>
+            </view>
+          </view>
+          <view wx:if="{{order.greetingMessage}}" class="detail-note">
+            <text class="detail-note__label">贺卡祝福语</text>
+            <text class="detail-note__copy">{{order.greetingMessage}}</text>
+          </view>
+          <view wx:if="{{order.remark}}" class="detail-note">
+            <text class="detail-note__label">订单备注</text>
+            <text class="detail-note__copy">{{order.remark}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="detail-section info-section">
+        <view class="detail-section__heading">
+          <text class="detail-section__index">04</text>
+          <text class="detail-section__title">订单信息</text>
+        </view>
+
+        <view class="amount-panel">
+          <view class="amount-row">
+            <text>商品金额</text>
+            <text>{{order.goodsAmountText}}</text>
+          </view>
+          <view class="amount-row">
+            <text>结算选项费用</text>
+            <text>{{order.optionFeeText}}</text>
+          </view>
+          <view class="amount-row amount-row--total">
+            <text>实付金额</text>
+            <text>{{order.totalAmountText}}</text>
+          </view>
+        </view>
+
+        <view class="order-records">
+          <view class="record-row">
+            <text class="record-row__label">订单编号</text>
+            <view class="record-row__value-wrap">
+              <text class="record-row__value record-row__value--mono" user-select="{{true}}">{{order.orderNo}}</text>
+              <button class="record-row__copy" bindtap="handleCopyOrderNo">复制</button>
+            </view>
+          </view>
+          <view class="record-row">
+            <text class="record-row__label">创建时间</text>
+            <text class="record-row__value">{{order.createdTimeText}}</text>
+          </view>
+          <view wx:if="{{order.paidTimeText}}" class="record-row">
+            <text class="record-row__label">支付时间</text>
+            <text class="record-row__value">{{order.paidTimeText}}</text>
+          </view>
+          <view wx:if="{{order.payTypeText}}" class="record-row">
+            <text class="record-row__label">支付方式</text>
+            <text class="record-row__value">{{order.payTypeText}}</text>
+          </view>
+          <view wx:if="{{order.receiveTimeText}}" class="record-row">
+            <text class="record-row__label">完成时间</text>
+            <text class="record-row__value">{{order.receiveTimeText}}</text>
+          </view>
+        </view>
+
+        <view class="detail-actions">
+          <button
+            wx:if="{{order.hasLogistics}}"
+            class="detail-action detail-action--secondary"
+            bindtap="handleViewLogistics"
+          >查看物流进度</button>
+          <button
+            class="detail-action detail-action--primary"
+            bindtap="handleContactService"
+          >联系客服</button>
+        </view>
+      </view>
+    </view>
+
+    <content-state
+      wx:elif="{{status === 'loading'}}"
+      status="loading"
+      title="正在加载订单详情"
+      description="正在整理商品、地址和结算信息。"
+    />
+    <content-state
+      wx:elif="{{status === 'login'}}"
+      status="login"
+      title="登录后查看订单详情"
+      description="订单详情只对下单账号开放。"
+      actionText="登录"
+      bindaction="handleGoLogin"
+    />
+    <content-state
+      wx:else
+      status="error"
+      title="订单详情加载失败"
+      description="{{errorMessage}}"
+      actionText="重新加载"
+      bindaction="handleRetry"
+    />
+
+    <customer-service-float
+      id="orderDetailCustomerService"
+      show-float="{{false}}"
+    />
+    <phone-login-modal id="phone-login-modal" />
+  </view>
+</theme-provider>

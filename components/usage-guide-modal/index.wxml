@@ -1,0 +1,260 @@
+<view
+  class="usage-guide-layer"
+  wx:if="{{visible}}"
+  role="dialog"
+  aria-label="使用指南"
+>
+  <view class="usage-guide-layer__backdrop" bindtap="handleClose" catchtouchmove="handleNoop"></view>
+
+  <view class="usage-guide-sheet" catchtap="handleNoop">
+    <view class="usage-guide-header">
+      <text class="usage-guide-header__title">使用指南</text>
+      <view
+        class="usage-guide-header__close"
+        bindtap="handleClose"
+        hover-class="usage-guide-header__close--pressed"
+        role="button"
+        aria-label="关闭使用指南"
+      >×</view>
+    </view>
+
+    <view class="usage-guide-tabs" role="tablist" aria-label="使用指南分类">
+      <button
+        class="usage-guide-tab {{activeTab === item.key ? 'usage-guide-tab--active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="key"
+        data-tab="{{item.key}}"
+        bindtap="handleTabChange"
+        hover-class="usage-guide-tab--pressed"
+        role="tab"
+        aria-selected="{{activeTab === item.key}}"
+      >{{item.label}}</button>
+    </view>
+
+    <view class="usage-guide-divider"></view>
+
+    <view class="usage-guide-content {{activeTab === 'wrist' ? 'usage-guide-content--wrist' : ''}}">
+      <scroll-view
+        class="usage-guide-scroll"
+        wx:if="{{activeTab === 'tutorial'}}"
+        scroll-y="{{true}}"
+        show-scrollbar="{{false}}"
+        enhanced="{{true}}"
+      >
+        <view class="usage-tutorial">
+          <view class="usage-tutorial-hero">
+            <text class="usage-tutorial-hero__eyebrow">DIY WORKFLOW</text>
+            <text class="usage-tutorial-hero__title">从一颗珠子，到一串作品</text>
+            <text class="usage-tutorial-hero__description">按顺序完成六步，把灵感变成可保存、可购买的手串方案。</text>
+          </view>
+
+          <view class="usage-tutorial-section">
+            <view class="usage-tutorial-section__heading">
+              <text class="usage-tutorial-section__title">完成一串手串</text>
+              <text class="usage-tutorial-section__meta">6 STEPS</text>
+            </view>
+
+            <view class="usage-tutorial-timeline">
+              <view class="usage-tutorial-step" wx:for="{{tutorialSteps}}" wx:key="title">
+                <view class="usage-tutorial-step__rail">
+                  <text class="usage-tutorial-step__number">{{index + 1}}</text>
+                </view>
+                <view class="usage-tutorial-step__content">
+                  <text class="usage-tutorial-step__title">{{item.title}}</text>
+                  <text class="usage-tutorial-step__description">{{item.description}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view class="usage-tutorial-section">
+            <view class="usage-tutorial-section__heading">
+              <text class="usage-tutorial-section__title">灵感捷径</text>
+              <text class="usage-tutorial-section__meta">IDEAS</text>
+            </view>
+            <view class="usage-tutorial-shortcuts">
+              <view class="usage-tutorial-shortcut" wx:for="{{tutorialShortcuts}}" wx:key="title">
+                <view class="usage-tutorial-shortcut__mark"></view>
+                <view class="usage-tutorial-shortcut__content">
+                  <text class="usage-tutorial-shortcut__title">{{item.title}}</text>
+                  <text class="usage-tutorial-shortcut__description">{{item.description}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view class="usage-tutorial-section usage-tutorial-section--last">
+            <view class="usage-tutorial-section__heading">
+              <text class="usage-tutorial-section__title">实物与预览</text>
+              <text class="usage-tutorial-section__meta">MATERIAL</text>
+            </view>
+            <view class="usage-tutorial-notes">
+              <view class="usage-tutorial-note" wx:for="{{materialNotes}}" wx:key="title">
+                <text class="usage-tutorial-note__title">{{item.title}}</text>
+                <text class="usage-tutorial-note__description">{{item.description}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <scroll-view
+        class="usage-guide-scroll"
+        wx:elif="{{activeTab === 'purchase'}}"
+        scroll-y="{{true}}"
+        show-scrollbar="{{false}}"
+        enhanced="{{true}}"
+      >
+        <view class="usage-guide-state" wx:if="{{purchaseNoticeStatus === 'loading'}}">
+          <view class="usage-guide-state__spinner"></view>
+          <text>正在加载购买须知</text>
+        </view>
+
+        <view class="usage-guide-state" wx:elif="{{purchaseNoticeStatus === 'empty'}}">
+          <text>购买须知图片暂未配置</text>
+        </view>
+
+        <view class="usage-guide-state" wx:elif="{{purchaseNoticeStatus === 'error'}}">
+          <text>{{purchaseNoticeErrorMessage}}</text>
+          <button class="usage-guide-state__retry" bindtap="handleRetryPurchaseNotice">重新加载</button>
+        </view>
+
+        <view class="usage-guide-notice-images" wx:else>
+          <image
+            class="usage-guide-notice-image"
+            wx:for="{{purchaseNoticeImageUrls}}"
+            wx:key="*this"
+            src="{{item}}"
+            data-url="{{item}}"
+            mode="widthFix"
+            lazy-load="{{true}}"
+            binderror="handlePurchaseNoticeImageError"
+          />
+        </view>
+      </scroll-view>
+
+      <scroll-view
+        class="usage-guide-scroll"
+        wx:elif="{{activeTab === 'wrist'}}"
+        scroll-y="{{true}}"
+        show-scrollbar="{{false}}"
+        enhanced="{{true}}"
+      >
+        <view class="wrist-guide">
+          <image
+            class="wrist-guide-poster"
+            wx:if="{{wristMeasurementStatus === 'ready'}}"
+            src="{{wristMeasurementImageUrl}}"
+            mode="widthFix"
+            lazy-load="{{true}}"
+            binderror="handleWristMeasurementImageError"
+          />
+
+          <view class="wrist-guide-media-state" wx:elif="{{wristMeasurementStatus === 'loading'}}">
+            <view class="usage-guide-state__spinner"></view>
+            <text>正在加载手围测量指南</text>
+          </view>
+
+          <view class="wrist-guide-media-state" wx:elif="{{wristMeasurementStatus === 'error'}}">
+            <text>{{wristMeasurementErrorMessage}}</text>
+            <button class="usage-guide-state__retry" bindtap="handleRetryWristMeasurement">重新加载</button>
+          </view>
+
+          <view class="wrist-guide-media-state wrist-guide-media-state--empty" wx:else>
+            <view class="wrist-guide-paper-loop">
+              <view class="wrist-guide-paper-loop__mark"></view>
+            </view>
+            <text>手围测量指南暂未配置</text>
+          </view>
+
+          <view class="wrist-reference">
+            <view class="wrist-reference__heading">
+              <view>
+                <text class="wrist-reference__eyebrow">SIZE REFERENCE</text>
+                <text class="wrist-reference__title">常见手围参考</text>
+              </view>
+              <text class="wrist-reference__meta">CM</text>
+            </view>
+
+            <view class="wrist-reference-switch" role="tablist" aria-label="手围参考人群">
+              <button
+                class="wrist-reference-switch__button {{activeWristReference === 'female' ? 'wrist-reference-switch__button--active' : ''}}"
+                data-gender="female"
+                bindtap="handleWristReferenceChange"
+                role="tab"
+                aria-selected="{{activeWristReference === 'female'}}"
+              >女生参考</button>
+              <button
+                class="wrist-reference-switch__button {{activeWristReference === 'male' ? 'wrist-reference-switch__button--active' : ''}}"
+                data-gender="male"
+                bindtap="handleWristReferenceChange"
+                role="tab"
+                aria-selected="{{activeWristReference === 'male'}}"
+              >男生参考</button>
+            </view>
+
+            <view class="wrist-reference-note">
+              <view class="wrist-reference-note__ring">
+                <view class="wrist-reference-note__ring-inner"></view>
+              </view>
+              <text>净手围指手腕最细处测量一圈。建议贴合但不勒紧，珠径越大，成品所需内圈通常也会略大。</text>
+            </view>
+
+            <view class="wrist-reference-grid">
+              <view
+                class="wrist-reference-card"
+                wx:for="{{activeWristReference === 'female' ? femaleWristSizes : maleWristSizes}}"
+                wx:key="size"
+              >
+                <text class="wrist-reference-card__size">{{item.size}}</text>
+                <text class="wrist-reference-card__label">{{item.label}}</text>
+              </view>
+            </view>
+
+            <text class="wrist-reference__footnote">参考值仅用于快速选择，实际请以本人测量结果为准。</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <scroll-view
+        class="usage-guide-scroll"
+        wx:else
+        scroll-y="{{true}}"
+        show-scrollbar="{{false}}"
+        enhanced="{{true}}"
+      >
+        <view class="bead-size-guide">
+          <view class="bead-size-guide__intro">
+            <text class="bead-size-guide__title">选择合适的珠径</text>
+            <text class="bead-size-guide__description">珠径会影响整体比例与重量，建议按佩戴习惯选择。</text>
+            <text class="bead-size-guide__tip">8mm 轻巧日常，10mm 均衡百搭，12mm 更有存在感。</text>
+          </view>
+
+          <view class="bead-size-options" aria-label="珠子大小示意">
+            <view class="bead-size-option">
+              <view class="bead-size-option__visual">
+                <view class="bead-size-option__bead bead-size-option__bead--small"></view>
+              </view>
+              <text class="bead-size-option__value">8mm</text>
+              <text class="bead-size-option__label">精巧</text>
+            </view>
+            <view class="bead-size-option">
+              <view class="bead-size-option__visual">
+                <view class="bead-size-option__bead bead-size-option__bead--medium"></view>
+              </view>
+              <text class="bead-size-option__value">10mm</text>
+              <text class="bead-size-option__label">标准</text>
+            </view>
+            <view class="bead-size-option">
+              <view class="bead-size-option__visual">
+                <view class="bead-size-option__bead bead-size-option__bead--large"></view>
+              </view>
+              <text class="bead-size-option__value">12mm</text>
+              <text class="bead-size-option__label">醒目</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,107 @@
+<view class="material-picker">
+<scroll-view class="main-category-tabs" scroll-x enable-flex>
+  <view class="main-category-tabs__track">
+    <button
+      wx:for="{{mainCategories}}"
+      wx:key="id"
+      class="main-category {{currentCategory === item.id ? 'main-category--active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="handleCategoryTap"
+    >
+      <text>{{item.label}}</text>
+      <view class="main-category__indicator" wx:if="{{currentCategory === item.id}}"></view>
+    </button>
+  </view>
+</scroll-view>
+
+<view class="material-panel">
+  <scroll-view class="subcategory-list" scroll-y>
+    <view class="subcategory-list__inner">
+      <button
+        wx:for="{{subcategories}}"
+        wx:key="id"
+        class="subcategory {{currentSubcategory === item.id ? 'subcategory--active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="handleSubcategoryTap"
+      >{{item.label}}</button>
+    </view>
+  </scroll-view>
+
+  <scroll-view
+    class="material-grid-scroll"
+    scroll-y
+    scroll-top="{{materialScrollTop}}"
+    lower-threshold="120"
+    bindscrolltolower="handleScrollLower"
+  >
+    <view class="material-state" wx:if="{{loadingMaterials}}">
+      <view class="material-skeleton" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this">
+        <view class="material-skeleton__image"></view>
+        <view class="material-skeleton__line"></view>
+        <view class="material-skeleton__line material-skeleton__line--short"></view>
+      </view>
+    </view>
+
+    <view class="material-error" wx:elif="{{materialsError}}">
+      <text class="material-error__title">材料加载失败</text>
+      <text class="material-error__description">{{materialsError}}</text>
+      <button class="material-error__retry" bindtap="handleRetry">重新加载</button>
+    </view>
+
+    <view class="material-empty" wx:elif="{{materialGroups.length === 0}}">
+      <text>{{currentSubcategory === '__using__' ? '当前设计还没有正在使用的珠材' : '当前筛选下没有材料'}}</text>
+    </view>
+
+    <view class="material-grid" wx:else>
+      <view
+        wx:for="{{materialGroups}}"
+        wx:key="key"
+        class="material-card {{item.materials.length > 1 ? 'material-card--multi-size' : 'material-card--single-size'}} {{item.fitText ? 'material-card--with-fit' : 'material-card--plain'}}"
+        data-id="{{item.activeMaterial.id}}"
+        bindtap="handleMaterialTap"
+        hover-class="material-card--pressed"
+        hover-stay-time="70"
+      >
+        <view class="material-card__usage" wx:if="{{item.usedCount > 1}}">×{{item.usedCount}}</view>
+        <view class="material-card__media">
+          <image
+            wx:if="{{item.activeMaterial.imageUrl}}"
+            class="material-card__image"
+            src="{{item.activeMaterial.imageUrl}}"
+            mode="aspectFit"
+            lazy-load="{{true}}"
+          />
+          <view wx:else class="material-card__fallback">{{item.initial}}</view>
+        </view>
+        <view class="material-card__details">
+          <text class="material-card__name">{{item.name}}</text>
+          <text class="material-card__fit" wx:if="{{item.fitText}}">{{item.fitText}}</text>
+          <view class="material-card__meta">
+            <text>{{item.sizeLabel}}</text>
+            <text class="material-card__separator">-</text>
+            <text class="material-card__price">¥ {{item.priceLabel}}</text>
+          </view>
+        </view>
+        <view class="size-switch" wx:if="{{item.materials.length > 1}}">
+          <button
+            class="size-switch__button {{item.hasPreviousSize ? '' : 'size-switch__button--disabled'}}"
+            data-key="{{item.key}}"
+            data-direction="-1"
+            catchtap="handleSizeChange"
+            disabled="{{!item.hasPreviousSize}}"
+          >−</button>
+          <view class="size-switch__divider"></view>
+          <button
+            class="size-switch__button {{item.hasNextSize ? '' : 'size-switch__button--disabled'}}"
+            data-key="{{item.key}}"
+            data-direction="1"
+            catchtap="handleSizeChange"
+            disabled="{{!item.hasNextSize}}"
+          >+</button>
+        </view>
+      </view>
+      <text class="material-grid__more" wx:if="{{hasMoreMaterials}}">继续上滑加载更多</text>
+    </view>
+  </scroll-view>
+</view>
+</view>

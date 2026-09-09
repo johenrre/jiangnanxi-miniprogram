@@ -1,0 +1,378 @@
+<theme-provider>
+<view class="home-page">
+  <view class="hero" aria-label="首页轮播海报">
+    <block wx:if="{{heroSlides.length > 0}}">
+      <swiper
+        class="hero__swiper"
+        autoplay="{{heroAutoplayEnabled && heroSlides.length > 1}}"
+        circular="{{heroSlides.length > 1}}"
+        duration="700"
+        interval="5200"
+        bindchange="handleSlideChange"
+      >
+        <swiper-item wx:for="{{heroSlides}}" wx:key="id">
+          <view class="hero__slide">
+            <image
+              wx:if="{{item.imageUrl}}"
+              class="hero__image"
+              src="{{item.imageUrl}}"
+              mode="aspectFill"
+              data-slide-id="{{item.id}}"
+              data-image-url="{{item.imageUrl}}"
+              bindload="handleHeroImageLoad"
+              binderror="handleHeroImageError"
+            />
+            <view wx:else class="hero__image hero__image--fallback"></view>
+          </view>
+        </swiper-item>
+      </swiper>
+
+      <view class="hero__story hero__story--on-image">
+        <view class="hero__eyebrow">
+          <view class="hero__eyebrow-dot"></view>
+          <text>{{activeHeroSlide.eyebrow}}</text>
+        </view>
+        <text class="hero__title">{{activeHeroSlide.title}}</text>
+        <text class="hero__description">{{activeHeroSlide.description}}</text>
+
+        <view class="diy-launch-row">
+          <button
+            class="diy-launch"
+            hover-class="diy-launch--pressed"
+            hover-stay-time="90"
+            bindtap="handleStartDiy"
+            aria-label="开始定制，进入 DIY 工坊"
+          >
+            <text class="diy-launch__label">开始定制</text>
+            <text class="diy-launch__arrow" aria-hidden="true">→</text>
+          </button>
+        </view>
+      </view>
+    </block>
+
+    <view wx:else class="hero__fallback">
+      <view class="hero__story">
+        <text class="hero__title">{{appDisplayName}}</text>
+        <text wx:if="{{homeConfigStatus === 'loading'}}" class="hero__description">正在加载首页内容…</text>
+        <text wx:elif="{{homeConfigStatus === 'empty'}}" class="hero__description">后台暂未配置首页轮播</text>
+        <text wx:else class="hero__description">{{homeConfigErrorMessage || '首页配置暂时无法加载'}}</text>
+        <button
+          wx:if="{{homeConfigStatus === 'error'}}"
+          class="hero__retry"
+          bindtap="handleRetrySettings"
+        >重新加载</button>
+      </view>
+    </view>
+
+    <view wx:if="{{horizontalLogoImageUrl}}" class="home-brand" style="top: {{menuButtonTopPx}}px;">
+      <image
+        class="home-brand__image"
+        src="{{horizontalLogoImageUrl}}"
+        mode="widthFix"
+        binderror="handleHorizontalLogoError"
+      />
+    </view>
+
+    <view wx:if="{{heroSlides.length > 0}}" class="hero__count">
+      {{currentSlide + 1}} / {{heroSlides.length}}
+    </view>
+
+    <view wx:if="{{heroSlides.length > 0 && hasHomeMusic}}" class="hero-tools">
+      <view
+        class="hero-tool {{isHomeMusicPlaying ? 'hero-tool--active' : ''}}"
+        bindtap="handleToggleHomeMusic"
+        hover-class="hero-tool--pressed"
+        hover-stay-time="80"
+        role="button"
+        aria-label="{{isHomeMusicPlaying ? '暂停背景音乐' : '播放背景音乐'}}"
+      >
+        <view wx:if="{{isHomeMusicPlaying}}" class="music-equalizer" aria-hidden="true">
+          <view class="music-equalizer__bar music-equalizer__bar--1"></view>
+          <view class="music-equalizer__bar music-equalizer__bar--2"></view>
+          <view class="music-equalizer__bar music-equalizer__bar--3"></view>
+        </view>
+        <view wx:else class="music-note" aria-hidden="true">
+          <view class="music-note__beam"></view>
+          <view class="music-note__stem music-note__stem--left"></view>
+          <view class="music-note__stem music-note__stem--right"></view>
+          <view class="music-note__dot music-note__dot--left"></view>
+          <view class="music-note__dot music-note__dot--right"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="craft-values home-enter">
+    <view class="craft-values__grid">
+      <view class="craft-value">
+        <view class="craft-value__icon-shell" aria-hidden="true">
+          <image class="craft-value__icon" src="/assets/home/features/original-design.svg" mode="aspectFit" />
+        </view>
+        <view class="craft-value__copy">
+          <text class="craft-value__title">原创搭配</text>
+          <text class="craft-value__description">独立表达</text>
+        </view>
+      </view>
+
+      <view class="craft-value">
+        <view class="craft-value__icon-shell" aria-hidden="true">
+          <image class="craft-value__icon" src="/assets/home/features/natural-crystal.svg" mode="aspectFit" />
+        </view>
+        <view class="craft-value__copy">
+          <text class="craft-value__title">天然晶材</text>
+          <text class="craft-value__description">细选纹理</text>
+        </view>
+      </view>
+
+      <view class="craft-value">
+        <view class="craft-value__icon-shell" aria-hidden="true">
+          <image class="craft-value__icon" src="/assets/home/features/handmade-stringing.svg" mode="aspectFit" />
+        </view>
+        <view class="craft-value__copy">
+          <text class="craft-value__title">手工成串</text>
+          <text class="craft-value__description">手围调整</text>
+        </view>
+      </view>
+
+      <view class="craft-value">
+        <view class="craft-value__icon-shell" aria-hidden="true">
+          <image class="craft-value__icon" src="/assets/home/features/personal-custom.svg" mode="aspectFit" />
+        </view>
+        <view class="craft-value__copy">
+          <text class="craft-value__title">专属定制</text>
+          <text class="craft-value__description">从珠子开始</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="home-hub home-enter">
+    <view
+      class="home-hub-identity"
+      bindtap="handleOpenProfile"
+      hover-class="home-hub-identity--pressed"
+      hover-stay-time="100"
+      role="button"
+      aria-label="进入我的页面"
+    >
+      <view class="home-hub-identity__avatar-shell">
+        <image
+          wx:if="{{homeIdentityAvatarUrl}}"
+          class="home-hub-identity__avatar"
+          src="{{homeIdentityAvatarUrl}}"
+          mode="aspectFill"
+          binderror="handleHomeIdentityAvatarError"
+        />
+        <view wx:else class="home-hub-identity__avatar-fallback" aria-hidden="true">
+          <view class="home-hub-identity__avatar-ring"></view>
+          <view class="home-hub-identity__avatar-stone"></view>
+        </view>
+      </view>
+      <view class="home-hub-identity__copy">
+        <text class="home-hub-identity__name">{{homeIdentityName}}</text>
+        <text class="home-hub-identity__description">{{homeIdentityDescription}}</text>
+      </view>
+      <view
+        class="home-hub-identity__works"
+        data-url="/pages/profile/my-designs/index"
+        data-login-copy="登录后可查看已保存的作品。"
+        catchtap="handleProtectedEntry"
+        hover-class="home-hub-identity__works--pressed"
+        hover-stay-time="100"
+        role="button"
+        aria-label="我的作品 {{homeIdentityWorkCount}} 件，点击查看"
+      >
+        <text class="home-hub-identity__works-count">{{homeIdentityWorkCount}}</text>
+        <text class="home-hub-identity__works-label">我的作品</text>
+      </view>
+    </view>
+
+    <view class="home-hub__features">
+      <button
+        class="home-hub-card"
+        bindtap="handleStartDiy"
+        hover-class="home-hub-card--pressed"
+        hover-stay-time="100"
+        aria-label="开始手作，进入 DIY 页面"
+      >
+        <view class="home-hub-card__media">
+          <image
+            wx:if="{{mainHandcraftImageUrl}}"
+            class="home-hub-card__image"
+            src="{{mainHandcraftImageUrl}}"
+            mode="aspectFill"
+            lazy-load="{{true}}"
+            data-asset="mainHandcraftImageUrl"
+            binderror="handleHomeAssetError"
+          />
+          <view wx:else class="home-hub-card__image home-hub-card__image--fallback"></view>
+          <view class="home-hub-card__veil"></view>
+        </view>
+        <view class="home-hub-card__body">
+          <view class="home-hub-card__title-row">
+            <text class="home-hub-card__title">开始手作</text>
+            <text class="home-hub-card__arrow" aria-hidden="true">→</text>
+          </view>
+          <text class="home-hub-card__description">亲自选珠，串出自己的节奏</text>
+        </view>
+      </button>
+
+      <button
+        class="home-hub-card"
+        bindtap="handleViewAllDesigns"
+        hover-class="home-hub-card--pressed"
+        hover-stay-time="100"
+        aria-label="制作同款，进入灵感页"
+      >
+        <view class="home-hub-card__media">
+          <image
+            wx:if="{{mainFinishedStyleImageUrl}}"
+            class="home-hub-card__image"
+            src="{{mainFinishedStyleImageUrl}}"
+            mode="aspectFill"
+            lazy-load="{{true}}"
+            data-asset="mainFinishedStyleImageUrl"
+            binderror="handleHomeAssetError"
+          />
+          <view wx:else class="home-hub-card__image home-hub-card__image--fallback"></view>
+          <view class="home-hub-card__veil"></view>
+        </view>
+        <view class="home-hub-card__body">
+          <view class="home-hub-card__title-row">
+            <text class="home-hub-card__title">制作同款</text>
+            <text class="home-hub-card__arrow" aria-hidden="true">→</text>
+          </view>
+          <text class="home-hub-card__description">从设计师搭配里找到灵感</text>
+        </view>
+      </button>
+    </view>
+
+    <view class="home-hub__shortcuts">
+      <button
+        class="home-hub-shortcut"
+        bindtap="handleViewAllDesigns"
+        hover-class="home-hub-shortcut--pressed"
+      >
+        <view class="home-hub-shortcut__media">
+          <image wx:if="{{shortcutInspirationImageUrl}}" class="home-hub-shortcut__image" src="{{shortcutInspirationImageUrl}}" mode="aspectFill" lazy-load="{{true}}" data-asset="shortcutInspirationImageUrl" binderror="handleHomeAssetError" />
+          <view wx:else class="home-hub-shortcut__image home-hub-shortcut__image--fallback"></view>
+        </view>
+        <text class="home-hub-shortcut__label">灵感图鉴</text>
+      </button>
+
+      <button
+        class="home-hub-shortcut"
+        bindtap="handleOpenCart"
+        hover-class="home-hub-shortcut--pressed"
+      >
+        <view class="home-hub-shortcut__media">
+          <image wx:if="{{shortcutCartImageUrl}}" class="home-hub-shortcut__image" src="{{shortcutCartImageUrl}}" mode="aspectFill" lazy-load="{{true}}" data-asset="shortcutCartImageUrl" binderror="handleHomeAssetError" />
+          <view wx:else class="home-hub-shortcut__image home-hub-shortcut__image--fallback"></view>
+        </view>
+        <text class="home-hub-shortcut__label">购物车</text>
+      </button>
+
+      <button
+        class="home-hub-shortcut"
+        data-url="/pages/profile/orders/index"
+        data-login-copy="登录后可查看订单进度。"
+        bindtap="handleProtectedEntry"
+        hover-class="home-hub-shortcut--pressed"
+      >
+        <view class="home-hub-shortcut__media">
+          <image wx:if="{{shortcutOrdersImageUrl}}" class="home-hub-shortcut__image" src="{{shortcutOrdersImageUrl}}" mode="aspectFill" lazy-load="{{true}}" data-asset="shortcutOrdersImageUrl" binderror="handleHomeAssetError" />
+          <view wx:else class="home-hub-shortcut__image home-hub-shortcut__image--fallback"></view>
+        </view>
+        <text class="home-hub-shortcut__label">我的订单</text>
+      </button>
+
+      <button
+        class="home-hub-shortcut"
+        data-url="/pages/profile/my-designs/index"
+        data-login-copy="登录后可查看已保存的设计。"
+        bindtap="handleProtectedEntry"
+        hover-class="home-hub-shortcut--pressed"
+      >
+        <view class="home-hub-shortcut__media">
+          <image wx:if="{{shortcutDesignsImageUrl}}" class="home-hub-shortcut__image" src="{{shortcutDesignsImageUrl}}" mode="aspectFill" lazy-load="{{true}}" data-asset="shortcutDesignsImageUrl" binderror="handleHomeAssetError" />
+          <view wx:else class="home-hub-shortcut__image home-hub-shortcut__image--fallback"></view>
+        </view>
+        <text class="home-hub-shortcut__label">我的设计</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="activity-zone home-enter">
+    <view class="activity-zone__heading">
+      <view class="activity-zone__heading-copy">
+        <text class="activity-zone__eyebrow">CREATOR NOTES</text>
+        <text class="activity-zone__title">活动专区</text>
+        <text class="activity-zone__subtitle">记录创作，也让灵感被更多人看见</text>
+      </view>
+      <text class="activity-zone__status">进行中</text>
+    </view>
+
+    <view class="activity-card-shell">
+      <view
+        class="activity-card"
+        bindtap="handleOpenActivity"
+        hover-class="activity-card--pressed"
+        hover-stay-time="100"
+        role="button"
+        aria-label="查看灵感分享计划活动规则"
+      >
+        <image
+          wx:if="{{activityImageUrl}}"
+          class="activity-card__image"
+          src="{{activityImageUrl}}"
+          mode="aspectFill"
+          lazy-load="{{true}}"
+          data-asset="activityImageUrl"
+          binderror="handleHomeAssetError"
+        />
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{processPosterUrl}}" class="process-poster-section home-enter">
+    <view
+      class="process-poster-preview"
+      bindtap="handlePreviewProcessPoster"
+      hover-class="process-poster-preview--pressed"
+      hover-stay-time="100"
+      role="button"
+      aria-label="点击查看完整的制作与交付流程"
+    >
+      <view class="process-poster-preview__viewport">
+        <image
+          class="process-poster-preview__background"
+          src="{{processPosterUrl}}"
+          mode="scaleToFill"
+          lazy-load="{{true}}"
+          data-asset="processPosterUrl"
+          binderror="handleHomeAssetError"
+        />
+      </view>
+      <view class="process-poster-preview__hint">
+        <view class="process-poster-preview__hint-line"></view>
+        <text>点击查看完整流程</text>
+        <view class="process-poster-preview__hint-arrow" aria-hidden="true">
+          <view class="process-poster-preview__hint-arrow-line"></view>
+          <view class="process-poster-preview__hint-arrow-head"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <activity-popup
+    image-url="{{activityPopupImageUrl}}"
+    bindclose="handleCloseActivityPopup"
+    bindopen="handleOpenActivityPopup"
+    bindimageerror="handleActivityPopupImageError"
+  />
+
+  <customer-service-float />
+  <phone-login-modal id="phone-login-modal" />
+
+</view>
+</theme-provider>

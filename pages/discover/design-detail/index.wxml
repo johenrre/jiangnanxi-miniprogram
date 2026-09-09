@@ -1,0 +1,171 @@
+<theme-provider>
+<view class="design-detail-page">
+  <button class="design-detail-back" style="top: {{navTopPx}}px;" bindtap="handleBack">
+    <image class="design-detail-back__icon" src="/assets/icons/back-dark.svg" mode="aspectFit" />
+  </button>
+
+  <block wx:if="{{status === 'ready' && design}}">
+    <view class="design-detail-hero">
+      <image
+        class="design-detail-hero__tray"
+        src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+        mode="aspectFit"
+        binderror="handleTrayError"
+      />
+      <view
+        wx:if="{{design.pattern && design.pattern.length}}"
+        class="design-detail-hero__bracelet"
+      >
+        <bracelet-preview
+          pattern="{{design.pattern}}"
+          materials="{{design.materialMap}}"
+          beadSize="{{design.beadSize}}"
+          containerSize="{{300}}"
+        />
+      </view>
+      <image
+        wx:elif="{{design.coverUrl && !previewLoadFailed}}"
+        class="design-detail-hero__image"
+        src="{{design.coverUrl}}"
+        mode="aspectFit"
+        binderror="handlePreviewError"
+      />
+      <view wx:else class="design-detail-hero__fallback">
+        <view class="design-detail-hero__ring"></view>
+        <text>暂无方案预览</text>
+      </view>
+    </view>
+
+    <view class="design-detail-card">
+      <view class="design-detail-head">
+        <view class="design-detail-head__copy">
+          <text class="design-detail-head__eyebrow">{{design.section === 'designer' ? 'DESIGNER PIECE' : 'CUSTOM STORY'}}</text>
+          <text class="design-detail-head__title">{{design.name}}</text>
+          <text wx:if="{{design.subtitle}}" class="design-detail-head__description">{{design.subtitle}}</text>
+        </view>
+        <text class="design-detail-head__price">{{design.priceText}}</text>
+      </view>
+
+      <view class="design-detail-section">
+        <view class="design-detail-section__heading">
+          <text class="design-detail-section__title">实拍图</text>
+          <text wx:if="{{design.livePhotos.length > 0}}" class="design-detail-section__count">{{design.livePhotos.length}} 张</text>
+        </view>
+        <text class="design-detail-section__description">自然光拍摄，仅供材质质感参考</text>
+        <scroll-view
+          wx:if="{{design.livePhotos.length > 0}}"
+          class="design-detail-photos"
+          scroll-x="{{true}}"
+          show-scrollbar="{{false}}"
+        >
+          <view class="design-detail-photos__track">
+            <image
+              class="design-detail-photos__item"
+              wx:for="{{design.livePhotos}}"
+              wx:key="*this"
+              src="{{item}}"
+              mode="aspectFill"
+              data-index="{{index}}"
+              bindtap="handlePhotoPreview"
+            />
+          </view>
+        </scroll-view>
+        <view wx:else class="design-detail-section__empty">实拍图整理中</view>
+      </view>
+
+      <view class="design-detail-section">
+        <text class="design-detail-section__title">材质构成</text>
+        <view class="design-detail-materials" wx:if="{{design.materials.length > 0}}">
+          <view class="design-detail-materials__head">
+            <text class="design-detail-materials__name">珠材</text>
+            <text>规格</text>
+            <text>单价</text>
+            <text>数量</text>
+            <text>小计</text>
+          </view>
+          <view class="design-detail-material" wx:for="{{design.materials}}" wx:key="id">
+            <view class="design-detail-material__name-cell">
+              <image
+                wx:if="{{item.imageUrl}}"
+                class="design-detail-material__image"
+                src="{{item.imageUrl}}"
+                mode="aspectFill"
+              />
+              <view wx:else class="design-detail-material__image design-detail-material__image--fallback"></view>
+              <text class="design-detail-material__name">{{item.name}}</text>
+            </view>
+            <text class="design-detail-material__cell">{{item.sizeText}}</text>
+            <text class="design-detail-material__cell">{{item.unitPriceText}}</text>
+            <text class="design-detail-material__cell">× {{item.count}}</text>
+            <text class="design-detail-material__cell">{{item.subtotalText}}</text>
+          </view>
+        </view>
+        <view wx:else class="design-detail-section__empty">材质信息整理中</view>
+      </view>
+
+      <view class="design-detail-author">
+        <image
+          wx:if="{{design.authorAvatar && !avatarLoadFailed}}"
+          class="design-detail-author__avatar"
+          src="{{design.authorAvatar}}"
+          mode="aspectFill"
+          binderror="handleAvatarError"
+        />
+        <image
+          wx:else
+          class="design-detail-author__avatar"
+          src="/assets/profile/default-avatar.svg"
+          mode="aspectFit"
+          aria-label="默认作者头像"
+        />
+        <view class="design-detail-author__copy">
+          <text class="design-detail-author__name">{{design.section === 'customer' ? '@' : ''}}{{design.authorName}}</text>
+          <text class="design-detail-author__role">{{design.section === 'designer' ? '设计师' : '方案作者'}}</text>
+        </view>
+      </view>
+      <view class="design-detail-scroll-space"></view>
+    </view>
+
+    <view class="design-detail-bottom-bar">
+      <view class="design-detail-cart-action">
+        <button class="design-detail-cart-button" bindtap="handleOpenCart">
+          <text class="design-detail-cart-button__label">购物车</text>
+        </button>
+        <text class="design-detail-cart-button__count" wx:if="{{cartItemCount > 0}}">{{cartItemCount}}</text>
+      </view>
+      <button
+        class="design-detail-bottom-button"
+        bindtap="handleUseDesign"
+      >使用该方案</button>
+    </view>
+  </block>
+
+  <view class="design-detail-loading" wx:elif="{{status === 'loading'}}">
+    <view class="design-detail-loading__hero"></view>
+    <view class="design-detail-loading__card">
+      <view class="design-detail-loading__head">
+        <view class="design-detail-loading__line design-detail-loading__line--title"></view>
+        <view class="design-detail-loading__line design-detail-loading__line--price"></view>
+      </view>
+      <view class="design-detail-loading__line design-detail-loading__line--description"></view>
+      <view class="design-detail-loading__section">
+        <view class="design-detail-loading__line design-detail-loading__line--section-title"></view>
+        <view class="design-detail-loading__empty"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="design-detail-state" wx:elif="{{status === 'empty'}}">
+    <text class="design-detail-state__title">没有找到这个设计方案</text>
+    <text class="design-detail-state__description">方案可能已下架，或链接中的方案编号不正确。</text>
+    <button class="design-detail-state__button" bindtap="handleBack">返回灵感页</button>
+  </view>
+
+  <view class="design-detail-state" wx:else>
+    <text class="design-detail-state__title">方案详情加载失败</text>
+    <text class="design-detail-state__description">{{errorMessage}}</text>
+    <button class="design-detail-state__button" bindtap="handleRetry">重新加载</button>
+  </view>
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

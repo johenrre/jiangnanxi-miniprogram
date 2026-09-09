@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "bracelet-preview": "/components/bracelet-preview/index"
+  }
+}

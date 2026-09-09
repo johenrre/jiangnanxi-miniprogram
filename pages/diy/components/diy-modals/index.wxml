@@ -1,0 +1,284 @@
+<view class="diy-modal diy-modal--centered" wx:if="{{showSizeGuide}}">
+  <view class="diy-modal__backdrop" bindtap="handleCloseSizeGuide"></view>
+  <view
+    class="size-guide-card"
+    bindtap="handleCloseSizeGuide"
+    hover-class="size-guide-card--pressed"
+    role="button"
+    aria-label="珠子尺寸调整提示，轻触关闭"
+  >
+    <text class="size-guide-card__title">调整珠子大小</text>
+    <text class="size-guide-card__description">点击“−”缩小，点击“＋”放大</text>
+
+    <view class="size-guide-visual" aria-hidden="{{true}}">
+      <view class="size-guide-visual__bead size-guide-visual__bead--small"></view>
+      <view class="size-guide-visual__arrow"></view>
+      <view class="size-guide-visual__bead size-guide-visual__bead--medium"></view>
+      <view class="size-guide-visual__arrow"></view>
+      <view class="size-guide-visual__bead size-guide-visual__bead--large"></view>
+    </view>
+
+    <view class="size-guide-control" aria-hidden="{{true}}">
+      <text class="size-guide-control__action">−</text>
+      <text class="size-guide-control__value">8 mm</text>
+      <text class="size-guide-control__action">＋</text>
+    </view>
+  </view>
+</view>
+
+<usage-guide-modal
+  visible="{{showGuide}}"
+  initial-tab="tutorial"
+  bindclose="handleCloseGuide"
+/>
+
+<view class="diy-modal diy-modal--centered" wx:if="{{showWristPicker}}">
+  <view class="diy-modal__backdrop" bindtap="handleCloseWrist"></view>
+  <view class="wrist-card">
+    <view class="wrist-card__header">
+      <view class="wrist-card__heading">
+        <image class="wrist-card__heading-icon" src="/assets/icons/ruler-dark.svg" mode="aspectFit" />
+        <text>设置手围</text>
+      </view>
+      <view
+        class="wrist-card__close"
+        bindtap="handleCloseWrist"
+        hover-class="wrist-card__close--pressed"
+        role="button"
+        aria-label="关闭手围设置"
+      >×</view>
+    </view>
+
+    <view class="wrist-estimator">
+      <view class="wrist-scale">
+        <view class="wrist-scale__heading">
+          <text class="wrist-scale__label">身高</text>
+          <text class="wrist-scale__value">{{heightDraftCm}}<text>cm</text></text>
+        </view>
+        <view class="wrist-scale__ruler">
+          <scroll-view
+            class="wrist-scale__scroller"
+            scroll-x="{{true}}"
+            enhanced="{{true}}"
+            show-scrollbar="{{false}}"
+            scroll-with-animation="{{true}}"
+            scroll-left="{{heightScrollLeft}}"
+            data-type="height"
+            bindscroll="handleRulerScroll"
+            bindscrollend="handleRulerScrollEnd"
+          >
+            <view class="wrist-scale__track" style="width: {{heightRulerTrackWidthPx}}px;">
+              <view class="wrist-scale__edge" style="width: {{rulerEdgePx}}px; flex-basis: {{rulerEdgePx}}px;"></view>
+              <view
+                class="wrist-scale__tick {{item.major ? 'wrist-scale__tick--major' : ''}}"
+                wx:for="{{heightRulerItems}}"
+                wx:key="value"
+                style="width: {{rulerTickPx}}px; flex-basis: {{rulerTickPx}}px;"
+              >
+                <view class="wrist-scale__tick-line"></view>
+                <text class="wrist-scale__tick-label" wx:if="{{item.label}}">{{item.label}}</text>
+              </view>
+              <view class="wrist-scale__edge" style="width: {{rulerEdgePx}}px; flex-basis: {{rulerEdgePx}}px;"></view>
+            </view>
+          </scroll-view>
+          <view class="wrist-scale__cursor"></view>
+        </view>
+      </view>
+
+      <view class="wrist-scale">
+        <view class="wrist-scale__heading">
+          <text class="wrist-scale__label">体重</text>
+          <text class="wrist-scale__value">{{weightDraftKg}}<text>kg</text></text>
+        </view>
+        <view class="wrist-scale__ruler">
+          <scroll-view
+            class="wrist-scale__scroller"
+            scroll-x="{{true}}"
+            enhanced="{{true}}"
+            show-scrollbar="{{false}}"
+            scroll-with-animation="{{true}}"
+            scroll-left="{{weightScrollLeft}}"
+            data-type="weight"
+            bindscroll="handleRulerScroll"
+            bindscrollend="handleRulerScrollEnd"
+          >
+            <view class="wrist-scale__track" style="width: {{weightRulerTrackWidthPx}}px;">
+              <view class="wrist-scale__edge" style="width: {{rulerEdgePx}}px; flex-basis: {{rulerEdgePx}}px;"></view>
+              <view
+                class="wrist-scale__tick {{item.major ? 'wrist-scale__tick--major' : ''}}"
+                wx:for="{{weightRulerItems}}"
+                wx:key="value"
+                style="width: {{rulerTickPx}}px; flex-basis: {{rulerTickPx}}px;"
+              >
+                <view class="wrist-scale__tick-line"></view>
+                <text class="wrist-scale__tick-label" wx:if="{{item.label}}">{{item.label}}</text>
+              </view>
+              <view class="wrist-scale__edge" style="width: {{rulerEdgePx}}px; flex-basis: {{rulerEdgePx}}px;"></view>
+            </view>
+          </scroll-view>
+          <view class="wrist-scale__cursor"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="wrist-recommendation">
+      <view class="wrist-recommendation__copy">
+        <text class="wrist-recommendation__label">推荐净手围</text>
+        <text class="wrist-recommendation__hint">可直接修改</text>
+      </view>
+      <view class="wrist-recommendation__field">
+        <input
+          class="wrist-recommendation__input"
+          type="digit"
+          value="{{wristDraftInput}}"
+          maxlength="4"
+          bindinput="handleWristInput"
+          bindblur="handleWristInputBlur"
+          aria-label="推荐净手围，可修改"
+        />
+        <text class="wrist-recommendation__unit">cm</text>
+      </view>
+      <view
+        class="wrist-recommendation__reset"
+        wx:if="{{wristDraftCm !== recommendedWristCm}}"
+        bindtap="handleUseRecommendedWrist"
+        role="button"
+      >恢复推荐</view>
+    </view>
+
+    <view class="wrist-common">
+      <view class="wrist-common__heading">
+        <text class="wrist-common__title">常用尺寸</text>
+        <text class="wrist-common__meta">净手围 CM</text>
+      </view>
+      <view class="wrist-common__grid">
+        <view
+          class="wrist-common__item {{selectedCommonWristCm === item.value ? 'wrist-common__item--active' : ''}}"
+          wx:for="{{commonWristSizes}}"
+          wx:key="value"
+          data-value="{{item.value}}"
+          bindtap="handleSelectCommonWrist"
+          hover-class="wrist-common__item--pressed"
+          role="button"
+          aria-label="选择 {{item.value}} 厘米，{{item.label}}"
+        >
+          <text class="wrist-common__size">{{item.value}}.0</text>
+          <text class="wrist-common__label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <text class="wrist-card__tip">身高和体重仅用于快速估算，建议有条件时以软尺实测净手围为准。</text>
+
+    <view class="wrist-strands">
+      <view class="wrist-strands__heading">
+        <text class="wrist-strands__title">佩戴圈数</text>
+        <text class="wrist-strands__summary" wx:if="{{wristDraftStrands === 2}}">净手围 {{wristDraftCm}} × 2</text>
+      </view>
+      <view class="wrist-strands__options" role="radiogroup" aria-label="选择佩戴圈数">
+        <view
+          class="wrist-strand-option {{wristDraftStrands === 1 ? 'wrist-strand-option--active' : ''}}"
+          data-strands="1"
+          bindtap="handleSelectWristStrands"
+          hover-class="wrist-strand-option--pressed"
+          role="radio"
+          aria-checked="{{wristDraftStrands === 1}}"
+        >
+          <view class="wrist-strand-option__title-row">
+            <view class="wrist-strand-option__radio" aria-hidden="{{true}}">
+              <view class="wrist-strand-option__radio-core"></view>
+            </view>
+            <text class="wrist-strand-option__title">单圈</text>
+          </view>
+          <text class="wrist-strand-option__description">适合日常佩戴</text>
+        </view>
+        <view
+          class="wrist-strand-option {{wristDraftStrands === 2 ? 'wrist-strand-option--active' : ''}}"
+          data-strands="2"
+          bindtap="handleSelectWristStrands"
+          hover-class="wrist-strand-option--pressed"
+          role="radio"
+          aria-checked="{{wristDraftStrands === 2}}"
+        >
+          <view class="wrist-strand-option__title-row">
+            <view class="wrist-strand-option__radio" aria-hidden="{{true}}">
+              <view class="wrist-strand-option__radio-core"></view>
+            </view>
+            <text class="wrist-strand-option__title">双圈</text>
+          </view>
+          <text class="wrist-strand-option__description">适合宽松手围</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="wrist-actions">
+      <view
+        class="wrist-clear"
+        bindtap="handleClearWrist"
+        hover-class="wrist-action--pressed"
+        role="button"
+      >清除设置</view>
+      <view
+        class="wrist-confirm"
+        bindtap="handleConfirmWrist"
+        hover-class="wrist-action--pressed"
+        role="button"
+      >确认</view>
+    </view>
+  </view>
+</view>
+
+<view class="diy-modal" wx:if="{{showSaveNameDialog}}">
+  <view class="diy-modal__backdrop" bindtap="handleCloseSave"></view>
+  <view class="save-name-card">
+    <text class="modal-eyebrow">YOUR CREATION</text>
+    <text class="modal-title save-name-card__title">给这串作品取个名字</text>
+    <text class="save-name-card__tip">保存后可以在“我的设计”中再次查看和使用。</text>
+    <view class="save-name-field">
+      <input
+        class="save-name-field__input"
+        value="{{designNameDraft}}"
+        maxlength="20"
+        placeholder="例如：春日薄荷"
+        placeholder-style="color:#a5aca8;"
+        confirm-type="done"
+        focus="{{showSaveNameDialog}}"
+        bindinput="handleSaveNameInput"
+        bindconfirm="handleConfirmSave"
+      />
+      <text class="save-name-field__count">{{designNameDraft.length}} / 20</text>
+    </view>
+    <view class="save-name-actions">
+      <button
+        class="save-name-actions__button save-name-actions__button--secondary"
+        bindtap="handleCloseSave"
+        disabled="{{savingDesign}}"
+      >取消</button>
+      <button
+        class="save-name-actions__button save-name-actions__button--primary"
+        bindtap="handleConfirmSave"
+        disabled="{{!designNameDraft || savingDesign}}"
+      >{{savingDesign ? '保存中…' : '保存设计'}}</button>
+    </view>
+  </view>
+</view>
+
+<view
+  class="diy-entry-mask {{entryMaskLeaving ? 'diy-entry-mask--leaving' : ''}}"
+  wx:if="{{entryMaskVisible}}"
+>
+  <view class="diy-entry-mask__content">
+    <view class="diy-entry-mask__beads" wx:if="{{!entryErrorText}}" aria-hidden="{{true}}">
+      <view class="diy-entry-mask__bead diy-entry-mask__bead--one"></view>
+      <view class="diy-entry-mask__bead diy-entry-mask__bead--two"></view>
+      <view class="diy-entry-mask__bead diy-entry-mask__bead--three"></view>
+    </view>
+    <text class="diy-entry-mask__status">{{entryStatusText}}</text>
+    <text class="diy-entry-mask__detail">{{entryErrorText || entryStatusDetail}}</text>
+    <button
+      class="diy-entry-mask__retry"
+      wx:if="{{entryErrorText}}"
+      bindtap="handleRetryEntry"
+    >重新加载</button>
+  </view>
+</view>

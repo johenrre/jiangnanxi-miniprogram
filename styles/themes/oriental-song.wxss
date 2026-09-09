@@ -1,0 +1,40 @@
+/* 东方宋韵风 */
+.theme-root.theme-oriental-song {
+  --color-bg-page: #f3f0e8;
+  --color-bg-surface: #fbf9f2;
+  --color-bg-section: #f6f2e8;
+  --color-bg-warm: #f8f4ea;
+  --color-bg-muted: #ebe7dd;
+  --color-bg-media: #e3e5dd;
+  --color-bg-primary-soft: #e5ebe4;
+  --color-text-heading: #303932;
+  --color-text-primary: #3c453e;
+  --color-text-secondary: #706f66;
+  --color-text-muted: #85847a;
+  --color-text-faint: #9b998e;
+  --color-primary: #52685e;
+  --color-primary-light: #687f73;
+  --color-primary-muted: #82968b;
+  --color-primary-pressed: #43584f;
+  --color-accent-jade: #9aaca0;
+  --color-accent-blush: #a65f52;
+  --color-accent-blush-strong: #8f4e43;
+  --color-white: #ffffff;
+  --color-divider: rgba(68, 79, 70, 0.08);
+  --color-border-hairline: rgba(68, 79, 70, 0.09);
+  --color-border-soft: rgba(82, 104, 94, 0.08);
+  --color-border: rgba(82, 104, 94, 0.13);
+  --color-border-strong: rgba(82, 104, 94, 0.20);
+  --color-shadow-soft: rgba(48, 57, 50, 0.07);
+  --color-shadow: rgba(48, 57, 50, 0.11);
+  --color-shadow-primary: rgba(67, 88, 79, 0.15);
+  --color-modal-backdrop: rgba(31, 38, 33, 0.48);
+  --color-modal-shadow: rgba(38, 46, 40, 0.18);
+  --color-surface-glass: rgba(251, 249, 242, 0.84);
+  --color-surface-glass-strong: rgba(251, 249, 242, 0.97);
+  --color-nav-surface: rgba(250, 248, 240, 0.97);
+  --color-nav-indicator: #71877b;
+  --color-nav-ring: rgba(246, 242, 232, 0.98);
+  --color-nav-shadow: rgba(48, 57, 50, 0.12);
+  --color-nav-shadow-soft: rgba(48, 57, 50, 0.04);
+}

@@ -1,0 +1,29 @@
+<view
+  class="bracelet-preview"
+  style="width:{{containerSize}}px;height:{{containerSize}}px;"
+>
+  <view
+    wx:if="{{pageActive}}"
+    class="bracelet-preview__inner"
+    style="width:{{physicalSize}}px;height:{{physicalSize}}px;transform:scale({{previewScale}});"
+  >
+    <view
+      class="bracelet-preview__bead"
+      wx:for="{{beads}}"
+      wx:key="key"
+      style="{{item.wrapperStyle}}"
+    >
+      <view class="bracelet-preview__rotator" style="{{item.rotatorStyle}}">
+        <image
+          wx:if="{{item.imageUrl}}"
+          class="{{item.imageClass}}"
+          src="{{item.imageUrl}}"
+          mode="{{item.imageMode}}"
+          lazy-load="{{true}}"
+          style="{{item.imageStyle}}"
+        />
+        <view wx:else class="bracelet-preview__fallback" style="{{item.fallbackStyle}}"></view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,32 @@
+<theme-provider>
+<view class="launch-page" aria-label="正在准备小程序资源">
+  <image
+    class="launch-page__image"
+    src="{{launchBackgroundImageUrl}}"
+    mode="aspectFill"
+    binderror="handleLaunchBackgroundError"
+  />
+  <view class="launch-page__veil"></view>
+  <view class="launch-page__brand">
+    <image
+      wx:if="{{brandLogoUrl}}"
+      class="launch-page__mark launch-page__mark--image"
+      src="{{brandLogoUrl}}"
+      mode="aspectFit"
+      binderror="handleBrandLogoError"
+    />
+    <text class="launch-page__english">CRYSTAL DIY</text>
+    <text class="launch-page__name">{{appDisplayName}}</text>
+    <text class="launch-page__slogan">以天然晶石，慢慢串起你的灵感</text>
+  </view>
+  <view class="launch-page__status">
+    <view class="launch-page__status-row">
+      <text>{{statusLabel}}</text>
+      <text>{{progress}}%</text>
+    </view>
+    <view class="launch-page__track">
+      <view class="launch-page__progress" style="width: {{progress}}%;"></view>
+    </view>
+  </view>
+</view>
+</theme-provider>

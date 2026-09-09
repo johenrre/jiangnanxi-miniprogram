@@ -1,0 +1,125 @@
+<theme-provider>
+<view class="mall-page">
+  <page-header title="商城" showBack="{{false}}" theme="warm" />
+
+  <view class="mall-hero {{!heroImageUrl || heroLoadFailed ? 'mall-hero--fallback' : ''}}">
+    <image
+      wx:if="{{heroImageUrl && !heroLoadFailed}}"
+      class="mall-hero__image"
+      src="{{heroImageUrl}}"
+      mode="aspectFill"
+      binderror="handleHeroImageError"
+    />
+    <view class="mall-hero__copy">
+      <text class="mall-hero__eyebrow">CURATED CRYSTALS</text>
+      <text class="mall-hero__title">日常晶石，慢慢挑</text>
+      <text class="mall-hero__description">天然材质 · 手工细作</text>
+    </view>
+  </view>
+
+  <view class="mall-filter" wx:if="{{categories.length > 0}}">
+    <view class="mall-primary">
+      <view class="mall-primary__track">
+        <view
+          wx:for="{{categories}}"
+          wx:key="id"
+          class="mall-primary__item {{selectedPrimaryCategoryId === item.id ? 'mall-primary__item--active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="handlePrimaryCategoryTap"
+          hover-class="mall-filter-button--pressed"
+          hover-start-time="20"
+          hover-stay-time="80"
+          aria-role="button"
+          aria-label="筛选{{item.name}}"
+        >
+          <text class="mall-primary__label">{{item.name}}</text>
+          <view wx:if="{{selectedPrimaryCategoryId === item.id}}" class="mall-primary__indicator"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="mall-secondary">
+      <view class="mall-secondary__track">
+        <view
+          wx:for="{{secondaryCategories}}"
+          wx:key="id"
+          class="mall-secondary__item {{selectedSecondaryCategoryId === item.id ? 'mall-secondary__item--active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="handleSecondaryCategoryTap"
+          hover-class="mall-filter-button--pressed"
+          hover-start-time="20"
+          hover-stay-time="80"
+          aria-role="button"
+          aria-label="筛选{{item.name}}"
+        >
+          <text class="mall-secondary__label">{{item.name}}</text>
+          <view wx:if="{{selectedSecondaryCategoryId === item.id}}" class="mall-secondary__indicator"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="mall-products" wx:if="{{status === 'ready' && visibleProducts.length > 0}}">
+    <button
+      class="mall-product-card"
+      wx:for="{{visibleProducts}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="handleProductTap"
+      hover-class="mall-product-card--pressed"
+    >
+      <view class="mall-product-card__media">
+        <image
+          wx:if="{{!item.coverLoadFailed}}"
+          class="mall-product-card__image"
+          src="{{item.images[0]}}"
+          mode="aspectFill"
+          lazy-load="{{index > 1}}"
+          data-id="{{item.id}}"
+          binderror="handleProductImageError"
+        />
+        <view wx:else class="mall-product-card__fallback" aria-hidden="true">
+          <view class="mall-product-card__fallback-ring"></view>
+        </view>
+        <text class="mall-product-card__tag">{{item.secondaryCategoryName}}</text>
+      </view>
+      <view class="mall-product-card__body">
+        <text class="mall-product-card__title">{{item.title}}</text>
+        <view class="mall-product-card__meta">
+          <text>{{item.primaryCategoryName}}</text>
+          <text>已售 {{item.soldCount}}</text>
+        </view>
+        <view class="mall-product-card__price-row">
+          <view class="mall-product-card__price-group">
+            <text class="mall-product-card__currency">¥</text>
+            <text class="mall-product-card__price">{{item.discountPriceText}}</text>
+            <text class="mall-product-card__original-price">¥{{item.priceText}}</text>
+          </view>
+          <text class="mall-product-card__link">查看</text>
+        </view>
+      </view>
+    </button>
+  </view>
+
+  <view class="mall-empty" wx:elif="{{status === 'loading'}}">
+    <view class="mall-empty__ring" aria-hidden="true"></view>
+    <text class="mall-empty__title">正在整理商品</text>
+    <text class="mall-empty__description">稍等一下，很快就好。</text>
+  </view>
+
+  <view class="mall-empty" wx:elif="{{status === 'error'}}">
+    <view class="mall-empty__ring" aria-hidden="true"></view>
+    <text class="mall-empty__title">商城暂时没有加载出来</text>
+    <text class="mall-empty__description">{{errorMessage}}</text>
+    <button class="mall-empty__button" bindtap="handleRetry">重新加载</button>
+  </view>
+
+  <view class="mall-empty" wx:else>
+    <view class="mall-empty__ring" aria-hidden="true"></view>
+    <text class="mall-empty__title">{{status === 'empty' ? '商品还在整理' : '这一类还在整理'}}</text>
+    <text class="mall-empty__description">{{status === 'empty' ? '上架商品后会显示在这里。' : '可以先看看其他分类。'}}</text>
+  </view>
+
+  <customer-service-float />
+</view>
+</theme-provider>

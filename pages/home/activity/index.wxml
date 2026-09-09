@@ -1,0 +1,44 @@
+<theme-provider>
+<view class="activity-page">
+  <page-header title="" fallbackUrl="/pages/home/index" />
+
+  <view wx:if="{{activityDetailImageUrls.length > 0}}" class="activity-detail-images">
+    <image
+      wx:for="{{activityDetailImageUrls}}"
+      wx:for-item="imageUrl"
+      wx:for-index="index"
+      wx:key="*this"
+      class="activity-detail-image"
+      src="{{imageUrl}}"
+      mode="widthFix"
+      lazy-load="{{index > 0}}"
+      data-index="{{index}}"
+      binderror="handleActivityDetailImageError"
+    />
+  </view>
+
+  <view class="activity-contact-dock">
+    <button
+      class="activity-contact"
+      bindtap="handleContactService"
+      hover-class="activity-contact--pressed"
+      hover-stay-time="100"
+      aria-label="显示活动客服二维码"
+    >
+      <view class="activity-contact__icon" aria-hidden="true">
+        <view class="activity-contact__bubble">
+          <view></view>
+          <view></view>
+          <view></view>
+        </view>
+      </view>
+      <text>联系活动客服</text>
+    </button>
+  </view>
+
+  <customer-service-float
+    id="activityCustomerService"
+    show-float="{{false}}"
+  />
+</view>
+</theme-provider>

@@ -1,0 +1,84 @@
+<view class="design-card design-card--{{variant}}" bindtap="handleTap" hover-class="design-card--pressed">
+  <view class="design-card__media">
+    <block wx:if="{{variant === 'home' && design.pattern && design.pattern.length}}">
+      <image
+        class="design-card__tray"
+        src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+        mode="aspectFit"
+        binderror="handleTrayError"
+      />
+      <view class="design-card__bracelet">
+        <bracelet-preview
+          pattern="{{design.pattern}}"
+          materials="{{design.materialMap}}"
+          beadSize="{{design.beadSize}}"
+          containerSize="{{114}}"
+        />
+      </view>
+    </block>
+    <image
+      wx:elif="{{variant === 'home' && design.coverUrl && !coverLoadFailed}}"
+      class="design-card__cover"
+      src="{{design.coverUrl}}"
+      mode="aspectFill"
+      lazy-load="{{true}}"
+      binderror="handleCoverError"
+    />
+    <block wx:elif="{{design.pattern && design.pattern.length}}">
+      <image
+        class="design-card__tray"
+        src="{{trayLoadFailed ? '/assets/bg_1.jpg' : trayBackgroundUrl}}"
+        mode="aspectFit"
+        binderror="handleTrayError"
+      />
+      <view class="design-card__bracelet">
+        <bracelet-preview
+          pattern="{{design.pattern}}"
+          materials="{{design.materialMap}}"
+          beadSize="{{design.beadSize}}"
+          containerSize="{{122}}"
+          preserveOnPageHide="{{variant === 'discover'}}"
+        />
+      </view>
+    </block>
+    <image
+      wx:elif="{{design.coverUrl && !coverLoadFailed}}"
+      class="design-card__cover"
+      src="{{design.coverUrl}}"
+      mode="aspectFill"
+      lazy-load="{{true}}"
+      binderror="handleCoverError"
+    />
+    <view wx:else class="design-card__cover-fallback">
+      <view class="design-card__fallback-ring"></view>
+      <text>暂无方案预览</text>
+    </view>
+    <text wx:if="{{design.isPinned}}" class="design-card__pinned">置顶</text>
+  </view>
+
+  <view class="design-card__body">
+    <view class="design-card__heading">
+      <text class="design-card__name">{{design.name}}</text>
+      <text class="design-card__price">{{design.priceText}}</text>
+    </view>
+    <view class="design-card__author {{design.section === 'customer' ? 'design-card__author--customer' : ''}}">
+      <image
+        wx:if="{{design.authorAvatar && !avatarLoadFailed}}"
+        class="design-card__avatar"
+        src="{{design.authorAvatar}}"
+        mode="aspectFill"
+        lazy-load="{{true}}"
+        binderror="handleAvatarError"
+      />
+      <image
+        wx:else
+        class="design-card__avatar"
+        src="/assets/profile/default-avatar.svg"
+        mode="aspectFit"
+        aria-label="默认作者头像"
+      />
+      <text class="design-card__author-name">{{design.section === 'customer' ? '@' : ''}}{{design.authorName}}</text>
+      <text wx:if="{{variant === 'home'}}" class="design-card__open" aria-hidden="true">↗</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,186 @@
+.my-designs-page {
+  min-height: 100vh;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+.my-designs-summary {
+  display: flex;
+  justify-content: space-between;
+  margin: 16rpx 30rpx 0;
+  padding: 22rpx 4rpx 24rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  gap: 24rpx;
+}
+
+.my-designs-summary__eyebrow,
+.my-designs-summary__title,
+.my-designs-summary__description {
+  display: block;
+}
+
+.my-designs-summary__eyebrow {
+  color: #9b817b;
+  font-size: 15rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.my-designs-summary__title {
+  margin-top: 8rpx;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 31rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+
+.my-designs-summary__description {
+  max-width: 250rpx;
+  align-self: flex-end;
+  color: var(--color-text-muted);
+  font-size: 18rpx;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.my-designs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 24rpx 26rpx 80rpx;
+  gap: 30rpx 22rpx;
+}
+
+.my-design-card {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.my-design-card__open {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  transition: transform 120ms ease;
+}
+
+.my-design-card__open::after,
+.my-design-card__delete::after {
+  display: none;
+}
+
+.my-design-card--pressed {
+  transform: scale(0.985);
+}
+
+.my-design-card__media {
+  position: relative;
+  height: 300rpx;
+  overflow: hidden;
+  border: 1rpx solid var(--color-border-soft);
+  border-radius: 20rpx;
+  background: var(--color-bg-media);
+  box-shadow: 0 10rpx 24rpx var(--color-shadow-soft);
+}
+
+.my-design-card__image,
+.my-design-card__fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.my-design-card__tray {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 86%;
+  height: 86%;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.my-design-card__bracelet {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-design-card__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--color-text-muted);
+  font-size: 18rpx;
+  gap: 15rpx;
+}
+
+.my-design-card__ring {
+  width: 122rpx;
+  height: 122rpx;
+  border: 20rpx solid rgba(111, 143, 136, 0.14);
+  border-radius: 50%;
+}
+
+.my-design-card__body {
+  box-sizing: border-box;
+  min-height: 82rpx;
+  padding: 15rpx 82rpx 0 4rpx;
+}
+
+.my-design-card__name,
+.my-design-card__date {
+  display: block;
+}
+
+.my-design-card__name {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 25rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-design-card__date {
+  margin-top: 8rpx;
+  color: #9aa19e;
+  font-size: 16rpx;
+  letter-spacing: 0.4rpx;
+}
+
+.my-design-card__delete {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 76rpx;
+  height: 72rpx;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #9b817b;
+  font-size: 17rpx;
+  font-weight: 500;
+  line-height: 72rpx;
+  text-align: right;
+}
+
+.my-design-card__delete[disabled] {
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-design-card__open {
+    transition: none;
+  }
+}

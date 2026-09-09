@@ -1,0 +1,112 @@
+<theme-provider>
+<view class="profile-page">
+  <page-header title="我的" showBack="{{false}}" theme="warm" />
+
+  <view class="profile-hero">
+    <view class="profile-hero__wash" aria-hidden="true"></view>
+    <view class="profile-hero__heading">
+      <text class="profile-hero__eyebrow">MY CRYSTAL SPACE</text>
+      <text class="profile-hero__title">{{isLoggedIn ? '欢迎回来' : '留住每一次灵感'}}</text>
+      <text class="profile-hero__subtitle">{{isLoggedIn ? '设计、订单和服务，都在这里。' : '登录后同步你的设计与订单。'}}</text>
+    </view>
+
+    <view class="profile-identity">
+      <view class="profile-identity__avatar-shell">
+        <image
+          wx:if="{{isLoggedIn && profile && profile.avatarUrl && !avatarLoadFailed}}"
+          class="profile-identity__avatar"
+          src="{{profile.avatarUrl}}"
+          mode="aspectFill"
+          binderror="handleAvatarError"
+        />
+        <image
+          wx:elif="{{defaultAvatarUrl}}"
+          class="profile-identity__avatar"
+          src="{{defaultAvatarUrl}}"
+          mode="aspectFill"
+          binderror="handleDefaultAvatarError"
+        />
+        <view wx:else class="profile-identity__avatar profile-identity__avatar--fallback" aria-hidden="true">
+          <view class="profile-identity__avatar-ring"></view>
+          <view class="profile-identity__avatar-stone"></view>
+        </view>
+      </view>
+
+      <view class="profile-identity__copy">
+        <text class="profile-identity__name">{{isLoggedIn ? profileDisplayName : '登录后继续创作'}}</text>
+        <text class="profile-identity__description">{{isLoggedIn ? '你的专属晶石档案' : '保存设计，随时回来继续调整'}}</text>
+      </view>
+
+      <button
+        wx:if="{{isLoggedIn}}"
+        class="profile-identity__action"
+        data-url="/pages/profile/profile-edit/index"
+        bindtap="handleEntryTap"
+        hover-class="profile-identity__action--pressed"
+      >编辑</button>
+      <button
+        wx:else
+        class="profile-identity__action profile-identity__action--login"
+        bindtap="handleLogin"
+      >登录</button>
+    </view>
+
+    <view wx:if="{{dashboardStatus === 'error'}}" class="profile-error">
+      <text class="profile-error__text">{{errorMessage}}</text>
+      <button class="profile-error__retry" bindtap="handleRetry">重试</button>
+    </view>
+    <view wx:elif="{{dashboardStatus === 'loading'}}" class="profile-syncing">
+      <view class="profile-syncing__dot"></view>
+      <text>正在同步个人资料</text>
+    </view>
+  </view>
+
+  <view class="profile-section">
+    <view class="profile-section__heading">
+      <view>
+        <text class="profile-section__eyebrow">ACCOUNT / SERVICE</text>
+        <text class="profile-section__title">账户与服务</text>
+      </view>
+      <text class="profile-section__hint">管理你的晶石生活</text>
+    </view>
+
+    <view class="profile-entry-list">
+      <button
+        class="profile-entry"
+        wx:for="{{profileEntries}}"
+        wx:key="id"
+        data-url="{{item.url}}"
+        data-login-copy="登录后可使用{{item.label}}。"
+        bindtap="handleEntryTap"
+        hover-class="profile-entry--pressed"
+      >
+        <view class="profile-entry__icon-shell profile-entry__icon-shell--{{index}}">
+          <image class="profile-entry__icon" src="{{item.iconUrl}}" mode="aspectFit" />
+        </view>
+        <view class="profile-entry__copy">
+          <text class="profile-entry__label">{{item.label}}</text>
+          <text class="profile-entry__description">{{item.description}}</text>
+        </view>
+        <image class="profile-entry__arrow" src="/assets/icons/back-dark.svg" mode="aspectFit" />
+      </button>
+      <button
+        class="profile-entry"
+        bindtap="handleOpenLegalCenter"
+        hover-class="profile-entry--pressed"
+      >
+        <view class="profile-entry__icon-shell profile-entry__icon-shell--legal">
+          <image class="profile-entry__icon" src="/assets/icons/profile-agreement.svg" mode="aspectFit" />
+        </view>
+        <view class="profile-entry__copy">
+          <text class="profile-entry__label">协议与隐私</text>
+          <text class="profile-entry__description">用户协议与隐私保护指引</text>
+        </view>
+        <image class="profile-entry__arrow" src="/assets/icons/back-dark.svg" mode="aspectFit" />
+      </button>
+    </view>
+  </view>
+
+  <customer-service-float />
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

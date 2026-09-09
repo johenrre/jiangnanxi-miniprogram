@@ -1,0 +1,51 @@
+<theme-provider>
+  <view class="agreement-page">
+    <page-header title="协议与隐私" showBack="{{true}}" theme="warm" />
+
+    <view class="agreement-hero">
+      <text class="agreement-hero__eyebrow">AGREEMENT / PRIVACY</text>
+      <text class="agreement-hero__title">协议与隐私</text>
+      <text class="agreement-hero__meta">用户协议更新日期：{{updatedAt}}</text>
+      <text class="agreement-hero__description">了解服务规则，以及我们如何处理使用服务所必要的信息。</text>
+    </view>
+
+    <view class="agreement-tabs" role="tablist">
+      <button
+        class="agreement-tab {{activeTab === 'agreement' ? 'agreement-tab--active' : ''}}"
+        data-tab="agreement"
+        bindtap="handleTabChange"
+      >用户协议</button>
+      <button
+        class="agreement-tab {{activeTab === 'privacy' ? 'agreement-tab--active' : ''}}"
+        data-tab="privacy"
+        bindtap="handleTabChange"
+      >隐私保护指引</button>
+    </view>
+
+    <view wx:if="{{activeTab === 'agreement'}}" class="agreement-content">
+      <view
+        class="agreement-section"
+        wx:for="{{agreementSections}}"
+        wx:for-item="section"
+        wx:key="title"
+      >
+        <text class="agreement-section__title">{{section.title}}</text>
+        <text
+          class="agreement-section__paragraph"
+          wx:for="{{section.paragraphs}}"
+          wx:for-item="paragraph"
+          wx:key="*this"
+        >{{paragraph}}</text>
+      </view>
+    </view>
+
+    <view wx:else class="privacy-content">
+      <view class="privacy-card">
+        <text class="privacy-card__title">微信官方隐私保护指引</text>
+        <text class="privacy-card__description">隐私保护指引由微信公众平台生成并维护，具体包括手机号、收货地址、头像昵称、售后图片、订单信息等实际使用的个人信息类型。</text>
+        <button class="privacy-card__button" bindtap="handleOpenOfficialPrivacy">查看隐私保护指引</button>
+      </view>
+      <text class="privacy-content__note">你可以在微信官方指引中查看信息收集用途、保存期限和个人信息相关权利。</text>
+    </view>
+  </view>
+</theme-provider>

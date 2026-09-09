@@ -1,0 +1,114 @@
+page {
+  background: var(--color-bg-page);
+}
+
+.activity-page {
+  min-height: 100vh;
+  padding-bottom: calc(150rpx + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  background: var(--color-bg-page);
+}
+
+.activity-detail-images {
+  padding: 16rpx 26rpx 30rpx;
+}
+
+.activity-detail-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 18rpx;
+  overflow: hidden;
+  border: 1rpx solid var(--color-border-soft);
+  border-radius: 22rpx;
+  background: var(--color-bg-media);
+  box-shadow: 0 12rpx 30rpx var(--color-shadow-soft);
+}
+
+.activity-detail-image:last-child {
+  margin-bottom: 0;
+}
+
+.activity-contact-dock {
+  position: fixed;
+  z-index: 30;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 18rpx 26rpx calc(18rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid var(--color-border-hairline);
+  background: rgba(248, 247, 243, 0.95);
+  box-shadow: 0 -14rpx 38rpx var(--color-shadow-soft);
+  -webkit-backdrop-filter: blur(18rpx);
+  backdrop-filter: blur(18rpx);
+}
+
+.activity-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 90rpx;
+  border-radius: 22rpx;
+  background: var(--color-primary);
+  box-shadow: 0 10rpx 24rpx rgba(70, 100, 92, 0.18);
+  color: var(--color-white);
+  font-size: 23rpx;
+  font-weight: 700;
+  gap: 14rpx;
+  letter-spacing: 1rpx;
+  transition: opacity 110ms ease, transform 110ms ease;
+}
+
+.activity-contact--pressed {
+  opacity: 0.88;
+  transform: scale(0.985);
+}
+
+.activity-contact__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.activity-contact__bubble {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25rpx;
+  height: 19rpx;
+  border: 2rpx solid currentColor;
+  border-radius: 9rpx;
+  gap: 3rpx;
+}
+
+.activity-contact__bubble::after {
+  position: absolute;
+  bottom: -6rpx;
+  left: 5rpx;
+  width: 6rpx;
+  height: 6rpx;
+  border-bottom: 2rpx solid currentColor;
+  border-left: 2rpx solid currentColor;
+  background: var(--color-primary);
+  content: "";
+  transform: skewY(-35deg);
+}
+
+.activity-contact__bubble view {
+  width: 2rpx;
+  height: 2rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-contact {
+    transition: none;
+  }
+}

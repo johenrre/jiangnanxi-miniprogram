@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "page-header": "/components/page-header/index"
+  }
+}

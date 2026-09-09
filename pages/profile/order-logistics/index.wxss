@@ -1,0 +1,353 @@
+.logistics-page {
+  min-height: 100vh;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
+
+.logistics-content {
+  padding: 34rpx 30rpx calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.logistics-progress {
+  display: flex;
+  align-items: center;
+  padding: 34rpx 6rpx 42rpx;
+  gap: 28rpx;
+}
+
+.logistics-progress__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112rpx;
+  height: 112rpx;
+  flex: 0 0 112rpx;
+  border-radius: 50%;
+  background: rgba(167, 200, 192, 0.22);
+}
+
+.logistics-progress__ring {
+  position: relative;
+  width: 52rpx;
+  height: 52rpx;
+  border: 7rpx solid var(--color-primary-light);
+  border-radius: 50%;
+}
+
+.logistics-progress__ring::after {
+  position: absolute;
+  right: -15rpx;
+  bottom: -3rpx;
+  width: 28rpx;
+  height: 14rpx;
+  border-bottom: 6rpx solid var(--color-primary-light);
+  border-left: 6rpx solid var(--color-primary-light);
+  content: "";
+  transform: rotate(-45deg);
+}
+
+.logistics-progress__copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.logistics-progress__eyebrow,
+.logistics-progress__title,
+.logistics-progress__description {
+  display: block;
+}
+
+.logistics-progress__eyebrow {
+  color: #91aaa3;
+  font-size: 15rpx;
+  letter-spacing: 4rpx;
+}
+
+.logistics-progress__title {
+  margin-top: 10rpx;
+  color: var(--color-text-heading);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.logistics-progress__description {
+  margin-top: 12rpx;
+  color: #838d89;
+  font-size: 19rpx;
+  line-height: 1.6;
+}
+
+.logistics-card {
+  padding: 28rpx 26rpx;
+  border: 1rpx solid var(--color-border-hairline);
+  border-radius: 22rpx;
+  background: var(--color-bg-surface);
+  box-shadow: 0 12rpx 34rpx var(--color-shadow-soft);
+}
+
+.logistics-card__heading,
+.logistics-row,
+.logistics-row__value-wrap,
+.logistics-sync {
+  display: flex;
+  align-items: center;
+}
+
+.logistics-card__heading {
+  justify-content: space-between;
+  padding-bottom: 24rpx;
+}
+
+.logistics-card__label,
+.logistics-card__company {
+  display: block;
+}
+
+.logistics-card__label {
+  color: #959e9a;
+  font-size: 17rpx;
+}
+
+.logistics-card__company {
+  margin-top: 8rpx;
+  color: var(--color-text-primary);
+  font-size: 27rpx;
+  font-weight: 600;
+}
+
+.logistics-card__badge {
+  padding: 8rpx 16rpx;
+  border-radius: 99rpx;
+  color: var(--color-primary);
+  background: rgba(167, 200, 192, 0.2);
+  font-size: 17rpx;
+}
+
+.logistics-row {
+  justify-content: space-between;
+  min-height: 76rpx;
+  border-top: 1rpx solid var(--color-divider);
+  gap: 24rpx;
+}
+
+.logistics-row__label {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 18rpx;
+}
+
+.logistics-row__value-wrap {
+  min-width: 0;
+  justify-content: flex-end;
+  flex: 1;
+  gap: 14rpx;
+}
+
+.logistics-row__value {
+  min-width: 0;
+  overflow: hidden;
+  color: #4b5753;
+  font-size: 19rpx;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logistics-row__value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.logistics-row__copy {
+  width: 84rpx;
+  height: 46rpx;
+  margin: 0;
+  padding: 0;
+  border: 1rpx solid rgba(96, 125, 118, 0.22);
+  border-radius: 13rpx;
+  color: var(--color-primary);
+  font-size: 17rpx;
+  line-height: 44rpx;
+}
+
+.logistics-sync {
+  margin-top: 18rpx;
+  padding: 15rpx 17rpx;
+  border-radius: 14rpx;
+  color: var(--color-primary);
+  background: rgba(167, 200, 192, 0.15);
+  font-size: 17rpx;
+  gap: 12rpx;
+}
+
+.logistics-sync__dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+}
+
+.logistics-note {
+  padding: 34rpx 10rpx 0;
+}
+
+.logistics-trace {
+  margin-top: 24rpx;
+  padding: 28rpx 26rpx 24rpx;
+  border: 1rpx solid var(--color-border-hairline);
+  border-radius: 22rpx;
+  background: var(--color-bg-surface);
+}
+
+.logistics-trace__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 24rpx;
+  gap: 20rpx;
+}
+
+.logistics-trace__heading text:first-child {
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 27rpx;
+}
+
+.logistics-trace__heading text:last-child {
+  color: #99a19e;
+  font-size: 16rpx;
+}
+
+.logistics-trace__item {
+  display: flex;
+  min-height: 112rpx;
+}
+
+.logistics-trace__axis {
+  position: relative;
+  width: 34rpx;
+  flex: 0 0 34rpx;
+}
+
+.logistics-trace__axis::after {
+  position: absolute;
+  top: 23rpx;
+  bottom: -1rpx;
+  left: 9rpx;
+  width: 1rpx;
+  background: rgba(96, 125, 118, 0.2);
+  content: "";
+}
+
+.logistics-trace__item:last-of-type .logistics-trace__axis::after {
+  display: none;
+}
+
+.logistics-trace__dot {
+  position: relative;
+  z-index: 1;
+  width: 15rpx;
+  height: 15rpx;
+  margin-top: 7rpx;
+  margin-left: 2rpx;
+  border: 3rpx solid var(--color-bg-surface);
+  border-radius: 50%;
+  background: #b5c2bd;
+  box-shadow: 0 0 0 1rpx rgba(96, 125, 118, 0.2);
+}
+
+.logistics-trace__item--latest .logistics-trace__dot {
+  background: var(--color-primary-light);
+  box-shadow: 0 0 0 5rpx rgba(167, 200, 192, 0.2);
+}
+
+.logistics-trace__copy {
+  min-width: 0;
+  padding: 0 0 28rpx 8rpx;
+  flex: 1;
+}
+
+.logistics-trace__context,
+.logistics-trace__location,
+.logistics-trace__time {
+  display: block;
+}
+
+.logistics-trace__context {
+  color: #66736f;
+  font-size: 20rpx;
+  line-height: 1.55;
+}
+
+.logistics-trace__item--latest .logistics-trace__context {
+  color: #40554f;
+  font-weight: 600;
+}
+
+.logistics-trace__location,
+.logistics-trace__time {
+  margin-top: 7rpx;
+  color: #9aa29f;
+  font-size: 16rpx;
+}
+
+.logistics-trace__provider {
+  display: block;
+  padding: 18rpx 0 0 42rpx;
+  border-top: 1rpx solid var(--color-divider);
+  color: #9aa29f;
+  font-size: 16rpx;
+  line-height: 1.5;
+}
+
+.logistics-note__title,
+.logistics-note__copy {
+  display: block;
+}
+
+.logistics-note__title {
+  color: var(--color-primary);
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.logistics-note__copy {
+  margin-top: 12rpx;
+  color: var(--color-text-muted);
+  font-size: 18rpx;
+  line-height: 1.7;
+}
+
+.logistics-actions {
+  padding: 34rpx 0 0;
+}
+
+.logistics-actions__note {
+  display: block;
+  padding: 0 8rpx 16rpx;
+  color: var(--color-text-muted);
+  font-size: 18rpx;
+  line-height: 1.6;
+}
+
+.logistics-actions__primary {
+  width: 100%;
+  height: 82rpx;
+  margin: 0;
+  border-radius: 18rpx;
+  color: var(--color-white);
+  background: var(--color-primary);
+  font-size: 23rpx;
+  font-weight: 600;
+  line-height: 82rpx;
+  box-shadow: 0 10rpx 24rpx rgba(96, 125, 118, 0.16);
+}
+
+.logistics-actions__primary[disabled] {
+  color: rgba(255, 255, 255, 0.78);
+  background: #9aaca7;
+}
+
+button::after {
+  border: 0;
+}

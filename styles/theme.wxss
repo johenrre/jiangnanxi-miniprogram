@@ -1,0 +1,53 @@
+@import "./themes/oriental-song.wxss";
+@import "./themes/glacier-crystal.wxss";
+@import "./themes/cream-french.wxss";
+@import "./themes/forest-mineral.wxss";
+@import "./themes/midnight-astrolabe.wxss";
+@import "./themes/japanese-wabi-sabi.wxss";
+@import "./themes/aegean-sea-salt.wxss";
+@import "./themes/desert-terracotta.wxss";
+@import "./themes/moonlit-pearl.wxss";
+@import "./themes/morandi-gallery.wxss";
+@import "./themes/monochrome-museum.wxss";
+
+page,
+.theme-root {
+  /* Global healing-INS theme tokens. Edit theme colors here. */
+  --color-bg-page: #f6f4ef;
+  --color-bg-surface: #fcfbf7;
+  --color-bg-section: #f8f7f3;
+  --color-bg-warm: #faf9f5;
+  --color-bg-muted: #f0f1ec;
+  --color-bg-media: #e9ece7;
+  --color-bg-primary-soft: #e7eeea;
+  --color-text-heading: #3f4c49;
+  --color-text-primary: #414b48;
+  --color-text-secondary: #7b8682;
+  --color-text-muted: #87918d;
+  --color-text-faint: #989e9b;
+  --color-primary: #607d76;
+  --color-primary-light: #6f8f88;
+  --color-primary-muted: #7d9a93;
+  --color-primary-pressed: #536f68;
+  --color-accent-jade: #a7c8c0;
+  --color-accent-blush: #b77c72;
+  --color-accent-blush-strong: #a66f67;
+  --color-white: #ffffff;
+  --color-divider: rgba(83, 101, 95, 0.08);
+  --color-border-hairline: rgba(83, 101, 95, 0.09);
+  --color-border-soft: rgba(96, 125, 118, 0.08);
+  --color-border: rgba(96, 125, 118, 0.12);
+  --color-border-strong: rgba(96, 125, 118, 0.18);
+  --color-shadow-soft: rgba(71, 84, 80, 0.07);
+  --color-shadow: rgba(71, 84, 80, 0.1);
+  --color-shadow-primary: rgba(79, 105, 98, 0.14);
+  --color-modal-backdrop: rgba(37, 43, 41, 0.48);
+  --color-modal-shadow: rgba(45, 55, 51, 0.18);
+  --color-surface-glass: rgba(252, 251, 247, 0.82);
+  --color-surface-glass-strong: rgba(252, 251, 247, 0.96);
+  --color-nav-surface: rgba(251, 250, 247, 0.97);
+  --color-nav-indicator: #86a49c;
+  --color-nav-ring: rgba(248, 247, 243, 0.98);
+  --color-nav-shadow: rgba(71, 84, 80, 0.11);
+  --color-nav-shadow-soft: rgba(71, 84, 80, 0.04);
+}

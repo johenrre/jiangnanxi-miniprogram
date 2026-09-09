@@ -1,0 +1,117 @@
+<theme-provider>
+<view class="addresses-page">
+  <page-header title="收货地址" />
+
+  <view wx:if="{{status === 'ready'}}" class="address-list">
+    <view class="address-card" wx:for="{{addresses}}" wx:key="id">
+      <view class="address-card__head">
+        <view>
+          <text class="address-card__name">{{item.receiverName}}</text>
+          <text class="address-card__phone">{{item.receiverPhone}}</text>
+        </view>
+        <text wx:if="{{item.isDefault}}" class="address-card__default">默认</text>
+      </view>
+      <text class="address-card__address">{{item.fullAddress}}</text>
+      <view class="address-card__actions {{item.isDefault ? 'address-card__actions--default' : ''}}">
+        <button
+          wx:if="{{!item.isDefault}}"
+          class="address-card__action"
+          data-id="{{item.id}}"
+          bindtap="handleSetDefault"
+        >设为默认</button>
+        <view class="address-card__actions-right">
+          <button class="address-card__action" data-id="{{item.id}}" bindtap="handleEditAddress">编辑</button>
+          <button class="address-card__action address-card__action--danger" data-id="{{item.id}}" bindtap="handleDeleteAddress">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <content-state
+    wx:elif="{{status === 'loading'}}"
+    status="loading"
+    title="正在加载收货地址"
+    description="请稍候"
+  />
+  <content-state
+    wx:elif="{{status === 'empty'}}"
+    status="empty"
+    title="还没有收货地址"
+    description="新增地址后，下单时可以直接选择。"
+  />
+  <content-state
+    wx:elif="{{status === 'login'}}"
+    status="login"
+    title="登录后管理收货地址"
+    description="收货信息仅用于订单配送。"
+    actionText="登录"
+    bindaction="handleGoLogin"
+  />
+  <content-state
+    wx:else
+    status="error"
+    title="收货地址加载失败"
+    description="{{errorMessage}}"
+    actionText="重新加载"
+    bindaction="handleRetry"
+  />
+
+  <button
+    wx:if="{{status === 'ready' || status === 'empty'}}"
+    class="address-add"
+    bindtap="handleAddAddress"
+  >新增收货地址</button>
+
+  <view wx:if="{{formVisible}}" class="address-form-layer" bindtap="handleCloseForm">
+    <view class="address-form" catchtap="handleNoop" catchtouchmove="handleNoop">
+      <view class="address-form__head">
+        <text class="address-form__title">{{editingAddressId ? '编辑收货地址' : '新增收货地址'}}</text>
+        <button
+          class="address-form__close"
+          bindtap="handleCloseForm"
+          aria-label="关闭"
+        >
+          <view class="dialog-close-icon" aria-hidden="{{true}}">
+            <view class="dialog-close-icon__line dialog-close-icon__line--forward"></view>
+            <view class="dialog-close-icon__line dialog-close-icon__line--backward"></view>
+          </view>
+        </button>
+      </view>
+      <button class="address-form__wechat-import" bindtap="handleImportWechatAddress">
+        <view class="address-form__wechat-import-icon" aria-hidden="true"></view>
+        <view class="address-form__wechat-import-copy">
+          <text>使用微信收货地址</text>
+          <text>自动填写姓名、手机号和所在地区</text>
+        </view>
+        <view class="address-form__wechat-import-arrow" aria-hidden="true"></view>
+      </button>
+      <view class="address-form__field">
+        <text class="address-form__label">收货人</text>
+        <input class="address-form__input" value="{{form.receiverName}}" maxlength="20" placeholder="姓名" data-field="receiverName" bindinput="handleFieldInput" />
+      </view>
+      <view class="address-form__field">
+        <text class="address-form__label">联系电话</text>
+        <input class="address-form__input" value="{{form.receiverPhone}}" type="number" maxlength="20" placeholder="手机号" data-field="receiverPhone" bindinput="handleFieldInput" />
+      </view>
+      <picker mode="region" value="{{region}}" bindchange="handleRegionChange">
+        <view class="address-form__field">
+          <text class="address-form__label">所在地区</text>
+          <text class="address-form__picker {{regionText ? '' : 'address-form__picker--placeholder'}}">
+            {{regionText || '请选择省市区'}}
+          </text>
+        </view>
+      </picker>
+      <view class="address-form__field address-form__field--textarea">
+        <text class="address-form__label">详细地址</text>
+        <textarea class="address-form__textarea" value="{{form.detail}}" maxlength="200" placeholder="街道、门牌号等" data-field="detail" bindinput="handleFieldInput"></textarea>
+      </view>
+      <view class="address-form__field">
+        <text class="address-form__label">设为默认</text>
+        <switch checked="{{form.isDefault}}" color="#607d76" bindchange="handleDefaultChange" />
+      </view>
+      <button class="address-form__save" loading="{{submitting}}" disabled="{{submitting}}" bindtap="handleSaveAddress">保存地址</button>
+    </view>
+  </view>
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

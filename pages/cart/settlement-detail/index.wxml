@@ -1,0 +1,167 @@
+<theme-provider>
+<view class="settlement-page">
+  <page-header
+    title="结算预览"
+    fallbackUrl="/pages/cart/index"
+    badge=""
+  />
+
+  <view class="settlement-loading" wx:if="{{status === 'loading'}}">
+    <view class="settlement-loading__hero"></view>
+    <view class="settlement-loading__row"></view>
+    <view class="settlement-loading__row"></view>
+    <view class="settlement-loading__panel"></view>
+  </view>
+
+  <view class="settlement-state" wx:elif="{{status === 'login'}}">
+    <text class="settlement-state__mark">人</text>
+    <text class="settlement-state__title">登录后查看结算详情</text>
+    <text class="settlement-state__description">登录后可查看手串预览与珠材构成。</text>
+    <button class="settlement-state__button" bindtap="handleLogin">登录</button>
+  </view>
+
+  <view class="settlement-state" wx:elif="{{status === 'missing'}}">
+    <image class="settlement-state__icon" src="/assets/icons/nav-cart-muted.svg" mode="aspectFit" />
+    <text class="settlement-state__title">{{sourceMode === 'diy' ? '当前设计预览已失效' : '商品已不在购物车'}}</text>
+    <text class="settlement-state__description">{{sourceMode === 'diy' ? '请返回 DIY 页面重新打开结算预览。' : '可能已被删除或商品参数已变化，请返回购物车重新选择。'}}</text>
+    <button class="settlement-state__button" bindtap="handleReturnCart">返回上一页</button>
+  </view>
+
+  <view class="settlement-state" wx:elif="{{status === 'error'}}">
+    <text class="settlement-state__mark">!</text>
+    <text class="settlement-state__title">结算详情加载失败</text>
+    <text class="settlement-state__description">{{errorMessage}}</text>
+    <button class="settlement-state__button" bindtap="handleRetry">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <scroll-view class="settlement-scroll" scroll-y="{{true}}" show-scrollbar="{{false}}">
+      <view class="settlement-hero">
+        <image
+          class="settlement-hero__tray"
+          src="{{trayBackgroundUrl}}"
+          mode="aspectFill"
+        />
+        <view
+          wx:if="{{item.pattern.length > 0}}"
+          class="settlement-hero__bracelet"
+        >
+          <bracelet-preview
+            pattern="{{item.pattern}}"
+            materials="{{item.materialMap}}"
+            beadSize="{{item.beadSize}}"
+            containerSize="{{300}}"
+          />
+        </view>
+        <image
+          wx:elif="{{item.coverUrl}}"
+          class="settlement-hero__image"
+          src="{{item.coverUrl}}"
+          mode="aspectFit"
+          binderror="handleCoverImageError"
+        />
+        <view wx:else class="settlement-hero__fallback">
+          <view class="settlement-hero__ring"></view>
+          <text>暂无方案预览</text>
+        </view>
+
+      </view>
+
+      <view class="settlement-content">
+        <view class="settlement-summary">
+          <view class="settlement-summary__facts">
+            <view class="settlement-summary__fact">
+              <text class="settlement-summary__label">建议净手围</text>
+              <text class="settlement-summary__value">{{item.wristRangeText}}</text>
+            </view>
+            <view class="settlement-summary__fact">
+              <text class="settlement-summary__label">数量</text>
+              <text class="settlement-summary__value">×{{item.quantity}}</text>
+            </view>
+          </view>
+          <text class="settlement-summary__price">¥{{item.lineTotalText}}</text>
+        </view>
+
+        <view class="settlement-section settlement-notice" wx:if="{{purchaseNoticeImageUrls.length}}">
+          <text class="settlement-notice__title">购买须知</text>
+          <view class="settlement-notice__images">
+            <image
+              class="settlement-notice__image"
+              wx:for="{{purchaseNoticeImageUrls}}"
+              wx:key="*this"
+              src="{{item}}"
+              mode="widthFix"
+              lazy-load
+            />
+          </view>
+        </view>
+
+        <view class="settlement-section settlement-materials">
+          <view class="settlement-section__heading">
+            <text class="settlement-section__title">构成清单</text>
+            <text class="settlement-section__meta">单件用料</text>
+          </view>
+
+          <block wx:if="{{item.materialRows.length > 0}}">
+            <view
+              class="settlement-material"
+              wx:for="{{item.materialRows}}"
+              wx:key="id"
+            >
+              <view class="settlement-material__identity">
+                <image
+                  wx:if="{{item.imageUrl}}"
+                  class="settlement-material__image"
+                  src="{{item.imageUrl}}"
+                  mode="aspectFit"
+                  lazy-load="{{true}}"
+                  data-index="{{index}}"
+                  binderror="handleMaterialImageError"
+                />
+                <view wx:else class="settlement-material__fallback"></view>
+                <view class="settlement-material__copy">
+                  <text class="settlement-material__label">{{item.name}}</text>
+                  <text class="settlement-material__meta">{{item.sizeText}} · ¥{{item.unitPriceText}}/颗</text>
+                </view>
+              </view>
+              <view class="settlement-material__amount">
+                <text class="settlement-material__quantity">×{{item.quantity}}</text>
+                <text class="settlement-material__subtotal">¥{{item.subtotalText}}</text>
+              </view>
+            </view>
+          </block>
+
+          <view class="settlement-materials__empty" wx:else>
+            当前设计没有可展示的珠材构成
+          </view>
+          <text class="settlement-materials__note">
+            珠材单价来自当前材料目录，最终结算金额以购物车和后端计价结果为准。
+          </text>
+        </view>
+
+        <view class="settlement-content__safe-space"></view>
+      </view>
+    </scroll-view>
+
+    <view class="settlement-footer">
+      <button
+        class="settlement-footer__button settlement-footer__button--secondary"
+        bindtap="handleAddToCart"
+        disabled="{{actionBusy}}"
+      >{{sourceMode === 'diy' ? (addedCartItemId ? '已加入购物车' : '加入购物车') : '返回购物车'}}</button>
+      <button
+        wx:if="{{sourceMode === 'cart'}}"
+        class="settlement-footer__button settlement-footer__button--redesign"
+        bindtap="handleRedesign"
+        disabled="{{actionBusy}}"
+      >重新设计</button>
+      <button
+        class="settlement-footer__button settlement-footer__button--primary"
+        bindtap="handleCheckout"
+        disabled="{{actionBusy}}"
+      >去结算</button>
+    </view>
+  </block>
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

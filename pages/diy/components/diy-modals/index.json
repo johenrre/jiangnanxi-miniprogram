@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "usage-guide-modal": "/components/usage-guide-modal/index"
+  }
+}

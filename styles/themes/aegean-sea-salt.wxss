@@ -1,0 +1,40 @@
+/* 海盐地中海风 */
+.theme-root.theme-aegean-sea-salt {
+  --color-bg-page: #eef3f1;
+  --color-bg-surface: #fcfbf6;
+  --color-bg-section: #f3f5f0;
+  --color-bg-warm: #f7f1e6;
+  --color-bg-muted: #dfe9e7;
+  --color-bg-media: #d5e4e4;
+  --color-bg-primary-soft: #dcebee;
+  --color-text-heading: #29434b;
+  --color-text-primary: #35515a;
+  --color-text-secondary: #6e8184;
+  --color-text-muted: #849596;
+  --color-text-faint: #9cacac;
+  --color-primary: #3d7488;
+  --color-primary-light: #578da0;
+  --color-primary-muted: #78a7b4;
+  --color-primary-pressed: #315f70;
+  --color-accent-jade: #7fb6ae;
+  --color-accent-blush: #c57e64;
+  --color-accent-blush-strong: #aa674f;
+  --color-white: #ffffff;
+  --color-divider: rgba(53, 81, 90, 0.08);
+  --color-border-hairline: rgba(53, 81, 90, 0.09);
+  --color-border-soft: rgba(61, 116, 136, 0.08);
+  --color-border: rgba(61, 116, 136, 0.14);
+  --color-border-strong: rgba(61, 116, 136, 0.22);
+  --color-shadow-soft: rgba(41, 67, 75, 0.07);
+  --color-shadow: rgba(41, 67, 75, 0.11);
+  --color-shadow-primary: rgba(49, 95, 112, 0.16);
+  --color-modal-backdrop: rgba(25, 42, 48, 0.46);
+  --color-modal-shadow: rgba(41, 67, 75, 0.18);
+  --color-surface-glass: rgba(252, 251, 246, 0.84);
+  --color-surface-glass-strong: rgba(252, 251, 246, 0.97);
+  --color-nav-surface: rgba(248, 250, 246, 0.97);
+  --color-nav-indicator: #4d8799;
+  --color-nav-ring: rgba(238, 243, 241, 0.98);
+  --color-nav-shadow: rgba(41, 67, 75, 0.12);
+  --color-nav-shadow-soft: rgba(41, 67, 75, 0.04);
+}

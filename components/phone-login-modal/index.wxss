@@ -1,0 +1,167 @@
+.phone-login-mask {
+  position: fixed;
+  /* 必须高于自定义 Tab Bar（9000）和普通业务浮层。 */
+  z-index: 20000;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(49, 57, 54, 0.38);
+  animation: phone-login-mask-in 180ms ease-out both;
+}
+
+.phone-login-sheet {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 18rpx 34rpx calc(30rpx + env(safe-area-inset-bottom));
+  border-radius: 32rpx 32rpx 0 0;
+  background: #faf7f1;
+  box-shadow: 0 -18rpx 52rpx rgba(49, 57, 54, 0.14);
+  animation: phone-login-sheet-in 220ms ease-out both;
+}
+
+.phone-login-sheet__handle {
+  width: 64rpx;
+  height: 7rpx;
+  margin: 0 auto 28rpx;
+  border-radius: 4rpx;
+  background: #d5dad6;
+}
+
+.phone-login-sheet__eyebrow,
+.phone-login-sheet__title,
+.phone-login-sheet__description,
+.phone-login-sheet__privacy {
+  display: block;
+}
+
+.phone-login-sheet__eyebrow {
+  color: #9b817b;
+  font-size: 15rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.phone-login-sheet__title {
+  margin-top: 10rpx;
+  color: #303b37;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 38rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+
+.phone-login-sheet__description {
+  margin-top: 14rpx;
+  color: #68736f;
+  font-size: 23rpx;
+  line-height: 1.65;
+}
+
+.phone-login-sheet__privacy {
+  margin-top: 12rpx;
+  color: #929a96;
+  font-size: 20rpx;
+  line-height: 1.55;
+}
+
+.phone-login-sheet__agreement {
+  display: flex;
+  align-items: center;
+  margin-top: 22rpx;
+  color: #7c8681;
+  font-size: 20rpx;
+  line-height: 1.6;
+  flex-wrap: wrap;
+}
+
+.phone-login-sheet__agreement-check {
+  display: inline-flex;
+  align-items: center;
+}
+
+.phone-login-sheet__agreement-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48rpx;
+}
+
+.phone-login-sheet__agreement-checkbox {
+  margin-right: 5rpx;
+  transform: scale(0.72);
+  transform-origin: center;
+}
+
+.phone-login-sheet__agreement-link {
+  min-height: 48rpx;
+  color: #526f67;
+  font-weight: 600;
+  line-height: 48rpx;
+}
+
+.phone-login-sheet__agreement-separator {
+  min-height: 48rpx;
+  color: #7c8681;
+  line-height: 48rpx;
+}
+
+.phone-login-sheet__actions {
+  display: flex;
+  margin-top: 32rpx;
+  gap: 18rpx;
+}
+
+.phone-login-sheet__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 82rpx;
+  margin: 0;
+  flex: 1;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.phone-login-sheet__button::after {
+  border: 0;
+}
+
+.phone-login-sheet__button--secondary {
+  border: 1rpx solid rgba(96, 125, 118, 0.17);
+  background: transparent;
+  color: #68736f;
+}
+
+.phone-login-sheet__button--primary {
+  background: #526f67;
+  box-shadow: 0 10rpx 24rpx rgba(77, 105, 98, 0.16);
+  color: #fff;
+}
+
+.phone-login-sheet__button--agreement-required {
+  background: #8c9c97;
+  box-shadow: none;
+}
+
+.phone-login-sheet__button[disabled] {
+  opacity: 0.62;
+}
+
+@keyframes phone-login-mask-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes phone-login-sheet-in {
+  from { transform: translateY(36rpx); }
+  to { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-login-mask,
+  .phone-login-sheet {
+    animation: none;
+  }
+}

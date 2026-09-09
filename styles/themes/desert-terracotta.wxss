@@ -1,0 +1,40 @@
+/* 沙丘赤陶风 */
+.theme-root.theme-desert-terracotta {
+  --color-bg-page: #f3e8d9;
+  --color-bg-surface: #fcf6ec;
+  --color-bg-section: #f6ecdf;
+  --color-bg-warm: #f4e3d2;
+  --color-bg-muted: #e8d6c4;
+  --color-bg-media: #dfcdbb;
+  --color-bg-primary-soft: #efdbcf;
+  --color-text-heading: #4c3931;
+  --color-text-primary: #59453c;
+  --color-text-secondary: #846f64;
+  --color-text-muted: #978379;
+  --color-text-faint: #ab988d;
+  --color-primary: #a35f45;
+  --color-primary-light: #b8755a;
+  --color-primary-muted: #ca9077;
+  --color-primary-pressed: #874c37;
+  --color-accent-jade: #8fa18a;
+  --color-accent-blush: #c9785b;
+  --color-accent-blush-strong: #ad5f45;
+  --color-white: #ffffff;
+  --color-divider: rgba(89, 69, 60, 0.08);
+  --color-border-hairline: rgba(89, 69, 60, 0.09);
+  --color-border-soft: rgba(163, 95, 69, 0.08);
+  --color-border: rgba(163, 95, 69, 0.14);
+  --color-border-strong: rgba(163, 95, 69, 0.22);
+  --color-shadow-soft: rgba(76, 57, 49, 0.07);
+  --color-shadow: rgba(76, 57, 49, 0.11);
+  --color-shadow-primary: rgba(135, 76, 55, 0.16);
+  --color-modal-backdrop: rgba(55, 39, 32, 0.48);
+  --color-modal-shadow: rgba(76, 57, 49, 0.18);
+  --color-surface-glass: rgba(252, 246, 236, 0.84);
+  --color-surface-glass-strong: rgba(252, 246, 236, 0.97);
+  --color-nav-surface: rgba(249, 241, 231, 0.97);
+  --color-nav-indicator: #b26d52;
+  --color-nav-ring: rgba(246, 236, 223, 0.98);
+  --color-nav-shadow: rgba(76, 57, 49, 0.12);
+  --color-nav-shadow-soft: rgba(76, 57, 49, 0.04);
+}

@@ -1,0 +1,53 @@
+<theme-provider>
+<view class="discover-page">
+  <view class="discover-header" style="padding-top: {{menuButtonTopPx}}px;">
+    <text class="discover-header__eyebrow">CURATED STORIES</text>
+    <text class="discover-header__title">灵感</text>
+    <text class="discover-header__description">从真实搭配与设计师作品里，找到属于你的灵感。</text>
+    <view class="discover-filters">
+      <button
+        class="discover-filter {{section === 'customer' ? 'discover-filter--active' : ''}}"
+        data-section="customer"
+        bindtap="handleSectionSelect"
+      >优秀客订</button>
+      <button
+        class="discover-filter {{section === 'designer' ? 'discover-filter--active' : ''}}"
+        data-section="designer"
+        bindtap="handleSectionSelect"
+      >设计师款</button>
+    </view>
+  </view>
+
+  <view class="discover-grid" wx:if="{{status === 'ready'}}">
+    <design-card
+      wx:for="{{designWorks}}"
+      wx:key="id"
+      design="{{item}}"
+      variant="discover"
+      tray-background-url="{{trayBackgroundUrl}}"
+      bindselect="handleDesignSelect"
+    />
+  </view>
+
+  <view class="discover-grid" wx:elif="{{status === 'loading'}}">
+    <view class="discover-skeleton" wx:for="{{[1, 2, 3, 4]}}" wx:key="*this">
+      <view class="discover-skeleton__media"></view>
+      <view class="discover-skeleton__line discover-skeleton__line--short"></view>
+      <view class="discover-skeleton__line"></view>
+    </view>
+  </view>
+
+  <view class="discover-state" wx:elif="{{status === 'empty'}}">
+    <text class="discover-state__title">{{section === 'designer' ? '暂无设计师作品' : '暂无优秀客订作品'}}</text>
+    <text class="discover-state__description">新的灵感正在整理中，稍后再来看看。</text>
+  </view>
+
+  <view class="discover-state discover-state--error" wx:else>
+    <text class="discover-state__title">设计作品加载失败</text>
+    <text class="discover-state__description">{{errorMessage}}</text>
+    <button class="discover-state__button" bindtap="handleRetry">重新加载</button>
+  </view>
+
+  <customer-service-float />
+</view>
+</theme-provider>

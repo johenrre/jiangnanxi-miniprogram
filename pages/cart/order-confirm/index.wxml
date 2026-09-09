@@ -1,0 +1,234 @@
+<theme-provider>
+<view class="confirm-page">
+  <page-header
+    title="确认订单"
+    fallbackUrl="/pages/cart/index"
+    badge=""
+  />
+
+  <view class="confirm-loading" wx:if="{{status === 'loading'}}">
+    <view class="confirm-loading__card"></view>
+    <view class="confirm-loading__card confirm-loading__card--large"></view>
+    <view class="confirm-loading__card"></view>
+  </view>
+
+  <view class="confirm-state" wx:elif="{{status === 'error'}}">
+    <text class="confirm-state__mark">!</text>
+    <text class="confirm-state__title">确认信息加载失败</text>
+    <text class="confirm-state__description">{{errorMessage}}</text>
+    <button class="confirm-state__button" bindtap="handleRetry">重新加载</button>
+  </view>
+
+  <view class="confirm-state" wx:elif="{{status === 'login'}}">
+    <text class="confirm-state__mark">人</text>
+    <text class="confirm-state__title">登录后继续下单</text>
+    <text class="confirm-state__description">登录后可读取收货地址，并继续完成订单。</text>
+    <button class="confirm-state__button" bindtap="handleGoLogin">登录</button>
+  </view>
+
+  <view class="confirm-state" wx:elif="{{status === 'empty'}}">
+    <image class="confirm-state__icon" src="/assets/icons/nav-cart-muted.svg" mode="aspectFit" />
+    <text class="confirm-state__title">没有待结算商品</text>
+    <text class="confirm-state__description">请返回购物车选择需要结算的商品。</text>
+    <button class="confirm-state__button" bindtap="handleReturnCart">返回购物车</button>
+  </view>
+
+  <block wx:else>
+    <scroll-view class="confirm-scroll" scroll-y="{{true}}" show-scrollbar="{{false}}">
+      <view class="confirm-content">
+        <view class="confirm-card confirm-address" bindtap="handleManageAddress">
+          <view class="confirm-card__heading">
+            <text class="confirm-card__title">收货信息</text>
+            <text class="confirm-card__action">管理 ›</text>
+          </view>
+          <block wx:if="{{address}}">
+            <view class="confirm-address__person">
+              <text class="confirm-address__name">{{address.receiverName}}</text>
+              <text class="confirm-address__phone">{{address.receiverPhone}}</text>
+              <text class="confirm-address__default" wx:if="{{address.isDefault}}">默认</text>
+            </view>
+            <text class="confirm-address__detail">{{address.fullAddress}}</text>
+          </block>
+          <view class="confirm-address__empty" wx:else>
+            <text>暂未选择收货地址</text>
+            <text>点击添加</text>
+          </view>
+        </view>
+
+        <view class="confirm-card">
+          <view class="confirm-card__heading">
+            <text class="confirm-card__title">商品清单</text>
+            <text class="confirm-card__meta">共 {{summary.selectedQuantity}} 件</text>
+          </view>
+          <view class="confirm-product" wx:for="{{cartItems}}" wx:key="id">
+            <view class="confirm-product__preview">
+              <bracelet-preview
+                wx:if="{{item.pattern.length > 0}}"
+                pattern="{{item.pattern}}"
+                materials="{{item.materialMap}}"
+                beadSize="{{item.beadSize}}"
+                containerSize="{{84}}"
+              />
+              <image
+                wx:elif="{{item.coverUrl}}"
+                class="confirm-product__image {{item.itemType === 'mall_product' ? 'confirm-product__image--mall' : ''}}"
+                src="{{item.coverUrl}}"
+                mode="{{item.itemType === 'mall_product' ? 'aspectFill' : 'aspectFit'}}"
+              />
+              <view wx:else class="confirm-product__fallback">{{item.itemType === 'mall_product' ? '商' : '设'}}</view>
+            </view>
+            <view class="confirm-product__copy">
+              <text class="confirm-product__type">{{item.typeLabel}}</text>
+              <text class="confirm-product__name">{{item.name}}</text>
+              <text class="confirm-product__unit">单价 ¥{{item.unitPriceText}} × {{item.quantity}}</text>
+              <text class="confirm-product__total">¥{{item.lineTotalText}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="confirm-card confirm-services" wx:if="{{optionGroupViews.length > 0}}">
+          <view class="confirm-card__heading">
+            <text class="confirm-card__title">结算选项</text>
+            <text class="confirm-card__meta">{{optionGroupViews.length}} 类 · 后台配置</text>
+          </view>
+          <view
+            class="confirm-service-group"
+            wx:for="{{optionGroupViews}}"
+            wx:key="groupCode"
+            wx:for-item="group"
+          >
+            <view class="confirm-service-group__heading">
+              <text class="confirm-service-group__title">{{group.title}}</text>
+              <text class="confirm-service-group__benefit" wx:if="{{group.benefitText}}">{{group.benefitText}}</text>
+            </view>
+            <view class="confirm-service-group__list">
+              <button
+                class="confirm-service {{option.selected ? 'confirm-service--selected' : ''}}"
+                wx:for="{{group.options}}"
+                wx:key="optionCode"
+                wx:for-item="option"
+                data-group-code="{{group.groupCode}}"
+                data-option-code="{{option.optionCode}}"
+                bindtap="handleSelectOption"
+                disabled="{{paymentBusy || paymentCompleted}}"
+              >
+                <image
+                  class="confirm-service__image"
+                  wx:if="{{option.imageUrl}}"
+                  src="{{option.imageUrl}}"
+                  mode="aspectFill"
+                />
+                <view class="confirm-service__copy">
+                  <text class="confirm-service__title">{{option.title}}</text>
+                  <text class="confirm-service__subtitle" wx:if="{{option.subtitle}}">{{option.subtitle}}</text>
+                  <text class="confirm-service__threshold {{option.freeByThreshold ? 'confirm-service__threshold--reached' : ''}}" wx:if="{{option.thresholdText}}">{{option.thresholdText}}</text>
+                </view>
+                <text class="confirm-service__price">{{option.priceText}}</text>
+                <view class="confirm-service__radio">
+                  <view class="confirm-service__radio-core" wx:if="{{option.selected}}"></view>
+                </view>
+              </button>
+            </view>
+          </view>
+          <view class="confirm-greeting" wx:if="{{requiresGreetingMessage}}">
+            <view class="confirm-greeting__heading">
+              <view>
+                <text class="confirm-greeting__title">贺卡祝福语</text>
+                <text class="confirm-greeting__required">必填</text>
+              </view>
+              <text class="confirm-greeting__count">{{greetingMessage.length}}/120</text>
+            </view>
+            <textarea
+              class="confirm-greeting__input"
+              value="{{greetingMessage}}"
+              maxlength="120"
+              auto-height="{{true}}"
+              placeholder="请填写希望印在贺卡上的内容"
+              placeholder-class="confirm-greeting__placeholder"
+              disabled="{{paymentBusy || paymentCompleted}}"
+              bindinput="handleGreetingMessageInput"
+            />
+            <text class="confirm-greeting__hint">工作室将按此内容制作贺卡，提交前请确认称呼和文字。</text>
+          </view>
+        </view>
+
+        <view class="confirm-card confirm-remark">
+          <view class="confirm-card__heading">
+            <text class="confirm-card__title">订单备注</text>
+            <text class="confirm-card__meta">选填</text>
+          </view>
+          <textarea
+            class="confirm-remark__input"
+            value="{{remark}}"
+            maxlength="200"
+            auto-height="{{true}}"
+            placeholder="可填写尺寸、包装或配送等补充说明"
+            placeholder-class="confirm-remark__placeholder"
+            disabled="{{paymentBusy || paymentCompleted}}"
+            bindinput="handleRemarkInput"
+          />
+        </view>
+
+        <view class="confirm-card confirm-fees">
+          <text class="confirm-card__title">费用明细</text>
+          <view class="confirm-fees__row">
+            <text>商品金额</text>
+            <text>¥{{goodsAmountText}}</text>
+          </view>
+          <view class="confirm-fees__row">
+            <text>结算服务费</text>
+            <text>¥{{optionAmountText}}</text>
+          </view>
+          <view class="confirm-fees__row">
+            <text>配送费</text>
+            <text>{{freightAmountText === '0.00' ? '免费' : '¥' + freightAmountText}}</text>
+          </view>
+          <view class="confirm-fees__total">
+            <text>合计</text>
+            <text>¥{{payableAmountText}}</text>
+          </view>
+        </view>
+
+        <view
+          class="confirm-payment-result confirm-payment-result--{{paymentFlowState}}"
+          wx:if="{{paymentMessage}}"
+        >
+          <text class="confirm-payment-result__title">
+            {{paymentFlowState === 'success' ? '支付已确认' : paymentFlowState === 'cancelled' ? '支付已取消' : paymentFlowState === 'order_failed' ? '订单创建失败' : paymentFlowState === 'timeout' ? '状态确认超时' : '支付未完成'}}
+          </text>
+          <text class="confirm-payment-result__message">{{paymentMessage}}</text>
+          <text class="confirm-payment-result__order" wx:if="{{paymentOrderNo}}">订单号 {{paymentOrderNo}}</text>
+          <view class="confirm-payment-result__actions" wx:if="{{hasPendingPaymentOrder}}">
+            <button
+              class="confirm-payment-result__action confirm-payment-result__action--query"
+              disabled="{{paymentBusy}}"
+              bindtap="handleQueryPaymentResult"
+            >查询支付结果</button>
+            <button
+              class="confirm-payment-result__action confirm-payment-result__action--cancel"
+              disabled="{{paymentBusy}}"
+              bindtap="handleCancelPendingOrder"
+            >取消订单</button>
+          </view>
+        </view>
+
+        <view class="confirm-content__safe-space"></view>
+      </view>
+    </scroll-view>
+
+    <view class="confirm-footer">
+      <view class="confirm-footer__amount">
+        <text class="confirm-footer__label">应付金额</text>
+        <text class="confirm-footer__price">¥{{payableAmountText}}</text>
+      </view>
+      <button
+        class="confirm-footer__button {{paymentCompleted ? 'confirm-footer__button--completed' : ''}}"
+        loading="{{paymentBusy}}"
+        disabled="{{paymentBusy || paymentCompleted}}"
+        bindtap="handleConfirmPayment"
+      >{{paymentButtonText}}</button>
+    </view>
+  </block>
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>

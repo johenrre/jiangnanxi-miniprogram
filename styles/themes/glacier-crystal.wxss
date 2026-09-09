@@ -1,0 +1,40 @@
+/* 冰川水晶风 */
+.theme-root.theme-glacier-crystal {
+  --color-bg-page: #f2f7f9;
+  --color-bg-surface: #fbfdfe;
+  --color-bg-section: #f5fafc;
+  --color-bg-warm: #f7fafb;
+  --color-bg-muted: #e8f0f3;
+  --color-bg-media: #e0ecf1;
+  --color-bg-primary-soft: #e4f0f4;
+  --color-text-heading: #263c46;
+  --color-text-primary: #304751;
+  --color-text-secondary: #6b818b;
+  --color-text-muted: #82949c;
+  --color-text-faint: #9aacb3;
+  --color-primary: #52798a;
+  --color-primary-light: #6c94a5;
+  --color-primary-muted: #86a8b5;
+  --color-primary-pressed: #416878;
+  --color-accent-jade: #a9d4dc;
+  --color-accent-blush: #927f9e;
+  --color-accent-blush-strong: #7c6888;
+  --color-white: #ffffff;
+  --color-divider: rgba(59, 89, 102, 0.08);
+  --color-border-hairline: rgba(59, 89, 102, 0.09);
+  --color-border-soft: rgba(82, 121, 138, 0.08);
+  --color-border: rgba(82, 121, 138, 0.13);
+  --color-border-strong: rgba(82, 121, 138, 0.20);
+  --color-shadow-soft: rgba(38, 67, 79, 0.07);
+  --color-shadow: rgba(38, 67, 79, 0.10);
+  --color-shadow-primary: rgba(65, 104, 120, 0.15);
+  --color-modal-backdrop: rgba(28, 43, 50, 0.46);
+  --color-modal-shadow: rgba(38, 67, 79, 0.18);
+  --color-surface-glass: rgba(251, 253, 254, 0.82);
+  --color-surface-glass-strong: rgba(251, 253, 254, 0.96);
+  --color-nav-surface: rgba(248, 252, 253, 0.97);
+  --color-nav-indicator: #79a5b4;
+  --color-nav-ring: rgba(242, 248, 250, 0.98);
+  --color-nav-shadow: rgba(38, 67, 79, 0.11);
+  --color-nav-shadow-soft: rgba(38, 67, 79, 0.04);
+}

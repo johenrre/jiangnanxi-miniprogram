@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "DIY",
+  "enableShareAppMessage": true,
+  "disableScroll": true,
+  "usingComponents": {
+    "diy-header": "/pages/diy/components/diy-header/index",
+    "diy-toolbar": "/pages/diy/components/diy-toolbar/index",
+    "material-picker": "/pages/diy/components/material-picker/index",
+    "diy-modals": "/pages/diy/components/diy-modals/index",
+    "phone-login-modal": "/components/phone-login-modal/index"
+  }
+}

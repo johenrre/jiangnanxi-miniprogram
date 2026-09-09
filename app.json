@@ -1,0 +1,67 @@
+{
+  "entryPagePath": "pages/launch/index",
+  "pages": [
+    "pages/launch/index",
+    "pages/home/index",
+    "pages/home/activity/index",
+    "pages/discover/index",
+    "pages/discover/design-detail/index",
+    "pages/mall/index",
+    "pages/mall/detail/index",
+    "pages/diy/index",
+    "pages/cart/index",
+    "pages/cart/settlement-detail/index",
+    "pages/cart/order-confirm/index",
+    "pages/profile/index",
+    "pages/legal/user-agreement/index",
+    "pages/profile/profile-edit/index",
+    "pages/profile/my-designs/index",
+    "pages/profile/orders/index",
+    "pages/profile/order-detail/index",
+    "pages/profile/order-logistics/index",
+    "pages/profile/addresses/index",
+    "pages/profile/after-sales/index",
+    "pages/profile/after-sale-apply/index"
+  ],
+  "usingComponents": {
+    "theme-provider": "/components/theme-provider/index"
+  },
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#f6f4ef",
+    "backgroundTextStyle": "dark"
+  },
+  "resolveAlias": {
+    "@/*": "/*"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#969c99",
+    "selectedColor": "#6f8f88",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/discover/index",
+        "text": "灵感"
+      },
+      {
+        "pagePath": "pages/mall/index",
+        "text": "商城"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "requiredPrivateInfos": [
+    "chooseAddress"
+  ],
+  "lazyCodeLoading": "requiredComponents"
+}

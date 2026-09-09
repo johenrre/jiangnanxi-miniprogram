@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "design-card": "/components/design-card/index",
+    "customer-service-float": "/components/customer-service-float/index"
+  }
+}

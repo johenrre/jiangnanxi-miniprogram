@@ -1,0 +1,97 @@
+:host {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.page-header {
+  position: relative;
+  z-index: 20;
+  padding-right: 24rpx;
+  padding-bottom: 10rpx;
+  padding-left: 24rpx;
+  border-bottom: 1rpx solid var(--color-border-soft);
+  background: rgba(246, 244, 239, 0.96);
+  -webkit-backdrop-filter: blur(18rpx);
+  backdrop-filter: blur(18rpx);
+}
+
+.page-header--dark,
+.page-header--warm,
+.page-header--diy {
+  border-bottom-color: transparent;
+  background: rgba(246, 244, 239, 0.96);
+}
+
+.page-header--warm {
+  padding-bottom: 8rpx;
+}
+
+.page-header--diy {
+  padding-bottom: 2rpx;
+}
+
+.page-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-header__back,
+.page-header__side {
+  width: 64rpx;
+  min-width: 64rpx;
+  height: 64rpx;
+}
+
+.page-header__side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface-glass);
+  box-shadow: 0 5rpx 14rpx var(--color-shadow-soft);
+}
+
+.page-header__back:active {
+  background: #eceee9;
+  transform: scale(0.96);
+}
+
+.page-header__back-icon {
+  width: 29rpx;
+  height: 29rpx;
+  opacity: 0.84;
+}
+
+.page-header__title {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 35rpx;
+  font-weight: 500;
+  letter-spacing: 3rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-header--warm .page-header__title {
+  font-size: 37rpx;
+}
+
+.page-header__badge {
+  padding: 5rpx 10rpx;
+  border-radius: 8rpx;
+  background: var(--color-bg-primary-soft);
+  color: var(--color-primary);
+  font-size: 15rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  line-height: 1;
+}

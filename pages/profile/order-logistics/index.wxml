@@ -1,0 +1,112 @@
+<theme-provider>
+<view class="logistics-page">
+  <page-header title="物流信息" />
+
+  <view wx:if="{{status === 'ready' && logistics}}" class="logistics-content">
+    <view class="logistics-progress">
+      <view class="logistics-progress__mark">
+        <view class="logistics-progress__ring"></view>
+      </view>
+      <view class="logistics-progress__copy">
+        <text class="logistics-progress__eyebrow">{{trackingEyebrow}}</text>
+        <text class="logistics-progress__title">{{trackingTitle}}</text>
+        <text class="logistics-progress__description">{{trackingDescription}}</text>
+      </view>
+    </view>
+
+    <view class="logistics-card">
+      <view class="logistics-card__heading">
+        <view>
+          <text class="logistics-card__label">承运信息</text>
+          <text class="logistics-card__company">{{logistics.expressCompany || '快递公司'}}</text>
+        </view>
+        <view class="logistics-card__badge">{{isCompleted ? '已完成' : '已发出'}}</view>
+      </view>
+
+      <view class="logistics-row">
+        <text class="logistics-row__label">快递单号</text>
+        <view class="logistics-row__value-wrap">
+          <text class="logistics-row__value logistics-row__value--mono" user-select="{{true}}">{{logistics.expressNo}}</text>
+          <button class="logistics-row__copy" bindtap="handleCopyTrackingNo">复制</button>
+        </view>
+      </view>
+      <view class="logistics-row">
+        <text class="logistics-row__label">发货时间</text>
+        <text class="logistics-row__value">{{logistics.shipTimeText || '—'}}</text>
+      </view>
+      <view wx:if="{{logistics.wechatShippingStatus === 'success'}}" class="logistics-sync">
+        <view class="logistics-sync__dot"></view>
+        <text>发货信息已同步至微信订单</text>
+      </view>
+    </view>
+
+    <view wx:if="{{logistics.trackingEvents.length}}" class="logistics-trace">
+      <view class="logistics-trace__heading">
+        <text>物流轨迹</text>
+        <text>{{logistics.trackingQueriedAtText ? '更新于 ' + logistics.trackingQueriedAtText : '实时查询'}}</text>
+      </view>
+      <view
+        class="logistics-trace__item {{index === 0 ? 'logistics-trace__item--latest' : ''}}"
+        wx:for="{{logistics.trackingEvents}}"
+        wx:key="time"
+      >
+        <view class="logistics-trace__axis">
+          <view class="logistics-trace__dot"></view>
+        </view>
+        <view class="logistics-trace__copy">
+          <text class="logistics-trace__context">{{item.context}}</text>
+          <text wx:if="{{item.location}}" class="logistics-trace__location">{{item.location}}</text>
+          <text class="logistics-trace__time">{{item.time || '时间待更新'}}</text>
+        </view>
+      </view>
+      <text class="logistics-trace__provider">物流轨迹由快递100提供，同一单号的查询结果缓存 30 分钟。</text>
+    </view>
+
+    <view wx:else class="logistics-note">
+      <text class="logistics-note__title">暂无实时轨迹</text>
+      <text class="logistics-note__copy">{{logistics.trackingMessage || '快递公司暂未返回运输轨迹，请稍后再查看。'}}</text>
+    </view>
+
+    <view wx:if="{{logistics.canConfirmReceipt}}" class="logistics-actions">
+      <text class="logistics-actions__note">请在实际收到商品后确认，确认结果将同步至微信订单。</text>
+      <button
+        class="logistics-actions__primary"
+        loading="{{confirmingReceipt}}"
+        disabled="{{confirmingReceipt}}"
+        bindtap="handleConfirmReceipt"
+      >确认收货</button>
+    </view>
+
+  </view>
+
+  <content-state
+    wx:elif="{{status === 'loading'}}"
+    status="loading"
+    title="正在加载物流"
+    description="正在同步最新发货信息"
+  />
+  <content-state
+    wx:elif="{{status === 'empty'}}"
+    status="empty"
+    title="暂未填写物流"
+    description="商家发货并填写快递单号后会显示在这里。"
+  />
+  <content-state
+    wx:elif="{{status === 'login'}}"
+    status="login"
+    title="登录后查看物流"
+    description="登录后可查看自己的订单物流信息。"
+    actionText="登录"
+    bindaction="handleGoLogin"
+  />
+  <content-state
+    wx:else
+    status="error"
+    title="物流信息加载失败"
+    description="{{errorMessage}}"
+    actionText="重新加载"
+    bindaction="handleRetry"
+  />
+  <phone-login-modal id="phone-login-modal" />
+</view>
+</theme-provider>
