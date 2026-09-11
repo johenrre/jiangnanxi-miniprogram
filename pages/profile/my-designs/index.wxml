@@ -6,9 +6,9 @@
     <view class="my-designs-summary">
       <view>
         <text class="my-designs-summary__eyebrow">SAVED DESIGNS</text>
-        <text class="my-designs-summary__title">已保存 {{total}} / 10</text>
+        <text class="my-designs-summary__title">已保存 {{total}} / 50</text>
       </view>
-      <text class="my-designs-summary__description">最多保存 10 个，删除后可继续添加</text>
+      <text class="my-designs-summary__description">最多保存 50 个，删除后可继续添加</text>
     </view>
 
     <view class="my-designs-grid">

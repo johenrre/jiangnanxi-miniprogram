@@ -9,8 +9,10 @@ import {
 export function loadDiscoverDesignWorks(
   section: DesignSection,
   forceRefresh = false,
+  page = 1,
+  pageSize?: number,
 ): Promise<DesignPage> {
-  return loadDesignWorks({ section, forceRefresh })
+  return loadDesignWorks({ section, forceRefresh, page, pageSize })
 }
 
 export function loadDiscoverDesignDetail(

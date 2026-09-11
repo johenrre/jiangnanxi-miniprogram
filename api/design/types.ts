@@ -157,6 +157,8 @@ export interface DesignPage {
 
 export interface LoadDesignsOptions {
   section?: DesignSection
+  page?: number
+  pageSize?: number
   limit?: number
   forceRefresh?: boolean
 }

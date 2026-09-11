@@ -87,8 +87,39 @@
 .discover-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: 24rpx 26rpx 180rpx;
+  padding: 24rpx 26rpx 48rpx;
   gap: 32rpx 22rpx;
+}
+
+.discover-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96rpx;
+  padding: 0 26rpx 96rpx;
+}
+
+.discover-pagination__text {
+  color: var(--color-text-muted);
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+.discover-pagination__retry {
+  width: auto;
+  height: 72rpx;
+  margin: 0;
+  padding: 0 28rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 999rpx;
+  background: var(--color-bg-surface);
+  color: var(--color-primary);
+  font-size: 21rpx;
+  line-height: 70rpx;
+}
+
+.discover-pagination__retry::after {
+  border: 0;
 }
 
 .discover-skeleton {

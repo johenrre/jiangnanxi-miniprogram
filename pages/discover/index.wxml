@@ -48,6 +48,19 @@
     <button class="discover-state__button" bindtap="handleRetry">重新加载</button>
   </view>
 
+  <view
+    class="discover-pagination"
+    wx:if="{{status === 'ready' && (isLoadingMore || loadMoreFailed || !hasMore)}}"
+  >
+    <text wx:if="{{isLoadingMore}}" class="discover-pagination__text">正在加载更多灵感…</text>
+    <button
+      wx:elif="{{loadMoreFailed}}"
+      class="discover-pagination__retry"
+      bindtap="handleLoadMoreRetry"
+    >加载失败，点击重试</button>
+    <text wx:else class="discover-pagination__text">已展示全部作品</text>
+  </view>
+
   <customer-service-float />
 </view>
 </theme-provider>

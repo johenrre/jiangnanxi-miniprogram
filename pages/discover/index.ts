@@ -23,6 +23,12 @@ Page({
     section: 'designer' as DesignSection,
     status: 'loading' as PageStatus,
     designWorks: [] as DesignWork[],
+    currentPage: 0,
+    pageSize: 18,
+    total: 0,
+    hasMore: false,
+    isLoadingMore: false,
+    loadMoreFailed: false,
     trayBackgroundUrl: '/assets/bg_1.jpg',
     errorMessage: '',
   },
@@ -67,13 +73,30 @@ Page({
     handleTabBarPageScroll(this, event.scrollTop)
   },
 
+  onReachBottom() {
+    void this.loadMoreDesigns()
+  },
+
   async loadDesigns(section: DesignSection, forceRefresh = false) {
-    this.setData({ status: 'loading', errorMessage: '', designWorks: [] })
+    this.setData({
+      status: 'loading',
+      errorMessage: '',
+      designWorks: [],
+      currentPage: 0,
+      total: 0,
+      hasMore: false,
+      isLoadingMore: false,
+      loadMoreFailed: false,
+    })
     try {
       const designPage = await loadDiscoverDesignWorks(section, forceRefresh)
       if (section !== this.data.section) return
       this.setData({
         designWorks: designPage.items,
+        currentPage: designPage.page,
+        pageSize: designPage.pageSize,
+        total: designPage.total,
+        hasMore: designPage.items.length > 0 && designPage.items.length < designPage.total,
         status: designPage.items.length > 0 ? 'ready' : 'empty',
       })
     } catch (error) {
@@ -83,6 +106,40 @@ Page({
         status: 'error',
         errorMessage: getDesignErrorMessage(error),
       })
+    }
+  },
+
+  async loadMoreDesigns() {
+    if (this.data.status !== 'ready' || !this.data.hasMore || this.data.isLoadingMore) return
+
+    const section = this.data.section
+    const nextPage = this.data.currentPage + 1
+    this.setData({ isLoadingMore: true, loadMoreFailed: false })
+
+    try {
+      const designPage = await loadDiscoverDesignWorks(
+        section,
+        false,
+        nextPage,
+        this.data.pageSize,
+      )
+      if (section !== this.data.section) return
+
+      const knownDesignIds = new Set(this.data.designWorks.map((design) => design.id))
+      const newDesigns = designPage.items.filter((design) => !knownDesignIds.has(design.id))
+      const currentPage = Math.max(nextPage, designPage.page)
+      this.setData({
+        designWorks: [...this.data.designWorks, ...newDesigns],
+        currentPage,
+        pageSize: designPage.pageSize,
+        total: designPage.total,
+        hasMore: designPage.items.length > 0
+          && currentPage * designPage.pageSize < designPage.total,
+        isLoadingMore: false,
+      })
+    } catch {
+      if (section !== this.data.section) return
+      this.setData({ isLoadingMore: false, loadMoreFailed: true })
     }
   },
 
@@ -96,6 +153,10 @@ Page({
 
   handleRetry() {
     void this.loadDesigns(this.data.section, true)
+  },
+
+  handleLoadMoreRetry() {
+    void this.loadMoreDesigns()
   },
 
   handleDesignSelect(event: WechatMiniprogram.CustomEvent<DesignSelectEventDetail>) {

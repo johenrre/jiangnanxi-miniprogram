@@ -11,9 +11,9 @@ export type MiniProgramEnvVersion = 'develop' | 'trial' | 'release'
  * 这里仅保存公开的接口地址，不能放微信、支付或其他服务端密钥。
  */
 const API_BASE_URLS: Record<MiniProgramEnvVersion, string> = {
-  develop: 'https://rocking.synology.me:6001',
-  trial: 'https://rocking.synology.me:6001',
-  release: 'https://rocking.synology.me:6001',
+  develop: 'https://rocking.synology.me:4001',
+  trial: 'https://rocking.synology.me:4001',
+  release: 'https://rocking.synology.me:4001',
 }
 
 function normalizeEnvVersion(value: unknown): MiniProgramEnvVersion {
