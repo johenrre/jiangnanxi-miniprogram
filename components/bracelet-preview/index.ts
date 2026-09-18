@@ -85,7 +85,13 @@ function buildPreviewLayout(
     ? circumference / (2 * materialCount * Math.sin(Math.PI / materialCount)) * baseScale
     : firstSize * baseScale
   const maxDiameter = resolvedMaterials.reduce((largest, material) => (
-    Math.max(largest, material.size * baseScale)
+    Math.max(largest, getMaterialRenderWidthMm({
+      sizeMm: material.size,
+      stringingWidthMm: material.stringingWidthMm,
+      stringingPosition: material.stringingPosition,
+      isIrregular: material.isIrregular,
+      imageScale: material.imageScale,
+    }) * baseScale)
   ), beadSize)
   const physicalSize = Math.max(1, (radius * 2 + maxDiameter) * 1.05)
   const previewScale = containerSize / physicalSize
@@ -105,6 +111,7 @@ function buildPreviewLayout(
       stringingWidthMm: material.stringingWidthMm,
       stringingPosition: material.stringingPosition,
       isIrregular: material.isIrregular,
+      imageScale: material.imageScale,
     }) * baseScale
     const stringingRadius = radius + material.stringingOffsetMm * baseScale
     const anchorY = material.stringingPosition === 'top'
@@ -115,8 +122,8 @@ function buildPreviewLayout(
     const left = centerX - renderWidth / 2
     const top = centerY - anchorY
     const rotation = getInwardFacingRotation(angle)
-    // Center-strung irregular materials use their threading width. When it is
-    // absent, getMaterialRenderWidthMm keeps the existing size fallback.
+    // The same width contract is shared with DIY Canvas: choose size or
+    // threading width first, then apply the independent visual scale.
     const usesAccessoryLayout = material.isIrregular
     const usesTopAnchor = material.stringingPosition === 'top'
     const imageMode: PreviewBead['imageMode'] = usesAccessoryLayout ? 'widthFix' : 'aspectFit'
