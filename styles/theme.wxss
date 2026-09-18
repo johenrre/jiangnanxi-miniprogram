@@ -101,9 +101,9 @@ page,
 }
 
 .theme-jiangnanxi .tab-bar__item--active .tab-bar__icon {
-  filter: hue-rotate(175deg) saturate(2);
+  filter: none;
 }
 
 .theme-jiangnanxi .tab-bar__item--primary .tab-bar__icon {
-  filter: brightness(0) invert(1);
+  filter: none;
 }

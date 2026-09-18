@@ -39,7 +39,6 @@ interface HomeHeroSlideView {
   route: string
 }
 
-const DEFAULT_APP_NAME = '水晶定制'
 type HomeAssetField =
   | 'mainHandcraftImageUrl'
   | 'mainFinishedStyleImageUrl'
@@ -60,7 +59,6 @@ const EMPTY_HOME_ASSETS: Record<HomeAssetField, string> = {
   activityImageUrl: '',
   processPosterUrl: '',
 }
-const LEGACY_APP_NAMES = new Set(['', '小程序', '晶石实验室'])
 const TAB_PAGE_PATHS = new Set([
   '/pages/home/index',
   '/pages/discover/index',
@@ -86,18 +84,12 @@ function normalizeSlideRoute(value: unknown): string {
   return /^\/pages\/[A-Za-z0-9_/-]+(?:\?[^#\s]*)?$/.test(route) ? route : ''
 }
 
-function getAppDisplayName(appName: string): string {
-  const normalizedName = String(appName || '').trim()
-  return LEGACY_APP_NAMES.has(normalizedName) ? DEFAULT_APP_NAME : normalizedName
-}
-
 function imageUrlFor(slots: Array<{ key: string; imageUrl: string }>, key: string, fallback: string): string {
   return slots.find((slot) => slot.key === key)?.imageUrl || fallback
 }
 
 Page({
   data: {
-    appDisplayName: DEFAULT_APP_NAME,
     brandLogoUrl: DEFAULT_ACCOUNT_AVATAR_URL,
     horizontalLogoImageUrl: '',
     homeIdentityDefaultName: DEFAULT_ACCOUNT_NAME,
@@ -232,7 +224,6 @@ Page({
       ? settings.homeActivityPopupImageUrl
       : ''
     activityPopupEntryEligible = false
-    const appDisplayName = getAppDisplayName(settings.appName)
     const brandLogoUrl = settings.siteTitleLogoImageUrl
       || settings.trayLogoImageUrl
       || ''
@@ -242,7 +233,6 @@ Page({
       homeBackgroundMusic.play()
     }
     this.setData({
-      appDisplayName,
       brandLogoUrl,
       horizontalLogoImageUrl: settings.horizontalLogoImageUrl,
       homeIdentityDefaultName: settings.homeIdentityName,

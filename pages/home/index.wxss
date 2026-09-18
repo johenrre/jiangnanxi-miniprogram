@@ -142,7 +142,7 @@ page {
   align-items: center;
   justify-content: center;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 12rpx;
   border: 1rpx solid rgba(89, 113, 107, 0.15);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.7);
@@ -238,31 +238,25 @@ page {
   position: absolute;
   z-index: 4;
   right: 30rpx;
-  bottom: 31rpx;
+  bottom: 112rpx;
   left: 30rpx;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
   pointer-events: none;
 }
 
-.hero__title,
 .hero__description {
   display: block;
 }
 
-.hero__title {
-  margin-top: 17rpx;
-  color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
-  font-size: 42rpx;
-  font-weight: 500;
-  letter-spacing: 2rpx;
-  line-height: 1.26;
-}
-
 .hero__description {
-  margin-top: 7rpx;
+  max-width: 560rpx;
+  margin-top: 0;
   color: var(--color-text-secondary);
-  font-size: 17rpx;
-  line-height: 1.6;
+  font-size: 22rpx;
+  line-height: 1.5;
 }
 
 .hero__retry {
@@ -271,7 +265,7 @@ page {
   justify-content: center;
   width: 190rpx;
   height: 70rpx;
-  margin-top: 28rpx;
+  margin-top: 22rpx;
   border-radius: 35rpx;
   background: #728e88;
   color: var(--color-white);
@@ -293,11 +287,10 @@ page {
   display: flex;
   width: auto;
   min-width: 0;
-  min-height: 132rpx;
+  min-height: 112rpx;
   align-items: center;
   margin: 0 0 30rpx;
-  padding: 4rpx 0 30rpx;
-  border-bottom: 1rpx solid var(--color-divider);
+  padding: 0;
   text-align: left;
   transition: opacity 100ms ease, transform 100ms ease;
 }
@@ -308,10 +301,10 @@ page {
 }
 
 .home-hub-identity__avatar-shell {
-  width: 92rpx;
-  height: 92rpx;
+  width: 96rpx;
+  height: 96rpx;
   overflow: hidden;
-  flex: 0 0 92rpx;
+  flex: 0 0 96rpx;
   border: 4rpx solid rgba(255, 255, 255, 0.92);
   border-radius: 50%;
   background: #eeeee7;
@@ -326,33 +319,40 @@ page {
 
 .home-hub-identity__copy {
   min-width: 0;
-  margin-left: 22rpx;
+  margin-left: 20rpx;
   flex: 1;
 }
 
 .home-hub-identity__name,
-.home-hub-identity__description {
+.home-hub-identity__description,
+.home-hub-identity__works-count,
+.home-hub-identity__works-label {
   display: block;
 }
 
 .home-hub-identity__name {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
-  font-size: 29rpx;
-  font-weight: 500;
-  letter-spacing: 0.5rpx;
-  line-height: 1.3;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .home-hub-identity__description {
-  margin-top: 10rpx;
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 7rpx;
+  padding: 3rpx 11rpx;
+  border: 1rpx solid #f0aa58;
+  border-radius: 18rpx;
+  background: #fff0d1;
+  color: #ff6159;
+  font-size: 19rpx;
+  line-height: 1.35;
   overflow: hidden;
-  color: var(--color-text-muted);
-  font-size: 17rpx;
-  line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -361,12 +361,10 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 76rpx;
-  margin-left: 22rpx;
-  padding-left: 24rpx;
-  flex: 0 0 122rpx;
+  min-height: 88rpx;
+  margin-left: 16rpx;
+  flex: 0 0 100rpx;
   flex-direction: column;
-  border-left: 1rpx solid var(--color-divider);
   text-align: center;
   transition: opacity 100ms ease, transform 100ms ease;
 }
@@ -376,23 +374,18 @@ page {
   transform: scale(0.96);
 }
 
-.home-hub-identity__works-count,
-.home-hub-identity__works-label {
-  display: block;
-}
-
 .home-hub-identity__works-count {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 36rpx;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
 }
 
 .home-hub-identity__works-label {
-  margin-top: 10rpx;
+  margin-top: 7rpx;
   color: var(--color-text-muted);
-  font-size: 15rpx;
+  font-size: 20rpx;
   line-height: 1.2;
   white-space: nowrap;
 }

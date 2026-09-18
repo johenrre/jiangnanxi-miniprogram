@@ -17,33 +17,33 @@ const tabItems: TabItem[] = [
   {
     pagePath: '/pages/home/index',
     text: '首页',
-    iconPath: '/assets/icons/ins-nav-home-muted.svg',
-    selectedIconPath: '/assets/icons/ins-nav-home-active.svg',
+    iconPath: '/assets/icons/gongxiaozhu-nav/home-muted.png',
+    selectedIconPath: '/assets/icons/gongxiaozhu-nav/home-active.png',
   },
   {
     pagePath: '/pages/discover/index',
     text: '灵感',
-    iconPath: '/assets/icons/ins-nav-discover-muted.svg',
-    selectedIconPath: '/assets/icons/ins-nav-discover-active.svg',
+    iconPath: '/assets/icons/gongxiaozhu-nav/discover-muted.png',
+    selectedIconPath: '/assets/icons/gongxiaozhu-nav/discover-active.png',
   },
   {
     pagePath: '/pages/diy/index',
     text: 'DIY',
-    iconPath: '/assets/icons/ins-nav-diy-muted.svg',
-    selectedIconPath: '/assets/icons/ins-nav-diy-active.svg',
+    iconPath: '/assets/icons/gongxiaozhu-nav/diy-muted.png',
+    selectedIconPath: '/assets/icons/gongxiaozhu-nav/diy-active.png',
     isPrimary: true,
   },
   {
     pagePath: '/pages/mall/index',
     text: '商城',
-    iconPath: '/assets/icons/ins-nav-cart-muted.svg',
-    selectedIconPath: '/assets/icons/ins-nav-cart-active.svg',
+    iconPath: '/assets/icons/gongxiaozhu-nav/cart-muted.png',
+    selectedIconPath: '/assets/icons/gongxiaozhu-nav/cart-active.png',
   },
   {
     pagePath: '/pages/profile/index',
     text: '我的',
-    iconPath: '/assets/icons/ins-nav-profile-muted.svg',
-    selectedIconPath: '/assets/icons/ins-nav-profile-active.svg',
+    iconPath: '/assets/icons/gongxiaozhu-nav/profile-muted.png',
+    selectedIconPath: '/assets/icons/gongxiaozhu-nav/profile-active.png',
   },
 ]
 

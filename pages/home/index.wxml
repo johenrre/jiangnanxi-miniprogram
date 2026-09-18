@@ -46,7 +46,6 @@
 
     <view wx:else class="hero__fallback">
       <view class="hero__story">
-        <text class="hero__title">{{appDisplayName}}</text>
         <text wx:if="{{homeConfigStatus === 'loading'}}" class="hero__description">正在加载首页内容…</text>
         <text wx:elif="{{homeConfigStatus === 'empty'}}" class="hero__description">后台暂未配置首页轮播</text>
         <text wx:else class="hero__description">{{homeConfigErrorMessage || '首页配置暂时无法加载'}}</text>

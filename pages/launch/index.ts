@@ -58,7 +58,7 @@ Page({
     progress: 8,
     statusLabel: '正在读取今日灵感',
     brandLogoUrl: '',
-    appDisplayName: '水晶定制',
+    appDisplayName: '江南禧',
     // 只读取已下载的启动背景文件，不读取上一次公开配置。
     launchBackgroundImageUrl: resolveInitialBackgroundImage(),
   },
@@ -109,7 +109,7 @@ Page({
     if (!pageAlive) return
     this.setData({
       brandLogoUrl: settings.siteTitleLogoImageUrl || settings.trayLogoImageUrl || '',
-      appDisplayName: String(settings.appName || '').trim() || '水晶定制',
+      appDisplayName: String(settings.appName || '').trim() || '江南禧',
     })
   },
 

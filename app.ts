@@ -36,7 +36,7 @@ function createDefaultSharePath(): string {
 
 function createDefaultShareMessage() {
   return {
-    title: shareAppName ? `${shareAppName} - 水晶定制` : '水晶定制',
+    title: shareAppName || '江南禧',
     path: createDefaultSharePath(),
   }
 }
