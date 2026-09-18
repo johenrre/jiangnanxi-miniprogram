@@ -1,16 +1,5 @@
 export const THEME_KEYS = [
   'healing-ins',
-  'oriental-song',
-  'glacier-crystal',
-  'cream-french',
-  'forest-mineral',
-  'midnight-astrolabe',
-  'japanese-wabi-sabi',
-  'aegean-sea-salt',
-  'desert-terracotta',
-  'moonlit-pearl',
-  'morandi-gallery',
-  'monochrome-museum',
 ] as const
 
 export type ThemeKey = typeof THEME_KEYS[number]

@@ -1,14 +1,3 @@
-@import "./themes/oriental-song.wxss";
-@import "./themes/glacier-crystal.wxss";
-@import "./themes/cream-french.wxss";
-@import "./themes/forest-mineral.wxss";
-@import "./themes/midnight-astrolabe.wxss";
-@import "./themes/japanese-wabi-sabi.wxss";
-@import "./themes/aegean-sea-salt.wxss";
-@import "./themes/desert-terracotta.wxss";
-@import "./themes/moonlit-pearl.wxss";
-@import "./themes/morandi-gallery.wxss";
-@import "./themes/monochrome-museum.wxss";
 
 page,
 .theme-root {
