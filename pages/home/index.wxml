@@ -103,16 +103,11 @@
     >
       <view class="home-hub-identity__avatar-shell">
         <image
-          wx:if="{{homeIdentityAvatarUrl}}"
           class="home-hub-identity__avatar"
           src="{{homeIdentityAvatarUrl}}"
           mode="aspectFill"
           binderror="handleHomeIdentityAvatarError"
         />
-        <view wx:else class="home-hub-identity__avatar-fallback" aria-hidden="true">
-          <view class="home-hub-identity__avatar-ring"></view>
-          <view class="home-hub-identity__avatar-stone"></view>
-        </view>
       </view>
       <view class="home-hub-identity__copy">
         <text class="home-hub-identity__name">{{homeIdentityName}}</text>

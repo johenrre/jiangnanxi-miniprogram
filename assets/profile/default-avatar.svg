@@ -1,7 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
-  <circle cx="64" cy="64" r="62" fill="#EEF2EF"/>
-  <circle cx="64" cy="64" r="60.5" stroke="#CFDAD5" stroke-width="3"/>
-  <circle cx="64" cy="44" r="17" fill="#66837A"/>
-  <path d="M28 106C31 82 44 69 64 69C84 69 97 82 100 106C90 114 78 118 64 118C50 118 38 114 28 106Z" fill="#66837A"/>
-  <path d="M52 71C55 78 59 81 64 81C69 81 73 78 76 71" stroke="#EEF2EF" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="64" cy="64" r="62" fill="#F5F1E9"/>
+  <g stroke="#B49A6A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 35C58 29 59 23 64 18C69 23 70 29 64 35Z"/>
+    <path d="M35 64C29 58 23 59 18 64C23 69 29 70 35 64Z"/>
+    <path d="M93 64C99 58 105 59 110 64C105 69 99 70 93 64Z"/>
+    <path d="M64 93C58 99 59 105 64 110C69 105 70 99 64 93Z"/>
+    <path d="M64 34C52 34 48 40 40 48L33 55C28 60 28 68 33 73L40 80C48 88 52 94 64 94C76 94 80 88 88 80L95 73C100 68 100 60 95 55L88 48C80 40 76 34 64 34Z"/>
+    <path d="M64 35V51M64 77V93M35 64H51M77 64H93"/>
+    <path d="M45 47H57V57H43M83 47H71V57H85M43 71H57V81H45M85 71H71V81H83"/>
+    <path d="M64 50C62 57 57 62 50 64C57 66 62 71 64 78C66 71 71 66 78 64C71 62 66 57 64 50Z" fill="#F5F1E9"/>
+  </g>
 </svg>

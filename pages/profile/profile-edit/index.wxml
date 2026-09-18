@@ -13,11 +13,13 @@
             mode="aspectFill"
             binderror="handleAvatarError"
           />
-          <view wx:else class="profile-edit-avatar profile-edit-avatar--fallback" aria-label="默认头像">
-            <view class="profile-edit-avatar__ring">
-              <view class="profile-edit-avatar__stone"></view>
-            </view>
-          </view>
+          <image
+            wx:else
+            class="profile-edit-avatar"
+            src="/assets/profile/default-avatar.svg"
+            mode="aspectFit"
+            aria-label="江南禧默认头像"
+          />
           <view class="profile-edit-avatar__edit">更换</view>
         </view>
       </button>

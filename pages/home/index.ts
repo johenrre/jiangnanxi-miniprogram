@@ -317,7 +317,7 @@ Page({
     const failedUrl = this.data.homeIdentityAvatarUrl
     if (!failedUrl) return
     this.setData({
-      homeIdentityAvatarUrl: recoverRemoteResourceUrl(failedUrl),
+      homeIdentityAvatarUrl: recoverRemoteResourceUrl(failedUrl) || DEFAULT_ACCOUNT_AVATAR_URL,
     })
   },
 

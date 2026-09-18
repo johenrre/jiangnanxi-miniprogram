@@ -62,34 +62,6 @@
   font-weight: 500;
 }
 
-.profile-edit-avatar--fallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.9), transparent 24%),
-    linear-gradient(145deg, #edf3ee, #dce8df);
-}
-
-.profile-edit-avatar__ring {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 74rpx;
-  height: 74rpx;
-  border: 2rpx solid rgba(96, 125, 118, 0.42);
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 8rpx rgba(255, 255, 255, 0.48);
-}
-
-.profile-edit-avatar__stone {
-  width: 22rpx;
-  height: 34rpx;
-  border: 2rpx solid rgba(96, 125, 118, 0.66);
-  background: rgba(255, 255, 255, 0.38);
-  clip-path: polygon(50% 0, 100% 28%, 82% 100%, 18% 100%, 0 28%);
-}
-
 .profile-edit-avatar__edit {
   position: absolute;
   right: -2rpx;

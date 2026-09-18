@@ -1,7 +1,7 @@
 import type { AccountProfile } from '@/api/index'
 
 export const DEFAULT_ACCOUNT_NAME = '微信用户'
-export const DEFAULT_ACCOUNT_AVATAR_URL = ''
+export const DEFAULT_ACCOUNT_AVATAR_URL = '/assets/profile/default-avatar.svg'
 
 const GENERIC_ACCOUNT_NAMES = new Set([
   '',

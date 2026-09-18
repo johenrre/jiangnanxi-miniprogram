@@ -98,28 +98,6 @@
   box-shadow: 0 8rpx 22rpx var(--color-shadow);
 }
 
-.profile-identity__avatar--fallback {
-  position: relative;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(145deg, var(--color-bg-section), #e4ebe6);
-}
-
-.profile-identity__avatar-ring {
-  width: 44rpx;
-  height: 44rpx;
-  border: 2rpx solid rgba(96, 125, 118, 0.34);
-  border-radius: 50%;
-}
-
-.profile-identity__avatar-stone {
-  position: absolute;
-  width: 15rpx;
-  height: 21rpx;
-  border: 2rpx solid rgba(96, 125, 118, 0.58);
-  transform: rotate(45deg);
-}
-
 .profile-identity__copy {
   display: flex;
   box-sizing: border-box;

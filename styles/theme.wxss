@@ -100,15 +100,6 @@ page,
   background: var(--color-primary);
 }
 
-.theme-jiangnanxi .home-hub-identity__avatar-fallback {
-  background: var(--color-bg-muted);
-}
-
-.theme-jiangnanxi .home-hub-identity__avatar-ring,
-.theme-jiangnanxi .home-hub-identity__avatar-stone {
-  border-color: var(--color-text-muted);
-}
-
 .theme-jiangnanxi .tab-bar__item--active .tab-bar__icon {
   filter: hue-rotate(175deg) saturate(2);
 }

@@ -26,10 +26,6 @@
           mode="aspectFill"
           binderror="handleDefaultAvatarError"
         />
-        <view wx:else class="profile-identity__avatar profile-identity__avatar--fallback" aria-hidden="true">
-          <view class="profile-identity__avatar-ring"></view>
-          <view class="profile-identity__avatar-stone"></view>
-        </view>
       </view>
 
       <view class="profile-identity__copy">
