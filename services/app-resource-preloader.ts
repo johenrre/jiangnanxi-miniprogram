@@ -44,7 +44,10 @@ let latestProgress: AppResourceProgress = {
 function collectResources(settings: PublicSettings): ResourceRequest[] {
   const resources: ResourceRequest[] = [
     { url: settings.launchBackgroundImageUrl, kind: 'image' },
-    ...settings.slides.slice(0, 1).map((slide) => ({ url: slide.imageUrl, kind: 'image' as const })),
+    ...settings.slides.slice(0, 1).flatMap((slide) => [
+      { url: slide.imageUrl, kind: 'image' as const },
+      { url: slide.textImageUrl, kind: 'image' as const },
+    ]),
     { url: settings.siteTitleLogoImageUrl, kind: 'image' },
     { url: settings.horizontalLogoImageUrl, kind: 'image' },
     { url: settings.trayLogoImageUrl, kind: 'image' },
@@ -86,6 +89,7 @@ function localizeSettings(settings: PublicSettings): PublicSettings {
     slides: settings.slides.map((slide) => ({
       ...slide,
       imageUrl: localize(slide.imageUrl),
+      textImageUrl: localize(slide.textImageUrl),
     })),
     homeMainEntries: settings.homeMainEntries.map((slot) => ({
       ...slot,

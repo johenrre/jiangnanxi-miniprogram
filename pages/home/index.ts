@@ -35,10 +35,8 @@ interface SwiperChangeDetail {
 interface HomeHeroSlideView {
   id: string
   imageUrl: string
-  pendingImageUrl: string
-  eyebrow: string
-  title: string
-  description: string
+  textImageUrl: string
+  route: string
 }
 
 const DEFAULT_APP_NAME = '水晶定制'
@@ -63,27 +61,29 @@ const EMPTY_HOME_ASSETS: Record<HomeAssetField, string> = {
   processPosterUrl: '',
 }
 const LEGACY_APP_NAMES = new Set(['', '小程序', '晶石实验室'])
-const EMPTY_HERO_SLIDE: HomeHeroSlideView = {
-  id: '',
-  imageUrl: '',
-  pendingImageUrl: '',
-  eyebrow: '',
-  title: '',
-  description: '',
-}
+const TAB_PAGE_PATHS = new Set([
+  '/pages/home/index',
+  '/pages/discover/index',
+  '/pages/mall/index',
+  '/pages/profile/index',
+])
 let homeIdentityCountLoading = false
 let shouldAutoPlayHomeMusic = false
 let activityPopupEntryEligible = false
 
 function mergeHeroSlides(slides: PublicHomeSlide[]): HomeHeroSlideView[] {
-  return slides.slice(0, 5).map((slide, index) => ({
+  return slides.slice(0, 5).map((slide) => ({
     id: slide.id,
-    imageUrl: index === 0 ? slide.imageUrl : '',
-    pendingImageUrl: slide.imageUrl,
-    eyebrow: slide.eyebrow,
-    title: slide.title,
-    description: slide.description,
+    imageUrl: slide.imageUrl,
+    textImageUrl: slide.textImageUrl,
+    route: slide.route,
   }))
+}
+
+function normalizeSlideRoute(value: unknown): string {
+  const route = String(value || '').trim()
+  if (route.length > 500) return ''
+  return /^\/pages\/[A-Za-z0-9_/-]+(?:\?[^#\s]*)?$/.test(route) ? route : ''
 }
 
 function getAppDisplayName(appName: string): string {
@@ -109,7 +109,6 @@ Page({
     searchButtonRightPx: 106,
     searchButtonSizePx: 32,
     currentSlide: 0,
-    activeHeroSlide: EMPTY_HERO_SLIDE,
     heroAutoplayEnabled: true,
     heroSlides: [] as HomeHeroSlideView[],
     homeConfigStatus: 'loading' as PageStatus,
@@ -221,7 +220,6 @@ Page({
       this.setData({
         heroSlides: [],
         currentSlide: 0,
-        activeHeroSlide: EMPTY_HERO_SLIDE,
         homeConfigStatus: 'error',
         homeConfigErrorMessage: getApiErrorMessage(error, '首页配置加载失败'),
       })
@@ -260,7 +258,6 @@ Page({
       hasHomeMusic: Boolean(settings.homeMusicUrl),
       heroSlides,
       currentSlide: 0,
-      activeHeroSlide: heroSlides[0] || EMPTY_HERO_SLIDE,
       homeConfigStatus: heroSlides.length > 0 ? 'ready' : 'empty',
     }, () => this.syncHomeIdentity())
   },
@@ -268,35 +265,11 @@ Page({
   handleSlideChange(event: WechatMiniprogram.CustomEvent<SwiperChangeDetail>) {
     const currentSlide = event.detail.current
     if (currentSlide === this.data.currentSlide) return
-    const activeHeroSlide = this.data.heroSlides[currentSlide]
-    if (!activeHeroSlide) return
-    const updates: WechatMiniprogram.IAnyObject = { currentSlide, activeHeroSlide }
-    if (!activeHeroSlide.imageUrl && activeHeroSlide.pendingImageUrl) {
-      updates[`heroSlides[${currentSlide}].imageUrl`] = activeHeroSlide.pendingImageUrl
-    }
-    this.setData(updates)
+    if (!this.data.heroSlides[currentSlide]) return
+    this.setData({ currentSlide })
   },
 
-  handleHeroImageLoad(event: WechatMiniprogram.TouchEvent) {
-    const loadedSlideId = String(event.currentTarget.dataset.slideId || '')
-    const loadedImageUrl = String(event.currentTarget.dataset.imageUrl || '')
-    if (!loadedSlideId || !loadedImageUrl) return
-    const slideIndex = this.data.heroSlides.findIndex((slide) => slide.id === loadedSlideId)
-    const slide = this.data.heroSlides[slideIndex]
-    if (!slide || slide.imageUrl !== loadedImageUrl) return
-    this.loadNextHeroImage(slideIndex)
-  },
-
-  loadNextHeroImage(loadedIndex: number) {
-    const nextIndex = loadedIndex + 1
-    const nextSlide = this.data.heroSlides[nextIndex]
-    if (!nextSlide || nextSlide.imageUrl || !nextSlide.pendingImageUrl) return
-    this.setData({
-      [`heroSlides[${nextIndex}].imageUrl`]: nextSlide.pendingImageUrl,
-    })
-  },
-
-  handleHeroImageError(event: WechatMiniprogram.TouchEvent) {
+  handleHeroBackgroundError(event: WechatMiniprogram.TouchEvent) {
     const failedSlideId = String(event.currentTarget.dataset.slideId || '')
     const failedImageUrl = String(event.currentTarget.dataset.imageUrl || '')
     if (!failedSlideId || !failedImageUrl) return
@@ -307,14 +280,37 @@ Page({
     if (remoteFallbackUrl) {
       this.setData({
         [`heroSlides[${slideIndex}].imageUrl`]: remoteFallbackUrl,
-        [`heroSlides[${slideIndex}].pendingImageUrl`]: remoteFallbackUrl,
       })
       return
     }
     this.setData({
       [`heroSlides[${slideIndex}].imageUrl`]: '',
-      [`heroSlides[${slideIndex}].pendingImageUrl`]: '',
-    }, () => this.loadNextHeroImage(slideIndex))
+    })
+  },
+
+  handleHeroTextImageError(event: WechatMiniprogram.TouchEvent) {
+    const failedSlideId = String(event.currentTarget.dataset.slideId || '')
+    const failedImageUrl = String(event.currentTarget.dataset.imageUrl || '')
+    if (!failedSlideId || !failedImageUrl) return
+    const slideIndex = this.data.heroSlides.findIndex((slide) => slide.id === failedSlideId)
+    const slide = this.data.heroSlides[slideIndex]
+    if (!slide || slide.textImageUrl !== failedImageUrl) return
+    this.setData({
+      [`heroSlides[${slideIndex}].textImageUrl`]: recoverRemoteResourceUrl(failedImageUrl),
+    })
+  },
+
+  handleHeroSlideTap(event: WechatMiniprogram.TouchEvent) {
+    const url = normalizeSlideRoute(event.currentTarget.dataset.route)
+    if (!url) return
+    const pagePath = url.split('?')[0] || ''
+    const fail = () => wx.showToast({ title: '页面暂时无法打开', icon: 'none' })
+    if (TAB_PAGE_PATHS.has(pagePath)) {
+      if (url.includes('?')) wx.reLaunch({ url, fail })
+      else wx.switchTab({ url: pagePath, fail })
+      return
+    }
+    wx.navigateTo({ url, fail })
   },
 
   handleHomeIdentityAvatarError() {

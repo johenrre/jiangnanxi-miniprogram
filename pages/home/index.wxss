@@ -12,18 +12,46 @@ page {
 
 .hero {
   position: relative;
-  height: 930rpx;
+  height: 1065rpx;
   overflow: hidden;
-  border-radius: 0 0 32rpx 32rpx;
   background: #f4f3ef;
 }
 
+.hero__backgrounds,
 .hero__swiper,
 .hero__slide,
-.hero__image,
+.hero__text-image,
 .hero__fallback {
   width: 100%;
   height: 100%;
+}
+
+.hero__backgrounds {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(circle at 76% 20%, rgba(167, 200, 192, 0.3), transparent 30%),
+    radial-gradient(circle at 24% 38%, rgba(217, 163, 154, 0.16), transparent 27%),
+    linear-gradient(160deg, var(--color-bg-section) 0%, var(--color-bg-primary-soft) 100%);
+}
+
+.hero__background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  inset: 0;
+  transition: opacity 700ms ease;
+}
+
+.hero__background--active {
+  opacity: 1;
+}
+
+.hero__swiper {
+  position: relative;
+  z-index: 2;
 }
 
 .hero__slide {
@@ -31,16 +59,12 @@ page {
   overflow: hidden;
 }
 
-.hero__image {
+.hero__text-image {
   position: absolute;
+  width: 100%;
+  height: 100%;
   inset: 0;
-}
-
-.hero__image--fallback {
-  background:
-    radial-gradient(circle at 76% 20%, rgba(167, 200, 192, 0.3), transparent 30%),
-    radial-gradient(circle at 24% 38%, rgba(217, 163, 154, 0.16), transparent 27%),
-    linear-gradient(160deg, var(--color-bg-section) 0%, var(--color-bg-primary-soft) 100%);
+  pointer-events: none;
 }
 
 .hero__fallback {
@@ -93,28 +117,6 @@ page {
   background: #53615e;
   transform: rotate(45deg);
   transform-origin: left center;
-}
-
-.hero__count {
-  position: absolute;
-  z-index: 8;
-  top: 170rpx;
-  right: 30rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 72rpx;
-  height: 34rpx;
-  padding: 0 12rpx;
-  border-radius: 18rpx;
-  background: rgba(255, 255, 255, 0.68);
-  -webkit-backdrop-filter: blur(10rpx);
-  backdrop-filter: blur(10rpx);
-  color: var(--color-primary-light);
-  font-size: 13rpx;
-  font-weight: 800;
-  letter-spacing: 2rpx;
-  pointer-events: none;
 }
 
 .hero-tools {
@@ -241,34 +243,6 @@ page {
   pointer-events: none;
 }
 
-.hero__eyebrow {
-  display: flex;
-  align-items: center;
-  color: var(--color-primary-light);
-  font-size: 13rpx;
-  font-weight: 800;
-  letter-spacing: 2rpx;
-  gap: 10rpx;
-}
-
-.hero__eyebrow-dot {
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: var(--color-accent-jade);
-  box-shadow: 0 0 0 6rpx rgba(167, 200, 192, 0.2);
-}
-
-.hero__story--on-image .hero__eyebrow {
-  color: #e6d2a3;
-  text-shadow: 0 2rpx 8rpx rgba(10, 18, 13, 0.72);
-}
-
-.hero__story--on-image .hero__eyebrow-dot {
-  background: #e6d2a3;
-  box-shadow: 0 0 0 6rpx rgba(230, 210, 163, 0.24);
-}
-
 .hero__title,
 .hero__description {
   display: block;
@@ -291,16 +265,6 @@ page {
   line-height: 1.6;
 }
 
-.hero__story--on-image .hero__title {
-  color: #fff8ec;
-  text-shadow: 0 2rpx 10rpx rgba(10, 18, 13, 0.72);
-}
-
-.hero__story--on-image .hero__description {
-  color: #f2eee4;
-  text-shadow: 0 2rpx 8rpx rgba(10, 18, 13, 0.72);
-}
-
 .hero__retry {
   display: flex;
   align-items: center;
@@ -316,137 +280,12 @@ page {
   pointer-events: auto;
 }
 
-.diy-launch-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  margin-top: 18rpx;
-}
-
-.diy-launch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 330rpx;
-  height: 76rpx;
-  margin: 0 !important;
-  padding: 0 20rpx;
-  flex: 0 0 330rpx;
-  border: 1rpx solid #e3dbcd;
-  border-radius: 38rpx;
-  background: #f7f3ea;
-  box-shadow: 0 7rpx 20rpx rgba(10, 18, 13, 0.2);
-  color: #29483f;
-  gap: 17rpx;
-  pointer-events: auto;
-  transform-origin: left center;
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    box-shadow 120ms ease,
-    transform 100ms ease;
-}
-
-.diy-launch--pressed {
-  border-color: #d4cab9;
-  background: #ebe4d7;
-  box-shadow: 0 3rpx 10rpx rgba(10, 18, 13, 0.16);
-  transform: scale(0.98);
-}
-
-.diy-launch__label {
-  color: #29483f;
-  font-size: 21rpx;
-  font-weight: 600;
-  letter-spacing: 2rpx;
-  line-height: 1;
-}
-
-.diy-launch__arrow {
-  color: #29483f;
-  font-family: Arial, sans-serif;
-  font-size: 25rpx;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.craft-values {
-  padding: 24rpx 18rpx 26rpx;
-  border-bottom: 1rpx solid var(--color-divider);
-  background: var(--color-bg-section);
-}
-
-.craft-value__title,
-.craft-value__description {
-  display: block;
-}
-
-.craft-values__grid {
-  display: flex;
-  align-items: stretch;
-}
-
-.craft-value {
-  display: flex;
-  min-width: 0;
-  min-height: 126rpx;
-  align-items: center;
-  justify-content: center;
-  padding: 2rpx 8rpx;
-  flex: 1;
-  flex-direction: column;
-  text-align: center;
-}
-
-.craft-value + .craft-value {
-  border-left: 1rpx solid var(--color-border-hairline);
-}
-
-.craft-value__icon-shell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 58rpx;
-  height: 58rpx;
-  flex: 0 0 58rpx;
-  border-radius: 50%;
-  background: rgba(226, 234, 229, 0.74);
-}
-
-.craft-value__icon {
-  width: 43rpx;
-  height: 43rpx;
-}
-
-.craft-value__copy {
-  min-width: 0;
-  width: 100%;
-  margin-top: 10rpx;
-}
-
-.craft-value__title {
-  overflow: hidden;
-  color: #46534f;
-  font-family: "Songti SC", "STSong", serif;
-  font-size: 24rpx;
-  font-weight: 500;
-  letter-spacing: 1rpx;
-  line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.craft-value__description {
-  margin-top: 4rpx;
-  color: var(--color-text-muted);
-  font-size: 14rpx;
-  line-height: 1.35;
-  white-space: nowrap;
-}
-
 .home-hub {
+  position: relative;
+  z-index: 4;
+  margin-top: -50rpx;
   padding: 34rpx 30rpx 18rpx;
+  border-radius: 48rpx 48rpx 0 0;
   background: var(--color-bg-section);
 }
 
@@ -946,10 +785,9 @@ page {
   animation: home-rise 480ms cubic-bezier(0.22, 0.76, 0.22, 1) both;
 }
 
-.craft-values.home-enter { animation-delay: 70ms; }
-.home-hub.home-enter { animation-delay: 105ms; }
-.activity-zone.home-enter { animation-delay: 145ms; }
-.process-poster-section.home-enter { animation-delay: 175ms; }
+.home-hub.home-enter { animation-delay: 70ms; }
+.activity-zone.home-enter { animation-delay: 105ms; }
+.process-poster-section.home-enter { animation-delay: 145ms; }
 
 @keyframes home-rise {
   from { opacity: 0; transform: translateY(14rpx); }
@@ -962,7 +800,7 @@ page {
     animation: none;
   }
 
-  .diy-launch,
+  .hero__background,
   .home-hub-identity,
   .home-hub-card,
   .home-hub-shortcut,

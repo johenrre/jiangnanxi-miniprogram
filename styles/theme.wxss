@@ -83,7 +83,6 @@ page,
 }
 
 /* 页面里原先固定的 INS 配色，按主题覆盖。 */
-.theme-jiangnanxi .craft-values,
 .theme-jiangnanxi .home-hub {
   background: var(--color-bg-surface);
 }
@@ -93,25 +92,8 @@ page,
   background: var(--color-bg-media);
 }
 
-.theme-jiangnanxi .hero__fallback,
-.theme-jiangnanxi .hero__image--fallback {
+.theme-jiangnanxi .hero__fallback {
   background: var(--color-bg-muted);
-}
-
-.theme-jiangnanxi .diy-launch {
-  border-color: var(--color-primary);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-pressed));
-  box-shadow: 0 7rpx 20rpx var(--color-shadow-primary);
-}
-
-.theme-jiangnanxi .diy-launch__label,
-.theme-jiangnanxi .diy-launch__arrow {
-  color: var(--color-white);
-}
-
-.theme-jiangnanxi .diy-launch--pressed {
-  border-color: var(--color-primary-pressed);
-  background: var(--color-primary-pressed);
 }
 
 .theme-jiangnanxi .hero__retry {
@@ -127,7 +109,6 @@ page,
   border-color: var(--color-text-muted);
 }
 
-.theme-jiangnanxi .craft-value__icon,
 .theme-jiangnanxi .tab-bar__item--active .tab-bar__icon {
   filter: hue-rotate(175deg) saturate(2);
 }

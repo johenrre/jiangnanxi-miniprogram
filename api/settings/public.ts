@@ -19,10 +19,12 @@ interface RawHomeSlide {
   image?: string
   imageUrl?: string
   image_url?: string
-  eyebrow?: string
-  title?: string
-  description?: string
-  subtitle?: string
+  textImage?: string
+  textImageUrl?: string
+  text_image?: string
+  text_image_url?: string
+  route?: string
+  path?: string
 }
 
 interface RawHomeImageSlot {
@@ -97,9 +99,8 @@ interface RawContactService {
 export interface PublicHomeSlide {
   id: string
   imageUrl: string
-  eyebrow: string
-  title: string
-  description: string
+  textImageUrl: string
+  route: string
 }
 
 export interface PublicHomeImageSlot {
@@ -155,9 +156,8 @@ function normalizeSlides(source: RawHomeSlide[] | undefined): PublicHomeSlide[] 
   return (source || []).map((slide, index) => ({
     id: toText(slide.id, `slide-${index + 1}`),
     imageUrl: resolveMediaUrl(slide.imageUrl || slide.image_url || slide.image),
-    eyebrow: toText(slide.eyebrow),
-    title: toText(slide.title),
-    description: toText(slide.description || slide.subtitle),
+    textImageUrl: resolveMediaUrl(slide.textImageUrl || slide.text_image_url || slide.textImage || slide.text_image),
+    route: toText(slide.route || slide.path),
   })).filter((slide) => slide.imageUrl)
 }
 

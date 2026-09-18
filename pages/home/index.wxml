@@ -2,6 +2,18 @@
 <view class="home-page">
   <view class="hero" aria-label="首页轮播海报">
     <block wx:if="{{heroSlides.length > 0}}">
+      <view class="hero__backgrounds" aria-hidden="true">
+        <image
+          wx:for="{{heroSlides}}"
+          wx:key="id"
+          class="hero__background {{index === currentSlide ? 'hero__background--active' : ''}}"
+          src="{{item.imageUrl}}"
+          mode="aspectFill"
+          data-slide-id="{{item.id}}"
+          data-image-url="{{item.imageUrl}}"
+          binderror="handleHeroBackgroundError"
+        />
+      </view>
       <swiper
         class="hero__swiper"
         autoplay="{{heroAutoplayEnabled && heroSlides.length > 1}}"
@@ -11,43 +23,25 @@
         bindchange="handleSlideChange"
       >
         <swiper-item wx:for="{{heroSlides}}" wx:key="id">
-          <view class="hero__slide">
+          <view
+            class="hero__slide"
+            data-route="{{item.route}}"
+            bindtap="handleHeroSlideTap"
+            role="{{item.route ? 'button' : 'img'}}"
+            aria-label="{{item.route ? '打开轮播内容' : '轮播文字说明'}}"
+          >
             <image
-              wx:if="{{item.imageUrl}}"
-              class="hero__image"
-              src="{{item.imageUrl}}"
+              wx:if="{{item.textImageUrl}}"
+              class="hero__text-image"
+              src="{{item.textImageUrl}}"
               mode="aspectFill"
               data-slide-id="{{item.id}}"
-              data-image-url="{{item.imageUrl}}"
-              bindload="handleHeroImageLoad"
-              binderror="handleHeroImageError"
+              data-image-url="{{item.textImageUrl}}"
+              binderror="handleHeroTextImageError"
             />
-            <view wx:else class="hero__image hero__image--fallback"></view>
           </view>
         </swiper-item>
       </swiper>
-
-      <view class="hero__story hero__story--on-image">
-        <view class="hero__eyebrow">
-          <view class="hero__eyebrow-dot"></view>
-          <text>{{activeHeroSlide.eyebrow}}</text>
-        </view>
-        <text class="hero__title">{{activeHeroSlide.title}}</text>
-        <text class="hero__description">{{activeHeroSlide.description}}</text>
-
-        <view class="diy-launch-row">
-          <button
-            class="diy-launch"
-            hover-class="diy-launch--pressed"
-            hover-stay-time="90"
-            bindtap="handleStartDiy"
-            aria-label="开始定制，进入 DIY 工坊"
-          >
-            <text class="diy-launch__label">开始定制</text>
-            <text class="diy-launch__arrow" aria-hidden="true">→</text>
-          </button>
-        </view>
-      </view>
     </block>
 
     <view wx:else class="hero__fallback">
@@ -73,10 +67,6 @@
       />
     </view>
 
-    <view wx:if="{{heroSlides.length > 0}}" class="hero__count">
-      {{currentSlide + 1}} / {{heroSlides.length}}
-    </view>
-
     <view wx:if="{{heroSlides.length > 0 && hasHomeMusic}}" class="hero-tools">
       <view
         class="hero-tool {{isHomeMusicPlaying ? 'hero-tool--active' : ''}}"
@@ -97,50 +87,6 @@
           <view class="music-note__stem music-note__stem--right"></view>
           <view class="music-note__dot music-note__dot--left"></view>
           <view class="music-note__dot music-note__dot--right"></view>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <view class="craft-values home-enter">
-    <view class="craft-values__grid">
-      <view class="craft-value">
-        <view class="craft-value__icon-shell" aria-hidden="true">
-          <image class="craft-value__icon" src="/assets/home/features/original-design.svg" mode="aspectFit" />
-        </view>
-        <view class="craft-value__copy">
-          <text class="craft-value__title">原创搭配</text>
-          <text class="craft-value__description">独立表达</text>
-        </view>
-      </view>
-
-      <view class="craft-value">
-        <view class="craft-value__icon-shell" aria-hidden="true">
-          <image class="craft-value__icon" src="/assets/home/features/natural-crystal.svg" mode="aspectFit" />
-        </view>
-        <view class="craft-value__copy">
-          <text class="craft-value__title">天然晶材</text>
-          <text class="craft-value__description">细选纹理</text>
-        </view>
-      </view>
-
-      <view class="craft-value">
-        <view class="craft-value__icon-shell" aria-hidden="true">
-          <image class="craft-value__icon" src="/assets/home/features/handmade-stringing.svg" mode="aspectFit" />
-        </view>
-        <view class="craft-value__copy">
-          <text class="craft-value__title">手工成串</text>
-          <text class="craft-value__description">手围调整</text>
-        </view>
-      </view>
-
-      <view class="craft-value">
-        <view class="craft-value__icon-shell" aria-hidden="true">
-          <image class="craft-value__icon" src="/assets/home/features/personal-custom.svg" mode="aspectFit" />
-        </view>
-        <view class="craft-value__copy">
-          <text class="craft-value__title">专属定制</text>
-          <text class="craft-value__description">从珠子开始</text>
         </view>
       </view>
     </view>
