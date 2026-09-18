@@ -13,7 +13,6 @@ import {
 import { ensureAuthenticated } from '@/services/auth-gate'
 import { homeBackgroundMusic } from '@/services/home-background-music'
 import { navigateToDiy } from '@/services/diy-navigation'
-import { consumeHomeActivityPopupEntry } from '@/services/home-activity-popup-session'
 import {
   consumePreparedHomeEntry,
   prepareAppResources,
@@ -46,8 +45,6 @@ type HomeAssetField =
   | 'shortcutCartImageUrl'
   | 'shortcutOrdersImageUrl'
   | 'shortcutDesignsImageUrl'
-  | 'activityImageUrl'
-  | 'processPosterUrl'
 
 const EMPTY_HOME_ASSETS: Record<HomeAssetField, string> = {
   mainHandcraftImageUrl: '',
@@ -56,8 +53,6 @@ const EMPTY_HOME_ASSETS: Record<HomeAssetField, string> = {
   shortcutCartImageUrl: '',
   shortcutOrdersImageUrl: '',
   shortcutDesignsImageUrl: '',
-  activityImageUrl: '',
-  processPosterUrl: '',
 }
 const TAB_PAGE_PATHS = new Set([
   '/pages/home/index',
@@ -67,7 +62,6 @@ const TAB_PAGE_PATHS = new Set([
 ])
 let homeIdentityCountLoading = false
 let shouldAutoPlayHomeMusic = false
-let activityPopupEntryEligible = false
 
 function mergeHeroSlides(slides: PublicHomeSlide[]): HomeHeroSlideView[] {
   return slides.slice(0, 5).map((slide) => ({
@@ -105,14 +99,12 @@ Page({
     heroSlides: [] as HomeHeroSlideView[],
     homeConfigStatus: 'loading' as PageStatus,
     homeConfigErrorMessage: '',
-    activityPopupImageUrl: '',
     isHomeMusicPlaying: false,
     hasHomeMusic: false,
     ...EMPTY_HOME_ASSETS,
   },
 
   onLoad() {
-    activityPopupEntryEligible = consumeHomeActivityPopupEntry()
     shouldAutoPlayHomeMusic = true
     const menuButton = wx.getMenuButtonBoundingClientRect()
     const modernWx = wx as unknown as {
@@ -208,7 +200,6 @@ Page({
       if (!forceRefresh) consumePreparedHomeEntry()
       this.applyHomeSettings(settings)
     } catch (error) {
-      activityPopupEntryEligible = false
       this.setData({
         heroSlides: [],
         currentSlide: 0,
@@ -220,10 +211,6 @@ Page({
 
   applyHomeSettings(settings: PublicSettings) {
     const heroSlides = mergeHeroSlides(settings.slides)
-    const activityPopupImageUrl = activityPopupEntryEligible
-      ? settings.homeActivityPopupImageUrl
-      : ''
-    activityPopupEntryEligible = false
     const brandLogoUrl = settings.siteTitleLogoImageUrl
       || settings.trayLogoImageUrl
       || ''
@@ -242,9 +229,6 @@ Page({
       shortcutCartImageUrl: imageUrlFor(settings.homeShortcuts, 'cart', EMPTY_HOME_ASSETS.shortcutCartImageUrl),
       shortcutOrdersImageUrl: imageUrlFor(settings.homeShortcuts, 'orders', EMPTY_HOME_ASSETS.shortcutOrdersImageUrl),
       shortcutDesignsImageUrl: imageUrlFor(settings.homeShortcuts, 'my-designs', EMPTY_HOME_ASSETS.shortcutDesignsImageUrl),
-      activityImageUrl: settings.homeActivityImageUrl || EMPTY_HOME_ASSETS.activityImageUrl,
-      activityPopupImageUrl,
-      processPosterUrl: settings.homeProcessImageUrl || EMPTY_HOME_ASSETS.processPosterUrl,
       hasHomeMusic: Boolean(settings.homeMusicUrl),
       heroSlides,
       currentSlide: 0,
@@ -351,41 +335,6 @@ Page({
 
   handleStartDiy() {
     navigateToDiy()
-  },
-
-  handleOpenActivity() {
-    wx.navigateTo({ url: '/pages/home/activity/index' })
-  },
-
-  handleCloseActivityPopup() {
-    if (!this.data.activityPopupImageUrl) return
-    this.setData({ activityPopupImageUrl: '' })
-  },
-
-  handleOpenActivityPopup() {
-    if (!this.data.activityPopupImageUrl) return
-    this.setData({ activityPopupImageUrl: '' })
-    wx.switchTab({ url: '/pages/discover/index' })
-  },
-
-  handleActivityPopupImageError() {
-    const failedUrl = this.data.activityPopupImageUrl
-    if (!failedUrl) return
-    this.setData({
-      activityPopupImageUrl: recoverRemoteResourceUrl(failedUrl),
-    })
-  },
-
-  handlePreviewProcessPoster() {
-    const processPosterUrl = this.data.processPosterUrl
-    if (!processPosterUrl) return
-    wx.previewImage({
-      current: processPosterUrl,
-      urls: [processPosterUrl],
-      fail: () => {
-        wx.showToast({ title: '流程图片暂时无法打开', icon: 'none' })
-      },
-    })
   },
 
   handleSearch() {

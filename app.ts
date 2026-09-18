@@ -3,7 +3,6 @@ import { loadPublicSettings } from '@/api/settings/public'
 import { prepareAppResources } from '@/services/app-resource-preloader'
 import { homeBackgroundMusic } from '@/services/home-background-music'
 import { captureWechatReceiptResult } from '@/services/wechat-order-receipt'
-import { initializeHomeActivityPopupSession } from '@/services/home-activity-popup-session'
 
 const registerPage = Page
 const LAUNCH_PAGE_PATH = '/pages/launch/index'
@@ -52,8 +51,7 @@ Page = ((options: WechatMiniprogram.Page.Options<any, any>) => {
 }) as WechatMiniprogram.Page.Constructor
 
 App({
-  onLaunch(options) {
-    initializeHomeActivityPopupSession(options)
+  onLaunch() {
     appSound.prepare()
     void loadPublicSettings()
       .then((settings) => {

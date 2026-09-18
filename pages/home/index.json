@@ -3,7 +3,6 @@
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark",
   "usingComponents": {
-    "activity-popup": "/components/activity-popup/index",
     "customer-service-float": "/components/customer-service-float/index",
     "phone-login-modal": "/components/phone-login-modal/index"
   }

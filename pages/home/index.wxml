@@ -133,7 +133,7 @@
         bindtap="handleStartDiy"
         hover-class="home-hub-card--pressed"
         hover-stay-time="100"
-        aria-label="开始手作，进入 DIY 页面"
+        aria-label="AI 搭配，进入 DIY 页面"
       >
         <view class="home-hub-card__media">
           <image
@@ -150,10 +150,9 @@
         </view>
         <view class="home-hub-card__body">
           <view class="home-hub-card__title-row">
-            <text class="home-hub-card__title">开始手作</text>
-            <text class="home-hub-card__arrow" aria-hidden="true">→</text>
+            <text class="home-hub-card__title">AI 搭配</text>
           </view>
-          <text class="home-hub-card__description">亲自选珠，串出自己的节奏</text>
+          <text class="home-hub-card__description">智能选珠，生成专属手串</text>
         </view>
       </button>
 
@@ -162,7 +161,7 @@
         bindtap="handleViewAllDesigns"
         hover-class="home-hub-card--pressed"
         hover-stay-time="100"
-        aria-label="制作同款，进入灵感页"
+        aria-label="AI 试戴，进入灵感页"
       >
         <view class="home-hub-card__media">
           <image
@@ -179,10 +178,9 @@
         </view>
         <view class="home-hub-card__body">
           <view class="home-hub-card__title-row">
-            <text class="home-hub-card__title">制作同款</text>
-            <text class="home-hub-card__arrow" aria-hidden="true">→</text>
+            <text class="home-hub-card__title">AI 试戴</text>
           </view>
-          <text class="home-hub-card__description">从设计师搭配里找到灵感</text>
+          <text class="home-hub-card__description">智能预览，找到适合你的款式</text>
         </view>
       </button>
     </view>
@@ -241,75 +239,6 @@
       </button>
     </view>
   </view>
-
-  <view class="activity-zone home-enter">
-    <view class="activity-zone__heading">
-      <view class="activity-zone__heading-copy">
-        <text class="activity-zone__eyebrow">CREATOR NOTES</text>
-        <text class="activity-zone__title">活动专区</text>
-        <text class="activity-zone__subtitle">记录创作，也让灵感被更多人看见</text>
-      </view>
-      <text class="activity-zone__status">进行中</text>
-    </view>
-
-    <view class="activity-card-shell">
-      <view
-        class="activity-card"
-        bindtap="handleOpenActivity"
-        hover-class="activity-card--pressed"
-        hover-stay-time="100"
-        role="button"
-        aria-label="查看灵感分享计划活动规则"
-      >
-        <image
-          wx:if="{{activityImageUrl}}"
-          class="activity-card__image"
-          src="{{activityImageUrl}}"
-          mode="aspectFill"
-          lazy-load="{{true}}"
-          data-asset="activityImageUrl"
-          binderror="handleHomeAssetError"
-        />
-      </view>
-    </view>
-  </view>
-
-  <view wx:if="{{processPosterUrl}}" class="process-poster-section home-enter">
-    <view
-      class="process-poster-preview"
-      bindtap="handlePreviewProcessPoster"
-      hover-class="process-poster-preview--pressed"
-      hover-stay-time="100"
-      role="button"
-      aria-label="点击查看完整的制作与交付流程"
-    >
-      <view class="process-poster-preview__viewport">
-        <image
-          class="process-poster-preview__background"
-          src="{{processPosterUrl}}"
-          mode="scaleToFill"
-          lazy-load="{{true}}"
-          data-asset="processPosterUrl"
-          binderror="handleHomeAssetError"
-        />
-      </view>
-      <view class="process-poster-preview__hint">
-        <view class="process-poster-preview__hint-line"></view>
-        <text>点击查看完整流程</text>
-        <view class="process-poster-preview__hint-arrow" aria-hidden="true">
-          <view class="process-poster-preview__hint-arrow-line"></view>
-          <view class="process-poster-preview__hint-arrow-head"></view>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <activity-popup
-    image-url="{{activityPopupImageUrl}}"
-    bindclose="handleCloseActivityPopup"
-    bindopen="handleOpenActivityPopup"
-    bindimageerror="handleActivityPopupImageError"
-  />
 
   <customer-service-float />
   <phone-login-modal id="phone-login-modal" />
