@@ -1,10 +1,11 @@
 export const THEME_KEYS = [
+  'jiangnanxi',
   'healing-ins',
 ] as const
 
 export type ThemeKey = typeof THEME_KEYS[number]
 
-export const DEFAULT_THEME_KEY: ThemeKey = 'healing-ins'
+export const DEFAULT_THEME_KEY: ThemeKey = 'jiangnanxi'
 
 const LEGACY_THEME_STORAGE_KEY = 'stone_active_theme_v1'
 const THEME_KEY_SET = new Set<string>(THEME_KEYS)

@@ -1,7 +1,48 @@
-
+/* 江南禧主风格：白色内容区、浅灰底、深灰文字，红色仅用于操作和选中态。 */
 page,
-.theme-root {
-  /* Global healing-INS theme tokens. Edit theme colors here. */
+.theme-root,
+.theme-jiangnanxi {
+  --color-bg-page: #f6f6f6;
+  --color-bg-surface: #ffffff;
+  --color-bg-section: #ffffff;
+  --color-bg-warm: #fafafa;
+  --color-bg-muted: #f5f5f5;
+  --color-bg-media: #fafafa;
+  --color-bg-primary-soft: #f5f5f5;
+  --color-text-heading: #333333;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-text-faint: #999999;
+  --color-primary: #b50102;
+  --color-primary-light: #fe2442;
+  --color-primary-muted: #fe2442;
+  --color-primary-pressed: #920102;
+  --color-accent-jade: #d4af37;
+  --color-accent-blush: #fe2442;
+  --color-accent-blush-strong: #b50102;
+  --color-white: #ffffff;
+  --color-divider: #eeeeee;
+  --color-border-hairline: rgba(0, 0, 0, 0.08);
+  --color-border-soft: rgba(0, 0, 0, 0.04);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.16);
+  --color-shadow-soft: rgba(0, 0, 0, 0.025);
+  --color-shadow: rgba(0, 0, 0, 0.06);
+  --color-shadow-primary: rgba(0, 0, 0, 0.08);
+  --color-modal-backdrop: rgba(0, 0, 0, 0.6);
+  --color-modal-shadow: rgba(0, 0, 0, 0.16);
+  --color-surface-glass: rgba(255, 255, 255, 0.82);
+  --color-surface-glass-strong: rgba(255, 255, 255, 0.96);
+  --color-nav-surface: rgba(255, 255, 255, 0.96);
+  --color-nav-indicator: #b50102;
+  --color-nav-ring: rgba(255, 255, 255, 0.98);
+  --color-nav-shadow: rgba(0, 0, 0, 0.06);
+  --color-nav-shadow-soft: rgba(0, 0, 0, 0.02);
+}
+
+.theme-healing-ins {
+  /* 治愈 INS 备用风格。 */
   --color-bg-page: #f6f4ef;
   --color-bg-surface: #fcfbf7;
   --color-bg-section: #f8f7f3;
@@ -39,4 +80,58 @@ page,
   --color-nav-ring: rgba(248, 247, 243, 0.98);
   --color-nav-shadow: rgba(71, 84, 80, 0.11);
   --color-nav-shadow-soft: rgba(71, 84, 80, 0.04);
+}
+
+/* 页面里原先固定的 INS 配色，按主题覆盖。 */
+.theme-jiangnanxi .craft-values,
+.theme-jiangnanxi .home-hub {
+  background: var(--color-bg-surface);
+}
+
+.theme-jiangnanxi .hero,
+.theme-jiangnanxi .home-hub-identity__avatar-shell {
+  background: var(--color-bg-media);
+}
+
+.theme-jiangnanxi .hero__fallback,
+.theme-jiangnanxi .hero__image--fallback {
+  background: var(--color-bg-muted);
+}
+
+.theme-jiangnanxi .diy-launch {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-pressed));
+  box-shadow: 0 7rpx 20rpx var(--color-shadow-primary);
+}
+
+.theme-jiangnanxi .diy-launch__label,
+.theme-jiangnanxi .diy-launch__arrow {
+  color: var(--color-white);
+}
+
+.theme-jiangnanxi .diy-launch--pressed {
+  border-color: var(--color-primary-pressed);
+  background: var(--color-primary-pressed);
+}
+
+.theme-jiangnanxi .hero__retry {
+  background: var(--color-primary);
+}
+
+.theme-jiangnanxi .home-hub-identity__avatar-fallback {
+  background: var(--color-bg-muted);
+}
+
+.theme-jiangnanxi .home-hub-identity__avatar-ring,
+.theme-jiangnanxi .home-hub-identity__avatar-stone {
+  border-color: var(--color-text-muted);
+}
+
+.theme-jiangnanxi .craft-value__icon,
+.theme-jiangnanxi .tab-bar__item--active .tab-bar__icon {
+  filter: hue-rotate(175deg) saturate(2);
+}
+
+.theme-jiangnanxi .tab-bar__item--primary .tab-bar__icon {
+  filter: brightness(0) invert(1);
 }
