@@ -82,7 +82,7 @@
   max-width: 120rpx;
   margin-top: 6rpx;
   color: #999999;
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-body);
   font-size: 22rpx;
   font-weight: 400;
   letter-spacing: 0;

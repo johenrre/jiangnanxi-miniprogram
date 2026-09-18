@@ -148,7 +148,7 @@
 
 .settlement-section__title {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -213,7 +213,7 @@
 .settlement-notice__title {
   display: block;
   color: var(--color-accent-blush);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 30rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
@@ -451,14 +451,14 @@
   border-radius: 50%;
   background: rgba(242, 226, 221, 0.7);
   color: var(--color-accent-blush);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 36rpx;
 }
 
 .settlement-state__title {
   margin-top: 24rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 500;
 }
@@ -493,4 +493,11 @@
   .settlement-loading__panel {
     animation: none;
   }
+}
+
+.settlement-summary__price,
+.settlement-option__price,
+.settlement-material__quantity,
+.settlement-material__subtotal {
+  font-family: var(--font-number);
 }

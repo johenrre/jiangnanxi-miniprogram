@@ -2,6 +2,9 @@
 page,
 .theme-root,
 .theme-jiangnanxi {
+  --font-body: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", Arial, Roboto, "PingFang SC", miui, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-number: "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "STSong", "Songti SC", serif;
   --color-bg-page: #f6f6f6;
   --color-bg-surface: #ffffff;
   --color-bg-section: #ffffff;

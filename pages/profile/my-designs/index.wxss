@@ -29,7 +29,7 @@
 .my-designs-summary__title {
   margin-top: 8rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -144,7 +144,7 @@
 .my-design-card__name {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
   letter-spacing: 1rpx;

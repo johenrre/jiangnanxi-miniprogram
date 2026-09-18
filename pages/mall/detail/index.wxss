@@ -80,7 +80,7 @@
 .mall-detail-summary__title {
   margin-top: 17rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 39rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
@@ -177,7 +177,7 @@
 .mall-detail-content__title {
   margin-top: 11rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 32rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
@@ -307,7 +307,7 @@
 .mall-detail-empty__title {
   margin-top: 28rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 30rpx;
 }
 
@@ -333,4 +333,10 @@
   .mall-detail-actions__button {
     transition: none;
   }
+}
+
+.mall-detail-gallery__counter-text,
+.mall-detail-summary__price,
+.mall-detail-summary__original-price {
+  font-family: var(--font-number);
 }

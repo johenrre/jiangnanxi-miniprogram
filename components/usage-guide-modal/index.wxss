@@ -50,7 +50,7 @@
 
 .usage-guide-header__title {
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 36rpx;
   font-weight: 600;
   letter-spacing: 2rpx;
@@ -76,7 +76,7 @@
   border-radius: 50%;
   background: var(--color-bg-muted);
   color: var(--color-text-muted);
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 34rpx;
   font-weight: 300;
   line-height: 1;
@@ -209,7 +209,7 @@
 .usage-tutorial-hero__title {
   margin-top: 13rpx;
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 34rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -243,7 +243,7 @@
 
 .usage-tutorial-section__title {
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 30rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -501,7 +501,7 @@
 .wrist-reference__title {
   margin-top: 10rpx;
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 30rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -708,7 +708,7 @@
 
 .bead-size-guide__title {
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -805,4 +805,8 @@
 
 @keyframes usage-guide-spin {
   to { transform: rotate(360deg); }
+}
+
+.usage-tutorial-step__number {
+  font-family: var(--font-number);
 }

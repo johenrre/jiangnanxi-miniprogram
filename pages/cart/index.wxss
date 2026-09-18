@@ -170,7 +170,7 @@
 
 .cart-card__fallback {
   color: var(--color-primary-light);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 40rpx;
 }
 
@@ -206,7 +206,7 @@
   margin-top: 7rpx;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
   line-height: 1.35;
@@ -479,7 +479,7 @@
 .cart-state__title {
   margin-top: 24rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 500;
 }
@@ -538,4 +538,10 @@
 @keyframes cart-skeleton {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
+}
+
+.cart-card__price,
+.cart-quantity__value,
+.cart-summary__price {
+  font-family: var(--font-number);
 }

@@ -236,7 +236,7 @@
 
 .design-card--home .design-card__name {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -264,7 +264,7 @@
 
 .design-card--discover .design-card__name {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -280,4 +280,8 @@
   .design-card {
     transition: none;
   }
+}
+
+.design-card__price {
+  font-family: var(--font-number);
 }

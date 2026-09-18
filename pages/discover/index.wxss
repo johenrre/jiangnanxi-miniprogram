@@ -31,7 +31,7 @@
 .discover-header__title {
   margin-top: 10rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 48rpx;
   font-weight: 500;
   letter-spacing: 5rpx;
@@ -169,7 +169,7 @@
 
 .discover-state__title {
   color: #4f5c58;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 29rpx;
   font-weight: 500;
   letter-spacing: 1rpx;

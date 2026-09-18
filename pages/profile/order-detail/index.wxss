@@ -124,7 +124,7 @@
 .order-hero__title {
   margin-top: 17rpx;
   color: #35433f;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 43rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -221,7 +221,7 @@
 
 .detail-section__title {
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 29rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -385,7 +385,7 @@
   overflow: hidden;
   margin-top: 8rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -578,4 +578,13 @@ button::after {
   .record-row__copy {
     transition: transform 120ms ease;
   }
+}
+
+.order-hero__amount text:first-child,
+.order-hero__amount text:last-child,
+.product-row__subtotal,
+.detail-row__fee,
+.amount-row text:last-child,
+.amount-row--total text:last-child {
+  font-family: var(--font-number);
 }

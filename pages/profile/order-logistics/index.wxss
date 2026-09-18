@@ -66,7 +66,7 @@
 .logistics-progress__title {
   margin-top: 10rpx;
   color: var(--color-text-heading);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 36rpx;
   font-weight: 500;
 }
@@ -209,7 +209,7 @@
 
 .logistics-trace__heading text:first-child {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 27rpx;
 }
 

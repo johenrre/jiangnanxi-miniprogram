@@ -57,7 +57,7 @@
   background: #e1eae6;
   box-shadow: 0 10rpx 28rpx var(--color-shadow);
   color: var(--color-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 44rpx;
   font-weight: 500;
 }

@@ -146,3 +146,8 @@
     transition: none;
   }
 }
+
+.diy-summary__price,
+.diy-summary__count {
+  font-family: var(--font-number);
+}

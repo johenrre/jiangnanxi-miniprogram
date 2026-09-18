@@ -73,7 +73,7 @@
 .page-header__title {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 35rpx;
   font-weight: 500;
   letter-spacing: 3rpx;

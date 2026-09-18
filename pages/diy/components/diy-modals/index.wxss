@@ -48,7 +48,7 @@
 
 .size-guide-card__title {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 35rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -222,7 +222,7 @@
 
 .diy-entry-mask__status {
   color: var(--color-primary-pressed);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 27rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -306,7 +306,7 @@
   margin-top: 8rpx;
   margin-bottom: 27rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 34rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
@@ -329,7 +329,7 @@
   flex: 1;
   gap: 12rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 28rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
@@ -930,4 +930,8 @@
 @keyframes wrist-modal-in {
   from { transform: translateY(12rpx) scale(0.98); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.save-name-field__count {
+  font-family: var(--font-number);
 }

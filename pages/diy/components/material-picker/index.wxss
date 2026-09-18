@@ -382,7 +382,7 @@
 
 .material-error__title {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
 }
@@ -417,4 +417,8 @@
     transition: none;
     animation: none;
   }
+}
+
+.material-card__price {
+  font-family: var(--font-number);
 }

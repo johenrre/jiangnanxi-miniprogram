@@ -67,7 +67,7 @@ page {
 
 .launch-page__name {
   margin-top: 12rpx;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-display);
   font-size: 42rpx;
   font-weight: 500;
   letter-spacing: 9rpx;

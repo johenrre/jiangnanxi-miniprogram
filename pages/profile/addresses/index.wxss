@@ -162,7 +162,7 @@
 .address-form__title {
   min-width: 0;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 34rpx;
   font-weight: 500;
   letter-spacing: 1rpx;

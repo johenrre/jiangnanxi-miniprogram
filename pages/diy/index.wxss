@@ -148,7 +148,7 @@
 
 .showcase-trigger__label {
   margin-top: 2rpx;
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-body);
   font-size: 18rpx;
   font-weight: 500;
   line-height: 24rpx;
@@ -310,7 +310,7 @@
 .diy-stage__empty-title {
   margin-top: 11rpx;
   color: var(--color-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 28rpx;
   font-weight: 500;
   letter-spacing: 2rpx;

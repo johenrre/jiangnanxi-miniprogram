@@ -45,7 +45,7 @@
 .phone-login-sheet__title {
   margin-top: 10rpx;
   color: #303b37;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 38rpx;
   font-weight: 500;
   letter-spacing: 1rpx;

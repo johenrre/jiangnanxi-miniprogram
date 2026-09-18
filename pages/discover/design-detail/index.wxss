@@ -150,7 +150,7 @@
 .design-detail-head__title {
   margin-top: 10rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 40rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
@@ -192,7 +192,7 @@
 .design-detail-section__title {
   display: block;
   color: #4b5552;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 30rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
@@ -508,7 +508,7 @@
 
 .design-detail-state__title {
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 31rpx;
   font-weight: 500;
 }
@@ -535,4 +535,10 @@
 @keyframes detail-skeleton {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
+}
+
+.design-detail-head__price,
+.design-detail-section__count,
+.design-detail-cart-button__count {
+  font-family: var(--font-number);
 }

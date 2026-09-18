@@ -137,7 +137,7 @@
   border-radius: 19rpx;
   background: #f0e8e1;
   color: #9b766c;
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 24rpx;
   font-weight: 500;
 }
@@ -156,7 +156,7 @@
 .after-sales-card__title {
   overflow: hidden;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
   font-weight: 500;
   text-overflow: ellipsis;
@@ -305,7 +305,7 @@
   display: block;
   margin-bottom: 5rpx;
   color: var(--color-text-primary);
-  font-family: "Songti SC", "STSong", serif;
+  font-family: var(--font-body);
   font-size: 25rpx;
 }
 
@@ -494,4 +494,8 @@
 
 button::after {
   border: 0;
+}
+
+.after-sales-card__amount {
+  font-family: var(--font-number);
 }
