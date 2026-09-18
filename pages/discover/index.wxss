@@ -1,7 +1,7 @@
 .discover-page {
   min-height: 100vh;
   padding-bottom: 180rpx;
-  background: var(--color-bg-page);
+  background: #f5f7fa;
   color: var(--color-text-primary);
 }
 

@@ -57,28 +57,27 @@
   </view>
 
   <view class="design-card__body">
-    <view class="design-card__heading">
-      <text class="design-card__name">{{design.name}}</text>
+    <text class="design-card__name">{{design.name}}</text>
+    <view class="design-card__footer">
+      <view class="design-card__author {{design.section === 'customer' ? 'design-card__author--customer' : ''}}">
+        <image
+          wx:if="{{design.authorAvatar && !avatarLoadFailed}}"
+          class="design-card__avatar"
+          src="{{design.authorAvatar}}"
+          mode="aspectFill"
+          lazy-load="{{true}}"
+          binderror="handleAvatarError"
+        />
+        <image
+          wx:else
+          class="design-card__avatar"
+          src="/assets/profile/default-avatar.svg"
+          mode="aspectFit"
+          aria-label="默认作者头像"
+        />
+        <text class="design-card__author-name">{{design.section === 'customer' ? '@' : ''}}{{design.authorName}}</text>
+      </view>
       <text class="design-card__price">{{design.priceText}}</text>
-    </view>
-    <view class="design-card__author {{design.section === 'customer' ? 'design-card__author--customer' : ''}}">
-      <image
-        wx:if="{{design.authorAvatar && !avatarLoadFailed}}"
-        class="design-card__avatar"
-        src="{{design.authorAvatar}}"
-        mode="aspectFill"
-        lazy-load="{{true}}"
-        binderror="handleAvatarError"
-      />
-      <image
-        wx:else
-        class="design-card__avatar"
-        src="/assets/profile/default-avatar.svg"
-        mode="aspectFit"
-        aria-label="默认作者头像"
-      />
-      <text class="design-card__author-name">{{design.section === 'customer' ? '@' : ''}}{{design.authorName}}</text>
-      <text wx:if="{{variant === 'home'}}" class="design-card__open" aria-hidden="true">↗</text>
     </view>
   </view>
 </view>

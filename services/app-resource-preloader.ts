@@ -54,9 +54,7 @@ function collectResources(settings: PublicSettings): ResourceRequest[] {
     ...settings.diyTrayImageUrls.slice(0, 1).map((url) => ({ url, kind: 'image' as const })),
     ...settings.homeMainEntries.map((slot) => ({ url: slot.imageUrl, kind: 'image' as const })),
     ...settings.homeShortcuts.map((slot) => ({ url: slot.imageUrl, kind: 'image' as const })),
-    { url: settings.homeActivityImageUrl, kind: 'image' },
     { url: settings.customerServiceFloatImageUrl, kind: 'image' },
-    { url: settings.bottomImageUrl, kind: 'image' },
     { url: settings.homeMusicUrl, kind: 'audio' },
   ]
   const seen = new Set<string>()
@@ -80,7 +78,6 @@ function localizeSettings(settings: PublicSettings): PublicSettings {
   return {
     ...settings,
     launchBackgroundImageUrl: localize(settings.launchBackgroundImageUrl),
-    bottomImageUrl: localize(settings.bottomImageUrl),
     trayLogoImageUrl: localize(settings.trayLogoImageUrl),
     diyTrayImageUrls: settings.diyTrayImageUrls.map(localize),
     siteTitleLogoImageUrl: localize(settings.siteTitleLogoImageUrl),
@@ -98,7 +95,6 @@ function localizeSettings(settings: PublicSettings): PublicSettings {
       ...slot,
       imageUrl: localize(slot.imageUrl),
     })),
-    homeProcessImageUrl: localize(settings.homeProcessImageUrl),
     homeActivityImageUrl: localize(settings.homeActivityImageUrl),
     activityDetailImageUrls: settings.activityDetailImageUrls.map(localize),
     customerServiceFloatImageUrl: localize(settings.customerServiceFloatImageUrl),

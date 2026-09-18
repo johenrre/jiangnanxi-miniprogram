@@ -240,6 +240,56 @@
     </view>
   </view>
 
+  <view class="home-designer home-enter">
+    <view class="home-designer__heading">
+      <text class="home-designer__title">设计广场</text>
+      <text class="home-designer__subtitle">从全世界能量搭配师的设计中寻找灵感</text>
+    </view>
+
+    <view class="home-designer__grid" wx:if="{{designerStatus === 'ready'}}">
+      <design-card
+        wx:for="{{designerWorks}}"
+        wx:key="id"
+        design="{{item}}"
+        variant="discover"
+        tray-background-url="{{designerTrayBackgroundUrl}}"
+        bindselect="handleHomeDesignerSelect"
+      />
+    </view>
+
+    <view class="home-designer__grid" wx:elif="{{designerStatus === 'loading'}}">
+      <view class="home-designer-skeleton" wx:for="{{[1, 2, 3, 4]}}" wx:key="*this">
+        <view class="home-designer-skeleton__media"></view>
+        <view class="home-designer-skeleton__line home-designer-skeleton__line--short"></view>
+        <view class="home-designer-skeleton__line"></view>
+      </view>
+    </view>
+
+    <view class="home-designer-state" wx:elif="{{designerStatus === 'empty'}}">
+      <text class="home-designer-state__title">设计广场暂无作品</text>
+      <text class="home-designer-state__description">新的搭配正在整理中，稍后再来看看。</text>
+    </view>
+
+    <view class="home-designer-state" wx:else>
+      <text class="home-designer-state__title">设计广场加载失败</text>
+      <text class="home-designer-state__description">{{designerErrorMessage}}</text>
+      <button class="home-designer-state__button" bindtap="handleRetryDesignerWorks">重新加载</button>
+    </view>
+
+    <view
+      class="home-designer-pagination"
+      wx:if="{{designerStatus === 'ready' && (isDesignerLoadingMore || designerLoadMoreFailed || !designerHasMore)}}"
+    >
+      <text wx:if="{{isDesignerLoadingMore}}" class="home-designer-pagination__text">正在加载更多设计…</text>
+      <button
+        wx:elif="{{designerLoadMoreFailed}}"
+        class="home-designer-pagination__retry"
+        bindtap="handleRetryMoreDesignerWorks"
+      >加载失败，点击重试</button>
+      <text wx:else class="home-designer-pagination__text">已展示全部设计</text>
+    </view>
+  </view>
+
   <customer-service-float />
   <phone-login-modal id="phone-login-modal" />
 

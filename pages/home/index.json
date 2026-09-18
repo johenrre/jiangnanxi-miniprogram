@@ -2,7 +2,9 @@
   "navigationStyle": "custom",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark",
+  "onReachBottomDistance": 160,
   "usingComponents": {
+    "design-card": "/components/design-card/index",
     "customer-service-float": "/components/customer-service-float/index",
     "phone-login-modal": "/components/phone-login-modal/index"
   }

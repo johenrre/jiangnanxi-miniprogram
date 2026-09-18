@@ -1,8 +1,11 @@
 import {
+  getDesignErrorMessage,
   getApiErrorMessage,
   getStoredAccountProfile,
   hasAuthSession,
+  loadDiscoverDesignWorks,
   loadPersonalDesigns,
+  type DesignWork,
   type PublicHomeSlide,
   type PublicSettings,
 } from '@/api/index'
@@ -29,6 +32,10 @@ type PageStatus = 'loading' | 'ready' | 'empty' | 'error'
 
 interface SwiperChangeDetail {
   current: number
+}
+
+interface DesignSelectEventDetail {
+  designId: string
 }
 
 interface HomeHeroSlideView {
@@ -99,6 +106,16 @@ Page({
     heroSlides: [] as HomeHeroSlideView[],
     homeConfigStatus: 'loading' as PageStatus,
     homeConfigErrorMessage: '',
+    designerStatus: 'loading' as PageStatus,
+    designerWorks: [] as DesignWork[],
+    designerCurrentPage: 0,
+    designerPageSize: 18,
+    designerTotal: 0,
+    designerHasMore: false,
+    isDesignerLoadingMore: false,
+    designerLoadMoreFailed: false,
+    designerErrorMessage: '',
+    designerTrayBackgroundUrl: '/assets/bg_1.jpg',
     isHomeMusicPlaying: false,
     hasHomeMusic: false,
     ...EMPTY_HOME_ASSETS,
@@ -120,6 +137,7 @@ Page({
       this.setData({ isHomeMusicPlaying })
     })
     void this.loadHomeSettings()
+    void this.loadHomeDesignerWorks()
   },
 
   onShow() {
@@ -173,7 +191,10 @@ Page({
 
   async onPullDownRefresh() {
     try {
-      await this.loadHomeSettings(true)
+      await Promise.all([
+        this.loadHomeSettings(true),
+        this.loadHomeDesignerWorks(true),
+      ])
     } finally {
       wx.stopPullDownRefresh()
     }
@@ -181,6 +202,10 @@ Page({
 
   onPageScroll(event: { scrollTop: number }) {
     handleTabBarPageScroll(this, event.scrollTop)
+  },
+
+  onReachBottom() {
+    void this.loadMoreHomeDesignerWorks()
   },
 
   async loadHomeSettings(forceRefresh = false) {
@@ -229,11 +254,82 @@ Page({
       shortcutCartImageUrl: imageUrlFor(settings.homeShortcuts, 'cart', EMPTY_HOME_ASSETS.shortcutCartImageUrl),
       shortcutOrdersImageUrl: imageUrlFor(settings.homeShortcuts, 'orders', EMPTY_HOME_ASSETS.shortcutOrdersImageUrl),
       shortcutDesignsImageUrl: imageUrlFor(settings.homeShortcuts, 'my-designs', EMPTY_HOME_ASSETS.shortcutDesignsImageUrl),
+      designerTrayBackgroundUrl: settings.diyTrayImageUrls[0] || '/assets/bg_1.jpg',
       hasHomeMusic: Boolean(settings.homeMusicUrl),
       heroSlides,
       currentSlide: 0,
       homeConfigStatus: heroSlides.length > 0 ? 'ready' : 'empty',
     }, () => this.syncHomeIdentity())
+  },
+
+  async loadHomeDesignerWorks(forceRefresh = false) {
+    this.setData({
+      designerStatus: 'loading',
+      designerWorks: [],
+      designerCurrentPage: 0,
+      designerTotal: 0,
+      designerHasMore: false,
+      isDesignerLoadingMore: false,
+      designerLoadMoreFailed: false,
+      designerErrorMessage: '',
+    })
+    try {
+      const designPage = await loadDiscoverDesignWorks('designer', forceRefresh)
+      this.setData({
+        designerWorks: designPage.items,
+        designerCurrentPage: designPage.page,
+        designerPageSize: designPage.pageSize,
+        designerTotal: designPage.total,
+        designerHasMore: designPage.items.length > 0
+          && designPage.page * designPage.pageSize < designPage.total,
+        designerStatus: designPage.items.length > 0 ? 'ready' : 'empty',
+      })
+    } catch (error) {
+      this.setData({
+        designerWorks: [],
+        designerStatus: 'error',
+        designerErrorMessage: getDesignErrorMessage(error),
+      })
+    }
+  },
+
+  async loadMoreHomeDesignerWorks() {
+    if (
+      this.data.designerStatus !== 'ready'
+      || !this.data.designerHasMore
+      || this.data.isDesignerLoadingMore
+    ) return
+
+    const nextPage = this.data.designerCurrentPage + 1
+    this.setData({
+      isDesignerLoadingMore: true,
+      designerLoadMoreFailed: false,
+    })
+    try {
+      const designPage = await loadDiscoverDesignWorks(
+        'designer',
+        false,
+        nextPage,
+        this.data.designerPageSize,
+      )
+      const knownDesignIds = new Set(this.data.designerWorks.map((design) => design.id))
+      const newDesigns = designPage.items.filter((design) => !knownDesignIds.has(design.id))
+      const currentPage = Math.max(nextPage, designPage.page)
+      this.setData({
+        designerWorks: [...this.data.designerWorks, ...newDesigns],
+        designerCurrentPage: currentPage,
+        designerPageSize: designPage.pageSize,
+        designerTotal: designPage.total,
+        designerHasMore: designPage.items.length > 0
+          && currentPage * designPage.pageSize < designPage.total,
+        isDesignerLoadingMore: false,
+      })
+    } catch {
+      this.setData({
+        isDesignerLoadingMore: false,
+        designerLoadMoreFailed: true,
+      })
+    }
   },
 
   handleSlideChange(event: WechatMiniprogram.CustomEvent<SwiperChangeDetail>) {
@@ -327,6 +423,22 @@ Page({
 
   handleRetrySettings() {
     void this.loadHomeSettings(true)
+  },
+
+  handleRetryDesignerWorks() {
+    void this.loadHomeDesignerWorks(true)
+  },
+
+  handleRetryMoreDesignerWorks() {
+    void this.loadMoreHomeDesignerWorks()
+  },
+
+  handleHomeDesignerSelect(event: WechatMiniprogram.CustomEvent<DesignSelectEventDetail>) {
+    const designId = String(event.detail.designId || '').trim()
+    if (!designId) return
+    wx.navigateTo({
+      url: `/pages/discover/design-detail/index?id=${encodeURIComponent(designId)}&section=designer`,
+    })
   },
 
   handleToggleHomeMusic() {
