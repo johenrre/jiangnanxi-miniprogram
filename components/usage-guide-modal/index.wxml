@@ -45,13 +45,13 @@
           <view class="usage-tutorial-hero">
             <text class="usage-tutorial-hero__eyebrow">DIY WORKFLOW</text>
             <text class="usage-tutorial-hero__title">从一颗珠子，到一串作品</text>
-            <text class="usage-tutorial-hero__description">按顺序完成六步，把灵感变成可保存、可购买的手串方案。</text>
+            <text class="usage-tutorial-hero__description">按顺序完成搭配，把灵感变成可保存、可购买的手串方案。</text>
           </view>
 
           <view class="usage-tutorial-section">
             <view class="usage-tutorial-section__heading">
               <text class="usage-tutorial-section__title">完成一串手串</text>
-              <text class="usage-tutorial-section__meta">6 STEPS</text>
+              <text class="usage-tutorial-section__meta">4 STEPS</text>
             </view>
 
             <view class="usage-tutorial-timeline">

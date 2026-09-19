@@ -13,7 +13,6 @@ import {
 } from '@/api/index'
 
 function suspendCanvasForDialog(page: DiyPageInstance): void {
-  page.physics?.cancelDrag()
   page.dragState = null
   page.cancelAnimationFrame()
 }
@@ -124,7 +123,7 @@ export const dialogPageMethods = {
   async handleSaveDesign(this: DiyPageInstance): Promise<void> {
     if (!this.data.canSave) {
       wx.showToast({
-        title: this.beads.length === 0 ? '请先添加珠子' : '请先收拢成串',
+        title: '请先添加珠子',
         icon: 'none',
       })
       return
@@ -170,14 +169,14 @@ export const dialogPageMethods = {
     }
     if (!this.data.canSave) {
       this.setData({ showSaveNameDialog: false, designNameDraft: '' })
-      wx.showToast({ title: '当前手串状态已变化，请重新收拢', icon: 'none' })
+      wx.showToast({ title: '当前手串为空，请重新添加珠子', icon: 'none' })
       resumeCanvasAfterDialog(this)
       return
     }
 
     this.setData({ savingDesign: true })
     try {
-      await saveDiyDesign(this.beads, this.data.backgroundIndex, designName)
+      await saveDiyDesign(this.beads, designName)
       this.setData(
         {
           savingDesign: false,
@@ -196,10 +195,6 @@ export const dialogPageMethods = {
   async handleAddToCart(this: DiyPageInstance): Promise<void> {
     if (this.beads.length === 0) {
       wx.showToast({ title: '请先添加珠子', icon: 'none' })
-      return
-    }
-    if (!this.data.isStrung) {
-      wx.showToast({ title: '请先收拢成串', icon: 'none' })
       return
     }
     appSound.play('soft-pop')

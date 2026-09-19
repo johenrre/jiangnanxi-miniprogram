@@ -1,115 +1,29 @@
+import { loadPublicSettings } from '@/api/index'
 import {
-  getDesignErrorMessage,
-  loadDiscoverDesignWorks,
-} from '@/api/index'
-import {
-  MINIMUM_STRING_BEADS,
   calculatePerimeterMm,
   calculateRecommendedWristRange,
   calculateTotalPrice,
-  getBeadCollisionRadiusPx,
   getEditorTrayRadius,
 } from '@/pages/diy/engine/geometry'
-import {
-  TRAY_BACKGROUND_COUNT,
-  createDefaultDiyShowcasePresentation,
-} from '@/pages/diy/engine/renderer'
-import { EDITOR_BEAD_DISPLAY_SCALE, canvasPageMethods } from '@/pages/diy/features/canvas'
+import { canvasPageMethods } from '@/pages/diy/features/canvas'
 import { dialogPageMethods } from '@/pages/diy/features/dialogs'
 import { entryPageMethods } from '@/pages/diy/features/entry'
 import { INITIAL_GROUP_LIMIT, materialPageMethods } from '@/pages/diy/features/materials'
 import { createDiyPageData } from '@/pages/diy/page/data'
-import type { DiyPageCustom, DiyPageData, DiyPageInstance } from '@/pages/diy/page/types'
+import type { DiyPageCustom, DiyPageData } from '@/pages/diy/page/types'
 import { cloneBeads, formatMoney, getWindowMetrics } from '@/pages/diy/page/utils'
 import {
   consumePendingDiyDesignSnapshot,
   type DiyDesignSnapshot,
 } from '@/services/diy-navigation'
 import { appSound } from '@/services/sound'
-import { prepareAppResources } from '@/services/app-resource-preloader'
 import { loadDiyWristPreference } from '@/services/diy-wrist-preference'
 import { resolveCanvasImageUrl } from '@/utils/material-image'
 
 const HISTORY_LIMIT = 20
-const RANDOM_GENERATION_MINIMUM_MS = 420
-const RANDOM_BEAD_LAUNCH_INTERVAL_MINIMUM_MS = 90
-const RANDOM_BEAD_LAUNCH_INTERVAL_VARIANCE_MS = 50
 const WRIST_FIT_WARNING_VISIBLE_MS = 2400
 const SHARED_BEADS_QUERY_KEY = 'beads'
 const MAXIMUM_MATERIALS_WITHOUT_WRIST = 40
-const SHARE_IMAGE_WIDTH = 1000
-const SHARE_IMAGE_HEIGHT = 800
-const SHARE_IMAGE_FRAME_TIMEOUT_MS = 1400
-
-interface DiyShareContent extends WechatMiniprogram.Page.ICustomShareContent {
-  promise?: Promise<WechatMiniprogram.Page.ICustomShareContent>
-}
-
-function clamp(value: number, minimum: number, maximum: number): number {
-  return Math.max(minimum, Math.min(maximum, value))
-}
-
-async function waitForShowcaseShareFrame(page: DiyPageInstance): Promise<void> {
-  const deadline = Date.now() + SHARE_IMAGE_FRAME_TIMEOUT_MS
-  while (
-    page.data.showShowcase
-    && !page.data.isClosingShowcase
-    && (page.showcaseTransitionDirection !== 'idle' || page.ringAnimation !== null)
-    && Date.now() < deadline
-  ) {
-    await new Promise<void>((resolve) => setTimeout(resolve, 16))
-  }
-  if (!page.data.showShowcase || page.data.isClosingShowcase || !page.canvas) {
-    throw new Error('DIY showcase is not available')
-  }
-  page.renderEditor()
-}
-
-async function createShowcaseShareImage(page: DiyPageInstance): Promise<string> {
-  await waitForShowcaseShareFrame(page)
-  const canvas = page.canvas
-  if (!canvas || canvas.width <= 0 || canvas.height <= 0) {
-    throw new Error('DIY canvas is not ready')
-  }
-
-  const canvasWidth = Math.floor(page.canvasWidth)
-  const canvasHeight = Math.floor(page.canvasHeight)
-  if (canvasWidth <= 0 || canvasHeight <= 0) {
-    throw new Error('DIY canvas layout is not ready')
-  }
-  const targetAspectRatio = SHARE_IMAGE_WIDTH / SHARE_IMAGE_HEIGHT
-  let sourceWidth = canvasWidth
-  let sourceHeight = Math.floor(sourceWidth / targetAspectRatio)
-  if (sourceHeight > canvasHeight) {
-    sourceHeight = canvasHeight
-    sourceWidth = Math.floor(sourceHeight * targetAspectRatio)
-  }
-
-  const ringLayout = page.getRingLayout()
-  const sourceX = Math.round(clamp(
-    ringLayout.centerX - sourceWidth / 2,
-    0,
-    canvasWidth - sourceWidth,
-  ))
-  const sourceY = Math.round(clamp(
-    ringLayout.centerY - sourceHeight / 2,
-    0,
-    canvasHeight - sourceHeight,
-  ))
-  const result = await wx.canvasToTempFilePath({
-    canvas,
-    x: sourceX,
-    y: sourceY,
-    width: sourceWidth,
-    height: sourceHeight,
-    destWidth: SHARE_IMAGE_WIDTH,
-    destHeight: SHARE_IMAGE_HEIGHT,
-    fileType: 'png',
-  })
-  if (!result.tempFilePath) throw new Error('DIY share image export failed')
-  return result.tempFilePath
-}
-
 function parseSharedMaterialIds(input: unknown): string[] {
   const queryValue = String(input || '').trim()
   if (!queryValue) return []
@@ -136,7 +50,6 @@ type EditorSummaryData = Pick<
   | 'totalPriceText'
   | 'perimeterText'
   | 'wristMessage'
-  | 'stringButtonText'
   | 'canUndo'
   | 'canSave'
 >
@@ -171,30 +84,13 @@ function resolveStringingConstraint(
   return { status: 'ready' }
 }
 
-function getStringButtonText(
-  isStrung: boolean,
-  constraint: StringingConstraint,
-): string {
-  if (isStrung) return '解除串珠'
-  if (constraint.status === 'bracelet-too-long') return '超出手围'
-  if (constraint.status === 'material-limit-exceeded') return '超出数量'
-  return '收拢成串'
-}
-
 function buildEditorSummaryData(
   beads: DiyPageCustom['beads'],
-  isStrung: boolean,
-  selectedWristCm: number | null,
 ): EditorSummaryData {
   const beadCount = beads.length
   const totalPrice = calculateTotalPrice(beads)
   const perimeterMm = calculatePerimeterMm(beads)
   const recommendedWristRange = calculateRecommendedWristRange(beads)
-  const stringingConstraint = resolveStringingConstraint(
-    beadCount,
-    recommendedWristRange,
-    selectedWristCm,
-  )
   return {
     beadCount,
     totalPriceText: formatMoney(totalPrice),
@@ -202,9 +98,8 @@ function buildEditorSummaryData(
     wristMessage: recommendedWristRange
       ? `${recommendedWristRange.minimumCm.toFixed(1)}–${recommendedWristRange.maximumCm.toFixed(1)} cm`
       : '待生成',
-    stringButtonText: getStringButtonText(isStrung, stringingConstraint),
     canUndo: beadCount > 0,
-    canSave: beadCount > 0 && isStrung,
+    canSave: beadCount > 0,
   }
 }
 
@@ -221,34 +116,22 @@ Page<DiyPageData, DiyPageCustom>({
   uidSequence: 0,
   canvas: null,
   renderer: null,
-  trayBackgroundUrls: [],
-  showcasePresentation: createDefaultDiyShowcasePresentation(),
-  showcaseBrandImagePath: '',
-  physics: null,
   canvasLeft: 0,
   canvasTop: 0,
   canvasWidth: 0,
   canvasHeight: 0,
   frameRequestId: null,
   lastFrameTimestamp: 0,
-  frameAccumulator: 0,
   renderDirty: true,
   pageVisible: false,
   ringAnimation: null,
   editorRingLayoutCache: null,
-  showcaseRingLayoutCache: null,
   ringRotationOffset: 0,
   ringAngularVelocity: 0,
   ringElasticScale: 1,
   ringElasticVelocity: 0,
   ringLayoutDirty: false,
-  showcaseAnimationStartTime: 0,
-  showcaseMotionAccumulator: 0,
-  showcaseTransitionProgress: 1,
-  showcaseTransitionStartProgress: 1,
-  showcaseTransitionDirection: 'idle',
-  showcasePlateOrigin: null,
-  showcaseEntryPositions: null,
+  editorOrigin: null,
   dragState: null,
   firstScreenMaterialImagesReady: false,
   firstCanvasFrameRendered: false,
@@ -260,8 +143,6 @@ Page<DiyPageData, DiyPageCustom>({
   audioWarmupTimer: null,
   skipEntrySizeGuide: false,
   templateDesignSequence: 0,
-  randomGenerationSequence: 0,
-  lastRandomDesignerId: '',
   pendingTemplateDesign: null,
   expectsTemplateDesign: false,
   templateDesignApplying: false,
@@ -285,11 +166,7 @@ Page<DiyPageData, DiyPageCustom>({
     this.allVisibleGroups = []
     this.beads = []
     this.history = []
-    this.trayBackgroundUrls = []
-    this.showcasePresentation = createDefaultDiyShowcasePresentation()
-    this.showcaseBrandImagePath = ''
     this.editorRingLayoutCache = null
-    this.showcaseRingLayoutCache = null
     this.firstScreenMaterialImagesReady = false
     this.firstCanvasFrameRendered = false
     this.pendingTemplateDesign = null
@@ -298,7 +175,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.expectsTemplateDesign = Boolean(pendingDesign)
     this.templateDesignApplying = false
     this.templateDesignApplied = false
-    this.lastRandomDesignerId = ''
     const storedWrist = hasSharedDesign ? null : loadDiyWristPreference()
     if (storedWrist !== null) {
       this.setData({
@@ -325,30 +201,10 @@ Page<DiyPageData, DiyPageCustom>({
 
   async loadDiyPresentation() {
     try {
-      const { settings } = await prepareAppResources()
-      this.trayBackgroundUrls = settings.diyTrayImageUrls
-      this.showcasePresentation = {
-        appDisplayName: String(settings.appName || '').trim(),
-        eyebrow: settings.diyShowcaseEyebrow,
-        title: settings.diyShowcaseTitle,
-        description: settings.diyShowcaseDescription,
-      }
-      this.showcaseBrandImagePath = settings.horizontalLogoImageUrl
+      const settings = await loadPublicSettings()
       this.setData({ diyPageTitle: settings.diyPageTitle })
-      const backgroundCount = this.trayBackgroundUrls.length || TRAY_BACKGROUND_COUNT
-      const backgroundIndex = this.data.backgroundIndex < backgroundCount
-        ? this.data.backgroundIndex
-        : 0
-      this.renderer?.setTrayBackgroundPaths(this.trayBackgroundUrls, backgroundIndex)
-      this.renderer?.setShowcasePresentation(this.showcasePresentation)
-      this.renderer?.setShowcaseBrandImagePath(this.showcaseBrandImagePath)
-      if (backgroundIndex !== this.data.backgroundIndex) {
-        this.setData({ backgroundIndex })
-      } else {
-        this.scheduleRender()
-      }
     } catch {
-      // 配置不可用时渲染器继续使用内置珠盘图，不阻塞 DIY 编辑。
+      // 配置不可用时继续使用页面默认标题，不阻塞 DIY 编辑。
     }
   },
 
@@ -367,29 +223,25 @@ Page<DiyPageData, DiyPageCustom>({
       }, 800)
     }
     if (this.renderer && !resumedSnapshot) this.scheduleRender()
-    else if (this.physics?.hasActiveMotion() || this.ringAnimation) this.requestAnimationFrame()
+    else if (this.ringAnimation) this.requestAnimationFrame()
     void this.tryApplyTemplateDesign()
     this.updateEntryGate()
   },
 
   onHide() {
     this.pageVisible = false
-    this.randomGenerationSequence += 1
-    if (this.data.randomGenerating) this.setData({ randomGenerating: false })
     if (this.audioWarmupTimer !== null) clearTimeout(this.audioWarmupTimer)
     this.audioWarmupTimer = null
     this.cancelAnimationFrame()
-    this.physics?.cancelDrag()
     this.dragState = null
     this.resetRingMotion()
-    if (this.data.isStrung && !this.data.showShowcase && this.beads.length > 0) {
+    if (this.beads.length > 0) {
       this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
     }
   },
 
   onUnload() {
     this.pageVisible = false
-    this.randomGenerationSequence += 1
     if (this.audioWarmupTimer !== null) clearTimeout(this.audioWarmupTimer)
     this.audioWarmupTimer = null
     this.clearEntryTimers()
@@ -398,7 +250,7 @@ Page<DiyPageData, DiyPageCustom>({
     this.disposeCanvas()
   },
 
-  onShareAppMessage(): DiyShareContent {
+  onShareAppMessage(): WechatMiniprogram.Page.ICustomShareContent {
     const diyPageTitle = String(this.data.diyPageTitle || '').trim() || '晶石实验室'
     const materialIds = this.beads
       .map((bead) => String(bead.materialId || '').trim())
@@ -407,32 +259,19 @@ Page<DiyPageData, DiyPageCustom>({
     const query = materialIds.length > 0
       ? `?${SHARED_BEADS_QUERY_KEY}=${encodeURIComponent(materialIds.join(','))}`
       : ''
-    const shareContent: WechatMiniprogram.Page.ICustomShareContent = {
+    return {
       title: `我在${diyPageTitle}完成了一条原创手串`,
       path: `/pages/diy/index${query}`,
-    }
-    if (!this.data.showShowcase || this.data.isClosingShowcase || !this.canvas) {
-      return shareContent
-    }
-    return {
-      ...shareContent,
-      promise: createShowcaseShareImage(this)
-        .then((imageUrl) => ({ ...shareContent, imageUrl }))
-        .catch((error) => {
-          console.error('[DIY] 分享封面生成失败', error)
-          return shareContent
-        }),
     }
   },
 
   createBead(material) {
     this.uidSequence += 1
-    const editorPlateOrigin = this.showcasePlateOrigin || {
+    const editorPlateOrigin = this.editorOrigin || {
       centerX: this.canvasWidth / 2,
       centerY: this.canvasHeight / 2,
       radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
     }
-    const radius = getBeadCollisionRadiusPx(material, EDITOR_BEAD_DISPLAY_SCALE)
     return {
       uid: `${material.id}_${Date.now()}_${this.uidSequence}`,
       materialId: material.id,
@@ -448,8 +287,8 @@ Page<DiyPageData, DiyPageCustom>({
       imageScale: material.imageScale,
       isIrregular: material.isIrregular,
       layer: material.layer,
-      x: editorPlateOrigin.centerX + (Math.random() - 0.5) * 42,
-      y: editorPlateOrigin.centerY + editorPlateOrigin.radius - radius - 5,
+      x: editorPlateOrigin.centerX,
+      y: editorPlateOrigin.centerY + editorPlateOrigin.radius,
       rotation: 0,
     }
   },
@@ -508,14 +347,11 @@ Page<DiyPageData, DiyPageCustom>({
   },
 
   acceptTemplateDesign(design) {
-    this.randomGenerationSequence += 1
     this.cancelAnimationFrame()
-    this.physics?.cancelDrag()
     this.ringAnimation = null
     this.dragState = null
     this.resetRingMotion()
     this.beads = []
-    this.physics?.replaceBeads([])
     this.invalidateRingLayoutCaches()
     this.history = []
     this.templateDesignSequence += 1
@@ -524,10 +360,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.templateDesignApplied = false
     this.renderer?.clear()
     this.setData({
-      backgroundIndex: 0,
-      isStrung: false,
-      showShowcase: false,
-      isClosingShowcase: false,
       showSizeGuide: false,
       showGuide: false,
       showWristPicker: false,
@@ -538,7 +370,6 @@ Page<DiyPageData, DiyPageCustom>({
       totalPriceText: '0',
       perimeterText: '0.0 mm',
       wristMessage: '待生成',
-      stringButtonText: '收拢成串',
       canUndo: false,
       canSave: false,
     })
@@ -589,12 +420,11 @@ Page<DiyPageData, DiyPageCustom>({
       this.dragState = null
       this.history = []
       this.beads = templateMaterials.map((material) => this.createBead(material))
-      this.physics?.replaceBeads([])
       this.invalidateRingLayoutCaches()
-      this.setData({
-        isStrung: true,
-        ...buildEditorSummaryData(this.beads, true, this.data.selectedWristCm),
-      }, () => this.updateMaterialUsageCounts())
+      this.setData(
+        buildEditorSummaryData(this.beads),
+        () => this.updateMaterialUsageCounts(),
+      )
       this.applyCurrentRingLayout(this.beads)
       this.templateDesignApplied = true
       this.pendingTemplateDesign = null
@@ -613,7 +443,7 @@ Page<DiyPageData, DiyPageCustom>({
   },
 
   addMaterialToBracelet(material, recordHistory = true) {
-    if (!this.data.canvasReady || !this.physics || !this.renderer) {
+    if (!this.data.canvasReady || !this.renderer) {
       wx.showToast({ title: '画布正在准备', icon: 'none' })
       return false
     }
@@ -623,49 +453,19 @@ Page<DiyPageData, DiyPageCustom>({
     const bead = this.createBead(material)
     this.beads.push(bead)
     this.invalidateRingLayoutCaches()
-
-    if (this.data.isStrung) {
-      this.startRingAnimation()
-    } else {
-      const editorPlateOrigin = this.showcasePlateOrigin || {
-        centerX: this.canvasWidth / 2,
-        centerY: this.canvasHeight / 2,
-        radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
-      }
-      const targetX = editorPlateOrigin.centerX
-        + (Math.random() - 0.5) * editorPlateOrigin.radius * 1.15
-      const targetY = editorPlateOrigin.centerY
-        + (Math.random() - 0.5) * editorPlateOrigin.radius * 1.15
-      const directionX = targetX - bead.x
-      const directionY = targetY - bead.y
-      const directionLength = Math.max(1, Math.sqrt(directionX * directionX + directionY * directionY))
-      const launchSpeed = 28 + Math.random() * 18
-      this.physics.addBead({
-        uid: bead.uid,
-        x: bead.x,
-        y: bead.y,
-        radius: getBeadCollisionRadiusPx(bead, EDITOR_BEAD_DISPLAY_SCALE),
-        velocityX: directionX / directionLength * launchSpeed,
-        velocityY: directionY / directionLength * launchSpeed,
-      })
-      this.requestAnimationFrame()
-    }
+    this.startRingAnimation()
     this.updateEditorSummary()
     this.scheduleRender()
     return true
   },
 
   updateEditorSummary() {
-    const summary = buildEditorSummaryData(
-      this.beads,
-      this.data.isStrung,
-      this.data.selectedWristCm,
-    )
+    const summary = buildEditorSummaryData(this.beads)
     this.setData(summary, () => this.updateMaterialUsageCounts())
   },
 
   createSnapshot() {
-    return { beads: cloneBeads(this.beads), isStrung: this.data.isStrung }
+    return { beads: cloneBeads(this.beads) }
   },
 
   pushHistory(snapshot) {
@@ -681,24 +481,17 @@ Page<DiyPageData, DiyPageCustom>({
       bead.uid,
       { x: bead.x, y: bead.y, rotation: bead.rotation },
     ]))
-    const animateRingReflow = this.data.isStrung && snapshot.isStrung
     this.beads = cloneBeads(snapshot.beads)
     this.invalidateRingLayoutCaches()
-    if (animateRingReflow) {
-      this.beads.forEach((bead) => {
-        const currentPosition = currentPositions.get(bead.uid)
-        if (!currentPosition) return
-        bead.x = currentPosition.x
-        bead.y = currentPosition.y
-        bead.rotation = currentPosition.rotation
-      })
-    }
-    this.setData({ isStrung: snapshot.isStrung })
-    if (snapshot.isStrung) {
-      if (animateRingReflow) this.startRingAnimation()
-      else this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
-    }
-    else this.rebuildLoosePhysics()
+    this.beads.forEach((bead) => {
+      const currentPosition = currentPositions.get(bead.uid)
+      if (!currentPosition) return
+      bead.x = currentPosition.x
+      bead.y = currentPosition.y
+      bead.rotation = currentPosition.rotation
+    })
+    if (this.beads.length > 0) this.startRingAnimation()
+    else this.resetRingMotion()
     this.updateEditorSummary()
     this.scheduleRender()
   },
@@ -710,72 +503,15 @@ Page<DiyPageData, DiyPageCustom>({
     if (recordHistory) this.pushHistory(historySnapshot)
     this.beads = this.beads.filter((bead) => bead.uid !== uid)
     this.invalidateRingLayoutCaches()
-    this.physics?.removeBead(uid)
 
-    if (this.beads.length === 0 && this.data.isStrung) {
-      this.setData({ isStrung: false })
+    if (this.beads.length === 0) {
       this.ringRotationOffset = 0
       this.resetRingMotion()
-    } else if (this.data.isStrung) {
+    } else {
       this.startRingAnimation(420)
     }
     this.updateEditorSummary()
     this.scheduleRender()
-  },
-
-  handleToggleString() {
-    appSound.resumeOnInteraction()
-    if (this.data.randomGenerating) return
-    if (this.beads.length === 0) {
-      wx.showToast({ title: '请先添加珠子', icon: 'none' })
-      return
-    }
-    if (this.data.isStrung) {
-      this.pushHistory()
-      this.ringAnimation = null
-      this.resetRingMotion()
-      this.setData({
-        isStrung: false,
-        ...buildEditorSummaryData(this.beads, false, this.data.selectedWristCm),
-      })
-      this.rebuildLoosePhysics(true)
-      return
-    }
-    if (this.beads.length < MINIMUM_STRING_BEADS) {
-      wx.showToast({ title: `至少需要 ${MINIMUM_STRING_BEADS} 颗珠子`, icon: 'none' })
-      return
-    }
-    const recommendedWristRange = calculateRecommendedWristRange(this.beads)
-    const stringingConstraint = resolveStringingConstraint(
-      this.beads.length,
-      recommendedWristRange,
-      this.data.selectedWristCm,
-    )
-    if (stringingConstraint.status === 'bracelet-too-long') {
-      wx.showToast({
-        title: `已超过手围，当前最小 ${stringingConstraint.minimumWristCm.toFixed(1)}cm`,
-        icon: 'none',
-      })
-    }
-    if (stringingConstraint.status === 'material-limit-exceeded') {
-      wx.showToast({
-        title: `未设置手围时最多添加 ${stringingConstraint.maximumMaterials} 颗`,
-        icon: 'none',
-      })
-      return
-    }
-
-    this.pushHistory()
-    appSound.play('soft-pop')
-    this.syncBeadsFromPhysics()
-    this.physics?.cancelDrag()
-    this.physics?.replaceBeads([])
-    this.setData({
-      isStrung: true,
-      ...buildEditorSummaryData(this.beads, true, this.data.selectedWristCm),
-    }, () => {
-      this.startRingAnimation()
-    })
   },
 
   handleUndo() {
@@ -807,143 +543,10 @@ Page<DiyPageData, DiyPageCustom>({
         this.ringAnimation = null
         this.ringRotationOffset = 0
         this.resetRingMotion()
-        this.physics?.replaceBeads([])
-        this.setData({ isStrung: false })
         this.updateEditorSummary()
         this.scheduleRender()
       },
     })
   },
 
-  async handleRandomDesign() {
-    appSound.resumeOnInteraction()
-    if (this.data.randomGenerating) return
-    if (
-      !this.data.canvasReady
-      || !this.renderer
-      || !this.physics
-    ) {
-      wx.showToast({ title: 'DIY 画布正在准备', icon: 'none' })
-      return
-    }
-
-    const renderer = this.renderer
-    const physics = this.physics
-    const generationSequence = ++this.randomGenerationSequence
-    const startedAt = Date.now()
-    let generationCompleted = false
-    this.setData({ randomGenerating: true })
-
-    try {
-      const designPage = await loadDiscoverDesignWorks('designer')
-      const availableDesigns = designPage.items.filter((design) => (
-        design.pattern.length > 0
-        && design.pattern.every((materialId) => Boolean(this.materialById[materialId]))
-      ))
-      if (availableDesigns.length === 0) {
-        throw new Error('暂时没有可用的设计师方案')
-      }
-      const alternativeDesigns = availableDesigns.length > 1
-        ? availableDesigns.filter((design) => design.id !== this.lastRandomDesignerId)
-        : availableDesigns
-      const candidates = alternativeDesigns.length > 0 ? alternativeDesigns : availableDesigns
-      const selectedDesign = candidates[Math.floor(Math.random() * candidates.length)]
-      const selectedMaterials = selectedDesign.pattern.map(
-        (materialId) => this.materialById[materialId]!,
-      )
-      if (selectedMaterials.length === 0) {
-        throw new Error('当前设计师方案缺少可用珠材')
-      }
-
-      await renderer.preloadImages(selectedMaterials.map(resolveCanvasImageUrl))
-      const remainingDelay = RANDOM_GENERATION_MINIMUM_MS - (Date.now() - startedAt)
-      if (remainingDelay > 0) {
-        await new Promise<void>((resolve) => setTimeout(resolve, remainingDelay))
-      }
-      if (
-        generationSequence !== this.randomGenerationSequence
-        || !this.pageVisible
-        || renderer !== this.renderer
-        || physics !== this.physics
-      ) return
-
-      this.pushHistory()
-      this.ringAnimation = null
-      this.ringRotationOffset = 0
-      this.resetRingMotion()
-      this.beads = []
-      this.invalidateRingLayoutCaches()
-      physics.replaceBeads([])
-      this.setData({ isStrung: false })
-      this.updateEditorSummary()
-      this.scheduleRender()
-      const editorPlateOrigin = this.showcasePlateOrigin || {
-        centerX: this.canvasWidth / 2,
-        centerY: this.canvasHeight / 2,
-        radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
-      }
-      for (let index = 0; index < selectedMaterials.length; index += 1) {
-        if (
-          generationSequence !== this.randomGenerationSequence
-          || !this.pageVisible
-          || renderer !== this.renderer
-          || physics !== this.physics
-        ) return
-
-        const material = selectedMaterials[index]
-        if (!material) continue
-        const bead = this.createBead(material)
-        this.beads.push(bead)
-        const targetX = editorPlateOrigin.centerX
-          + (Math.random() - 0.5) * editorPlateOrigin.radius * 1.15
-        const targetY = editorPlateOrigin.centerY
-          + (Math.random() - 0.5) * editorPlateOrigin.radius * 1.15
-        const directionX = targetX - bead.x
-        const directionY = targetY - bead.y
-        const directionLength = Math.max(1, Math.sqrt(directionX * directionX + directionY * directionY))
-        const launchSpeed = 28 + Math.random() * 18
-        physics.addBead({
-          uid: bead.uid,
-          x: bead.x,
-          y: bead.y,
-          radius: getBeadCollisionRadiusPx(bead, EDITOR_BEAD_DISPLAY_SCALE),
-          rotation: bead.rotation,
-          velocityX: directionX / directionLength * launchSpeed,
-          velocityY: directionY / directionLength * launchSpeed,
-        })
-        this.updateEditorSummary()
-        this.scheduleRender()
-
-        if (index < selectedMaterials.length - 1) {
-          const launchInterval = RANDOM_BEAD_LAUNCH_INTERVAL_MINIMUM_MS
-            + Math.random() * RANDOM_BEAD_LAUNCH_INTERVAL_VARIANCE_MS
-          await new Promise<void>((resolve) => setTimeout(resolve, launchInterval))
-        }
-      }
-      this.showCurrentWristFitWarning()
-      this.lastRandomDesignerId = selectedDesign.id
-      generationCompleted = true
-    } catch (error) {
-      if (generationSequence === this.randomGenerationSequence) {
-        wx.showToast({ title: getDesignErrorMessage(error), icon: 'none' })
-      }
-    } finally {
-      if (generationSequence === this.randomGenerationSequence) {
-        this.setData({ randomGenerating: false }, () => {
-          if (generationCompleted && this.pageVisible) appSound.play('soft-pop')
-        })
-      }
-    }
-  },
-
-  handleToggleBackground() {
-    appSound.play('soft-pop')
-    const backgroundCount = this.renderer?.getTrayBackgroundCount()
-      || this.trayBackgroundUrls.length
-      || TRAY_BACKGROUND_COUNT
-    this.setData({
-      backgroundIndex: (this.data.backgroundIndex + 1) % backgroundCount,
-    })
-    this.scheduleRender()
-  },
 })

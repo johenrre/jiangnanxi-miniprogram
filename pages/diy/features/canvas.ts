@@ -6,10 +6,8 @@ import {
   easeOutCubic,
   findRingInsertionIndexForBeads,
   fitRingScalesToOuterRadius,
-  getBeadCollisionRadiusPx,
   getEditorTrayRadius,
 } from '@/pages/diy/engine/geometry'
-import { LooseBraceletPhysics } from '@/pages/diy/engine/physics'
 import { BraceletRenderer } from '@/pages/diy/engine/renderer'
 import type { DiyBead, RingTarget, TouchPoint } from '@/pages/diy/model/types'
 import type { CanvasQueryResult, DiyPageInstance } from '@/pages/diy/page/types'
@@ -18,11 +16,7 @@ import { appSound } from '@/services/sound'
 import { getMaterialRenderMetrics } from '@/utils/material-render-geometry'
 
 const FIXED_STEP_MS = 1000 / 60
-const MAXIMUM_STEPS_PER_FRAME = 2
 const RING_ANIMATION_DURATION_MS = 440
-const SHOWCASE_TRANSITION_DURATION_MS = 760
-const SHOWCASE_ROTATION_RADIANS_PER_MS = Math.PI * 2 / 18000
-const SHOWCASE_IDLE_FRAME_MS = 1000 / 60
 const EDITOR_RING_MAX_OUTER_RADIUS_RATIO = 0.92
 const MAXIMUM_RING_ANGULAR_VELOCITY = 0.012
 const MINIMUM_RING_ANGULAR_VELOCITY = 0.00004
@@ -33,11 +27,6 @@ const RING_SPRING_STIFFNESS = 0.00028
 const RING_SPRING_DAMPING = 0.017
 const RING_MINIMUM_ELASTIC_SCALE = 0.3
 const RING_MAXIMUM_ELASTIC_SCALE = 1.012
-const LOOSE_DRAG_VELOCITY_SMOOTHING_MS = 34
-const LOOSE_DRAG_MINIMUM_MOTION_SQUARED = 0.16
-const LOOSE_RELEASE_VELOCITY_HOLD_MS = 48
-const LOOSE_RELEASE_VELOCITY_DECAY_MS = 150
-const LOOSE_RELEASE_VELOCITY_EXPIRE_MS = 260
 const MAXIMUM_CANVAS_PIXEL_COUNT = 800000
 const MINIMUM_CANVAS_PIXEL_RATIO = 3
 const MAXIMUM_CANVAS_PIXEL_RATIO = 3
@@ -72,8 +61,6 @@ export const canvasPageMethods = {
 
       const reusableRenderer = this.canvas === canvas ? this.renderer : null
       this.cancelAnimationFrame()
-      this.physics?.destroy()
-      this.physics = null
       if (!reusableRenderer) this.renderer?.destroy()
       this.canvas = canvas
       this.canvasLeft = Number(result?.left) || 0
@@ -84,7 +71,7 @@ export const canvasPageMethods = {
       const anchorHeight = Number(anchorResult?.height) || anchorWidth
       const anchorLeft = Number(anchorResult?.left) - this.canvasLeft
       const anchorTop = Number(anchorResult?.top) - this.canvasTop
-      this.showcasePlateOrigin = {
+      this.editorOrigin = {
         centerX: (Number.isFinite(anchorLeft) ? anchorLeft : (width - anchorWidth) / 2)
           + anchorWidth / 2,
         centerY: (Number.isFinite(anchorTop) ? anchorTop : (height - anchorHeight) / 2)
@@ -112,10 +99,6 @@ export const canvasPageMethods = {
           width,
           height,
           pixelRatio,
-          this.data.backgroundIndex,
-          this.trayBackgroundUrls,
-          this.showcasePresentation,
-          this.showcaseBrandImagePath,
           () => {
             this.scheduleRender()
             this.updateEntryGate()
@@ -125,38 +108,13 @@ export const canvasPageMethods = {
       if (!this.data.loadingMaterials && !this.firstScreenMaterialImagesReady) {
         void this.preloadFirstScreenMaterialImages()
       }
-      if (!this.data.showShowcase) {
-        const editorPlateOrigin = this.showcasePlateOrigin
-        this.physics = new LooseBraceletPhysics(
-          editorPlateOrigin.centerX,
-          editorPlateOrigin.centerY,
-          editorPlateOrigin.radius,
-        )
-      }
       this.setData({ canvasReady: true }, () => {
         void this.tryApplyTemplateDesign()
         this.updateEntryGate()
       })
 
       if (this.beads.length > 0) {
-        if (this.data.isStrung) {
-          if (this.data.showShowcase && this.showcaseEntryPositions) {
-            this.beads.forEach((bead) => {
-              const entryPosition = this.showcaseEntryPositions?.get(bead.uid)
-              if (!entryPosition) return
-              bead.x = entryPosition.x
-              bead.y = entryPosition.y
-              bead.rotation = entryPosition.rotation
-            })
-            this.startRingAnimation(SHOWCASE_TRANSITION_DURATION_MS)
-          } else if (this.data.showShowcase) {
-            this.startRingAnimation(SHOWCASE_TRANSITION_DURATION_MS)
-          } else {
-            this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
-          }
-        } else {
-          this.rebuildLoosePhysics()
-        }
+        this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
       }
       this.scheduleRender()
     })
@@ -165,13 +123,10 @@ export const canvasPageMethods = {
   disposeCanvas(this: DiyPageInstance): void {
     this.cancelAnimationFrame()
     this.renderer?.destroy()
-    this.physics?.destroy()
     this.renderer = null
-    this.physics = null
     this.canvas = null
     this.ringAnimation = null
     this.dragState = null
-    this.showcaseMotionAccumulator = 0
     this.resetRingMotion()
   },
 
@@ -198,7 +153,6 @@ export const canvasPageMethods = {
     }
     this.frameRequestId = null
     this.lastFrameTimestamp = 0
-    this.frameAccumulator = 0
   },
 
   handleAnimationFrame(this: DiyPageInstance, timestamp: number): void {
@@ -214,104 +168,21 @@ export const canvasPageMethods = {
       animationActive = this.stepRingAnimation(timestamp)
     } else if (this.dragState?.mode === 'ring-bead') {
       animationActive = this.stepRingDragReflow(deltaMs)
-    } else if (!this.data.isStrung && this.physics) {
-      animationActive = this.stepLoosePhysics(deltaMs)
     }
     if (
-      this.data.isStrung
-      && !this.data.showShowcase
-      && !this.ringAnimation
+      !this.ringAnimation
       && this.dragState?.mode !== 'ring-bead'
     ) {
       animationActive = this.stepRingMotion(deltaMs) || animationActive
     }
-    if (this.data.showShowcase) {
-      animationActive = this.stepShowcaseAnimation(timestamp, deltaMs) || animationActive
-    }
     this.lastFrameTimestamp = timestamp
 
     // Animation activity controls scheduling; renderDirty controls drawing.
-    // Keeping them separate avoids a duplicate full-canvas draw on 120Hz
-    // devices when the fixed 60Hz physics step has not advanced.
     if (this.renderDirty) this.renderEditor()
     if (animationActive || this.renderDirty) this.requestAnimationFrame()
     else {
       this.lastFrameTimestamp = 0
-      this.frameAccumulator = 0
     }
-  },
-
-  stepLoosePhysics(this: DiyPageInstance, deltaMs: number): boolean {
-    if (!this.physics) return false
-    this.frameAccumulator = Math.min(
-      this.frameAccumulator + deltaMs,
-      FIXED_STEP_MS * MAXIMUM_STEPS_PER_FRAME,
-    )
-    let stepCount = 0
-    while (this.frameAccumulator >= FIXED_STEP_MS && stepCount < MAXIMUM_STEPS_PER_FRAME) {
-      this.physics.step(FIXED_STEP_MS)
-      this.frameAccumulator -= FIXED_STEP_MS
-      stepCount += 1
-    }
-    if (stepCount > 0) {
-      appSound.enqueueImpacts(this.physics.drainImpacts())
-      this.syncBeadsFromPhysics()
-      this.renderDirty = true
-    }
-    return this.physics.hasActiveMotion()
-  },
-
-  stepShowcaseAnimation(this: DiyPageInstance, timestamp: number, deltaMs: number): boolean {
-    if (!this.data.showShowcase) return false
-    const transitionDirection = this.showcaseTransitionDirection
-    if (transitionDirection !== 'idle') {
-      if (this.showcaseAnimationStartTime === 0) this.showcaseAnimationStartTime = timestamp
-      const transitionDistance = transitionDirection === 'opening'
-        ? 1 - this.showcaseTransitionStartProgress
-        : this.showcaseTransitionStartProgress
-      const transitionDuration = Math.max(
-        160,
-        SHOWCASE_TRANSITION_DURATION_MS * transitionDistance,
-      )
-      const linearProgress = Math.min(
-        1,
-        (timestamp - this.showcaseAnimationStartTime) / transitionDuration,
-      )
-      const easedProgress = easeOutCubic(linearProgress)
-      const nextProgress = transitionDirection === 'opening'
-        ? this.showcaseTransitionStartProgress
-          + (1 - this.showcaseTransitionStartProgress) * easedProgress
-        : this.showcaseTransitionStartProgress * (1 - easedProgress)
-      if (Math.abs(nextProgress - this.showcaseTransitionProgress) > 0.0001) {
-        this.showcaseTransitionProgress = nextProgress
-        this.renderDirty = true
-      }
-
-      if (linearProgress >= 1) {
-        if (transitionDirection === 'closing') {
-          this.completeShowcaseClose()
-          return false
-        }
-        this.showcaseTransitionProgress = 1
-        this.showcaseTransitionDirection = 'idle'
-      }
-    }
-
-    if (this.showcaseTransitionDirection === 'idle' && !this.ringAnimation) {
-      this.showcaseMotionAccumulator += deltaMs
-      if (this.showcaseMotionAccumulator >= SHOWCASE_IDLE_FRAME_MS) {
-        const elapsedMs = this.showcaseMotionAccumulator
-        this.showcaseMotionAccumulator %= SHOWCASE_IDLE_FRAME_MS
-        this.ringRotationOffset += SHOWCASE_ROTATION_RADIANS_PER_MS * elapsedMs
-        this.applyCurrentRingLayout(this.beads)
-      }
-    }
-    return true
-  },
-
-  syncBeadsFromPhysics(this: DiyPageInstance): void {
-    if (!this.physics) return
-    this.physics.syncPositions(this.beads)
   },
 
   renderEditor(this: DiyPageInstance): void {
@@ -325,23 +196,10 @@ export const canvasPageMethods = {
       return
     }
 
-    const editorLayout = this.data.isStrung ? this.getEditorRingLayout() : null
-    const editorDisplayScale = editorLayout?.displayScale ?? EDITOR_BEAD_DISPLAY_SCALE
-    let displayScale = editorDisplayScale
-    if (this.data.showShowcase) {
-      const showcaseLayout = this.getRingLayout()
-      displayScale = editorDisplayScale
-        + (showcaseLayout.displayScale - editorDisplayScale) * this.showcaseTransitionProgress
-    }
+    const displayScale = this.getEditorRingLayout().displayScale
     this.renderer?.render(
       this.beads,
-      this.data.backgroundIndex,
-      this.data.showShowcase ? 'showcase' : 'editor',
       displayScale,
-      this.data.statusBarHeight,
-      this.showcaseTransitionProgress,
-      this.showcasePlateOrigin,
-      !this.data.isClosingShowcase,
       this.dragState?.uid ?? null,
     )
     if (!this.firstCanvasFrameRendered && this.renderer) {
@@ -352,14 +210,12 @@ export const canvasPageMethods = {
 
   invalidateRingLayoutCaches(this: DiyPageInstance): void {
     this.editorRingLayoutCache = null
-    this.showcaseRingLayoutCache = null
   },
 
   startRingAnimation(this: DiyPageInstance, duration = RING_ANIMATION_DURATION_MS): void {
     if (this.beads.length === 0 || this.canvasWidth <= 0 || this.canvasHeight <= 0) return
-    // Ring transitions must own a fresh RAF. A loose-physics frame can remain
-    // pending while a restored cart design switches modes on some real devices.
-    // Reusing that stale request makes the ring appear to snap to its target.
+    // Ring transitions own a fresh RAF so a pending frame cannot make the
+    // bracelet appear to snap directly to its target.
     this.cancelAnimationFrame()
     this.resetRingMotion()
     const targets = this.buildCurrentRingTargets(this.beads)
@@ -383,34 +239,6 @@ export const canvasPageMethods = {
       duration,
       items,
     }
-    this.renderDirty = true
-    this.requestAnimationFrame()
-  },
-
-  startRingAnimationToPositions(
-    this: DiyPageInstance,
-    positions: Map<string, { x: number; y: number; rotation: number }>,
-    duration: number,
-  ): void {
-    if (this.beads.length === 0) return
-    this.cancelAnimationFrame()
-    this.resetRingMotion()
-    const items = []
-    for (let index = 0; index < this.beads.length; index += 1) {
-      const bead = this.beads[index]
-      const target = positions.get(bead.uid)
-      if (!target) continue
-      items.push({
-        bead,
-        fromX: bead.x,
-        fromY: bead.y,
-        fromRotation: bead.rotation,
-        targetX: target.x,
-        targetY: target.y,
-        targetRotation: target.rotation,
-      })
-    }
-    this.ringAnimation = { startTime: 0, duration, items }
     this.renderDirty = true
     this.requestAnimationFrame()
   },
@@ -482,8 +310,6 @@ export const canvasPageMethods = {
   },
 
   stepRingMotion(this: DiyPageInstance, deltaMs: number): boolean {
-    if (!this.data.isStrung || this.data.showShowcase) return false
-
     const isDirectlyRotating = this.dragState?.mode === 'ring-rotate'
     let rotationChanged = false
     if (!isDirectlyRotating && Math.abs(this.ringAngularVelocity) > 0) {
@@ -550,7 +376,7 @@ export const canvasPageMethods = {
     const draggedBead = dragState.bead
     if (!draggedBead) return
 
-    const ringLayout = this.getRingLayout()
+    const ringLayout = this.getEditorRingLayout()
     const insertionIndex = findRingInsertionIndexForBeads(
       point.x,
       point.y,
@@ -603,7 +429,7 @@ export const canvasPageMethods = {
   },
 
   applyCurrentRingLayout(this: DiyPageInstance, beads: DiyBead[]): void {
-    const layout = this.getRingLayout()
+    const layout = this.getEditorRingLayout()
     applyRingLayout(
       beads,
       layout.centerX,
@@ -618,7 +444,7 @@ export const canvasPageMethods = {
 
   getEditorRingLayout(this: DiyPageInstance) {
     if (this.editorRingLayoutCache) return this.editorRingLayoutCache
-    const editorPlateOrigin = this.showcasePlateOrigin || {
+    const editorPlateOrigin = this.editorOrigin || {
       centerX: this.canvasWidth / 2,
       centerY: this.canvasHeight / 2,
       radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
@@ -639,34 +465,8 @@ export const canvasPageMethods = {
     return this.editorRingLayoutCache
   },
 
-  getRingLayout(this: DiyPageInstance) {
-    if (!this.data.showShowcase) return this.getEditorRingLayout()
-    if (this.showcaseRingLayoutCache) return this.showcaseRingLayoutCache
-
-    const centerX = this.canvasWidth / 2
-    const naturalRadius = calculatePerimeterMm(this.beads) / (Math.PI * 2) * PIXELS_PER_MM
-    const maximumOuterRadius = Math.min(this.canvasWidth * 0.43, this.canvasHeight * 0.19)
-    const minimumHeroRadius = this.canvasWidth * 0.22
-    const preferredScale = naturalRadius > 0
-      ? Math.max(1.18, minimumHeroRadius / naturalRadius)
-      : 1
-    const fittedScales = fitRingScalesToOuterRadius(
-      this.beads,
-      maximumOuterRadius,
-      preferredScale,
-      preferredScale,
-    )
-    this.showcaseRingLayoutCache = {
-      centerX,
-      centerY: this.canvasHeight * 0.55,
-      radiusScale: fittedScales.radiusScale,
-      displayScale: fittedScales.displayScale,
-    }
-    return this.showcaseRingLayoutCache
-  },
-
   buildCurrentRingTargets(this: DiyPageInstance, beads: DiyBead[]): RingTarget[] {
-    const layout = this.getRingLayout()
+    const layout = this.getEditorRingLayout()
     return buildRingTargets(
       beads,
       layout.centerX,
@@ -675,29 +475,6 @@ export const canvasPageMethods = {
       layout.radiusScale * this.ringElasticScale,
       layout.displayScale,
     )
-  },
-
-  rebuildLoosePhysics(this: DiyPageInstance, scatter = false): void {
-    if (!this.physics) return
-    this.resetRingMotion()
-    this.physics.replaceBeads(this.beads.map((bead) => {
-      const launchAngle = Math.random() * Math.PI * 2
-      const scatterSpeed = 28 + Math.random() * 18
-      return {
-        uid: bead.uid,
-        x: bead.x,
-        y: bead.y,
-        radius: getBeadCollisionRadiusPx(bead, EDITOR_BEAD_DISPLAY_SCALE),
-        rotation: bead.rotation,
-        velocityX: scatter
-          ? Math.cos(launchAngle) * scatterSpeed
-          : (Math.random() - 0.5) * 10,
-        velocityY: scatter
-          ? Math.sin(launchAngle) * scatterSpeed
-          : (Math.random() - 0.5) * 10,
-      }
-    }))
-    this.requestAnimationFrame()
   },
 
   getCanvasTouchPoint(
@@ -719,9 +496,7 @@ export const canvasPageMethods = {
   },
 
   findBeadAtPoint(this: DiyPageInstance, point: TouchPoint): DiyBead | null {
-    const displayScale = this.data.isStrung
-      ? this.getEditorRingLayout().displayScale
-      : EDITOR_BEAD_DISPLAY_SCALE
+    const displayScale = this.getEditorRingLayout().displayScale
     const orderedBeads = this.beads.slice().sort((left, right) => (
       right.layer - left.layer || right.y - left.y
     ))
@@ -746,7 +521,7 @@ export const canvasPageMethods = {
   },
 
   isPointOutsideRemovalBoundary(this: DiyPageInstance, point: TouchPoint): boolean {
-    const editorPlateOrigin = this.showcasePlateOrigin || {
+    const editorPlateOrigin = this.editorOrigin || {
       centerX: this.canvasWidth / 2,
       centerY: this.canvasHeight / 2,
       radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
@@ -777,34 +552,13 @@ export const canvasPageMethods = {
     if (!dragState.uid) return
 
     if (this.isPointOutsideRemovalBoundary(point)) {
-      this.physics?.cancelDrag()
       this.removeBead(dragState.uid, dragState.snapshot)
-      return
-    }
-
-    if (dragState.mode === 'loose-bead') {
-      const releaseAgeMs = Math.max(0, point.timestamp - dragState.lastMotionTimestamp)
-      const releaseDecay = releaseAgeMs <= LOOSE_RELEASE_VELOCITY_HOLD_MS
-        ? 1
-        : Math.exp(
-          -(releaseAgeMs - LOOSE_RELEASE_VELOCITY_HOLD_MS)
-          / LOOSE_RELEASE_VELOCITY_DECAY_MS,
-        )
-      const releaseMultiplier = releaseAgeMs >= LOOSE_RELEASE_VELOCITY_EXPIRE_MS
-        ? 0
-        : releaseDecay
-      this.physics?.endDrag(
-        dragState.uid,
-        dragState.releaseVelocityX * releaseMultiplier,
-        dragState.releaseVelocityY * releaseMultiplier,
-      )
-      this.requestAnimationFrame()
       return
     }
 
     const draggedBead = dragState.bead
     if (!draggedBead) return
-    const ringLayout = this.getRingLayout()
+    const ringLayout = this.getEditorRingLayout()
     const insertionIndex = findRingInsertionIndexForBeads(
       point.x,
       point.y,
@@ -824,118 +578,12 @@ export const canvasPageMethods = {
     this.startRingAnimation(420)
   },
 
-  switchShowcaseMode(this: DiyPageInstance, showShowcase: boolean): void {
-    if (showShowcase) {
-      if (this.data.showShowcase) return
-      this.showcaseEntryPositions = new Map(this.beads.map((bead) => [
-        bead.uid,
-        { x: bead.x, y: bead.y, rotation: bead.rotation },
-      ]))
-      this.showcaseAnimationStartTime = 0
-      this.showcaseMotionAccumulator = 0
-      this.showcaseTransitionProgress = 0
-      this.showcaseTransitionStartProgress = 0
-      this.showcaseTransitionDirection = 'opening'
-      this.renderDirty = false
-      this.cancelAnimationFrame()
-      this.setData({
-        showShowcase: true,
-        isClosingShowcase: false,
-        showSizeGuide: false,
-        showGuide: false,
-        showWristPicker: false,
-      }, () => {
-        this.startRingAnimation(SHOWCASE_TRANSITION_DURATION_MS)
-        this.scheduleRender()
-      })
-      return
-    }
-
-    if (!this.data.showShowcase || this.showcaseTransitionDirection === 'closing') return
-    this.showcaseAnimationStartTime = 0
-    this.showcaseMotionAccumulator = 0
-    this.showcaseTransitionStartProgress = this.showcaseTransitionProgress
-    this.showcaseTransitionDirection = 'closing'
-    const transitionDuration = Math.max(
-      160,
-      SHOWCASE_TRANSITION_DURATION_MS * this.showcaseTransitionStartProgress,
-    )
-    const editorLayout = this.getEditorRingLayout()
-    const editorTargets = buildRingTargets(
-      this.beads,
-      editorLayout.centerX,
-      editorLayout.centerY,
-      this.ringRotationOffset,
-      editorLayout.radiusScale,
-      editorLayout.displayScale,
-    )
-    this.showcaseEntryPositions = new Map(editorTargets.map((target) => [
-      target.uid,
-      { x: target.x, y: target.y, rotation: target.rotation },
-    ]))
-    this.startRingAnimationToPositions(this.showcaseEntryPositions, transitionDuration)
-    this.setData({ isClosingShowcase: true }, () => this.scheduleRender())
-    this.requestAnimationFrame()
-  },
-
-  completeShowcaseClose(this: DiyPageInstance): void {
-    this.showcaseTransitionProgress = 0
-    this.showcaseTransitionStartProgress = 0
-    this.showcaseTransitionDirection = 'idle'
-    this.showcaseAnimationStartTime = 0
-    this.showcaseMotionAccumulator = 0
-    this.ringAnimation = null
-    this.renderDirty = false
-    this.setData({ showShowcase: false, isClosingShowcase: false }, () => {
-      this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
-      this.showcaseEntryPositions = null
-      this.showcaseTransitionProgress = 1
-      this.showcaseTransitionStartProgress = 1
-      this.scheduleRender()
-    })
-  },
-
-  handleOpenShowcase(this: DiyPageInstance): void {
-    if (!this.data.isStrung || this.beads.length === 0) return
-    appSound.play('soft-pop')
-    this.switchShowcaseMode(true)
-  },
-
-  handleCloseShowcase(this: DiyPageInstance): void {
-    this.switchShowcaseMode(false)
-  },
-
   handleCanvasTouchStart(this: DiyPageInstance, event: WechatMiniprogram.TouchEvent): void {
     const point = this.getCanvasTouchPoint(event)
     if (!point) return
-    if (this.data.showShowcase) {
-      this.handleCloseShowcase()
-      return
-    }
     if (this.ringAnimation) return
     const bead = this.findBeadAtPoint(point)
     const snapshot = this.createSnapshot()
-
-    if (!this.data.isStrung) {
-      if (!bead || !this.physics?.beginDrag(bead.uid)) return
-      this.dragState = {
-        uid: bead.uid,
-        bead,
-        mode: 'loose-bead',
-        latestPoint: point,
-        renderedPoint: point,
-        releaseVelocityX: 0,
-        releaseVelocityY: 0,
-        lastMotionTimestamp: point.timestamp,
-        snapshot,
-        originalIndex: this.beads.indexOf(bead),
-        insertionIndex: this.beads.indexOf(bead),
-        reflowTargets: null,
-      }
-      appSound.play('soft-pop')
-      this.scheduleRender()
-      return
-    }
 
     this.ringAngularVelocity = 0
     this.dragState = {
@@ -944,9 +592,6 @@ export const canvasPageMethods = {
       mode: bead ? 'ring-bead' : 'ring-rotate',
       latestPoint: point,
       renderedPoint: point,
-      releaseVelocityX: 0,
-      releaseVelocityY: 0,
-      lastMotionTimestamp: point.timestamp,
       snapshot,
       originalIndex: bead ? this.beads.indexOf(bead) : -1,
       insertionIndex: bead ? this.beads.indexOf(bead) : -1,
@@ -967,7 +612,7 @@ export const canvasPageMethods = {
     dragState.renderedPoint = point
 
     if (dragState.mode === 'ring-rotate') {
-      const ringLayout = this.getRingLayout()
+      const ringLayout = this.getEditorRingLayout()
       const angle = Math.atan2(
         point.y - ringLayout.centerY,
         point.x - ringLayout.centerX,
@@ -999,37 +644,7 @@ export const canvasPageMethods = {
     if (!bead) return
     bead.x = point.x
     bead.y = point.y
-    if (dragState.mode === 'loose-bead') {
-      const deltaX = point.x - previousRenderedPoint.x
-      const deltaY = point.y - previousRenderedPoint.y
-      const distanceSquared = deltaX * deltaX + deltaY * deltaY
-      if (distanceSquared >= LOOSE_DRAG_MINIMUM_MOTION_SQUARED) {
-        const elapsedMs = Math.max(
-          4,
-          Math.min(80, point.timestamp - previousRenderedPoint.timestamp),
-        )
-        const elapsedFrames = elapsedMs / FIXED_STEP_MS
-        const instantaneousVelocityX = deltaX / elapsedFrames
-        const instantaneousVelocityY = deltaY / elapsedFrames
-        const velocityBlend = 1 - Math.exp(
-          -elapsedMs / LOOSE_DRAG_VELOCITY_SMOOTHING_MS,
-        )
-        dragState.releaseVelocityX += (
-          instantaneousVelocityX - dragState.releaseVelocityX
-        ) * velocityBlend
-        dragState.releaseVelocityY += (
-          instantaneousVelocityY - dragState.releaseVelocityY
-        ) * velocityBlend
-        dragState.lastMotionTimestamp = point.timestamp
-      }
-      this.physics?.moveDraggedBead(
-        bead.uid,
-        point.x,
-        point.y,
-        dragState.releaseVelocityX,
-        dragState.releaseVelocityY,
-      )
-    } else if (dragState.mode === 'ring-bead') {
+    if (dragState.mode === 'ring-bead') {
       this.updateRingDragReflow(point)
     }
     this.renderDirty = true

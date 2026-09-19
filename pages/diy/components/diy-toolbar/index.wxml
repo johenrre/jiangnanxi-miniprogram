@@ -11,15 +11,6 @@
       </button>
       <button
         class="tool-button tool-button--round"
-        bindtap="handleBackground"
-        hover-class="tool-button--pressed"
-        aria-label="切换托盘背景"
-      >
-        <image class="tool-button__icon" src="/assets/icons/bg-dark.svg" mode="aspectFit" />
-        <text class="tool-button__caption">换底</text>
-      </button>
-      <button
-        class="tool-button tool-button--round"
         bindtap="handleClear"
         hover-class="tool-button--pressed"
         aria-label="清空当前设计"
@@ -39,18 +30,6 @@
       </button>
     </view>
 
-    <button
-      class="string-button {{isStrung ? 'string-button--active' : ''}} {{stringDisabled ? 'string-button--disabled' : ''}}"
-      bindtap="handleToggleString"
-      disabled="{{stringDisabled}}"
-      hover-class="string-button--pressed"
-      aria-disabled="{{stringDisabled}}"
-    >
-      <view class="string-button__icon-shell">
-        <image class="string-button__icon" src="/assets/icons/string-white.svg" mode="aspectFit" />
-      </view>
-      <text>{{stringButtonText}}</text>
-    </button>
   </view>
 
   <view class="diy-search-row">

@@ -35,14 +35,6 @@ export interface DiyBead {
   rotation: number
 }
 
-export interface BeadPosition {
-  uid: string
-  x: number
-  y: number
-  rotation: number
-  isSleeping: boolean
-}
-
 export interface RingTarget {
   uid: string
   x: number
@@ -53,7 +45,6 @@ export interface RingTarget {
 
 export interface EditorSnapshot {
   beads: DiyBead[]
-  isStrung: boolean
 }
 
 export interface TouchPoint {

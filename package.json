@@ -10,9 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "",
-  "dependencies": {
-    "matter-js": "^0.20.0"
-  },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1",
     "miniprogram-automator": "^0.12.1",

@@ -45,7 +45,6 @@ function calculatePerimeter(beads: DiyDesignBeadInput[]): number {
 
 export async function saveDiyDesign(
   beads: DiyDesignBeadInput[],
-  backgroundIndex: number,
   name: string,
 ): Promise<SavedDiyDesign> {
   if (beads.length === 0) throw new Error('请先添加珠子')
@@ -59,7 +58,7 @@ export async function saveDiyDesign(
       pattern: beads.map((bead) => bead.materialId),
       mode: 'bracelet',
       perimeter: calculatePerimeter(beads),
-      bgIndex: backgroundIndex,
+      bgIndex: 0,
       isPublic: 0,
     },
   })

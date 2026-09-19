@@ -30,17 +30,6 @@
   flex: 1;
 }
 
-.diy-editor--showcase > .diy-chrome,
-.diy-editor--showcase > .diy-modal-host {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.diy-editor--showcase .diy-stage {
-  background: transparent;
-}
-
 .diy-stage {
   position: relative;
   display: flex;
@@ -101,61 +90,6 @@
   height: 100vh;
 }
 
-.diy-fullscreen-canvas--showcase {
-  z-index: 10020;
-}
-
-.showcase-trigger {
-  position: absolute;
-  z-index: 5;
-  top: 16rpx;
-  right: 28rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 68rpx;
-  min-width: 68rpx;
-  height: 92rpx;
-  min-height: 92rpx;
-  padding: 8rpx 0 7rpx;
-  border: 1rpx solid var(--color-border);
-  border-radius: 34rpx;
-  background: rgba(252, 251, 247, 0.86);
-  box-shadow: 0 8rpx 20rpx var(--color-shadow-soft);
-  color: var(--color-primary);
-  transition: opacity 100ms ease, transform 100ms ease;
-}
-
-.showcase-trigger--pressed {
-  opacity: 0.78;
-  transform: scale(0.97);
-}
-
-.showcase-trigger__icon-shell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34rpx;
-  height: 34rpx;
-}
-
-.showcase-trigger__icon {
-  width: 28rpx;
-  height: 28rpx;
-}
-
-.showcase-trigger__label {
-  margin-top: 2rpx;
-  font-family: var(--font-body);
-  font-size: 18rpx;
-  font-weight: 500;
-  line-height: 24rpx;
-  letter-spacing: 0.5rpx;
-  white-space: nowrap;
-}
-
 .stage-tool-button {
   position: absolute;
   z-index: 6;
@@ -176,42 +110,6 @@
 
 .stage-tool-button::after {
   display: none;
-}
-
-.stage-tool-button--random {
-  left: 30rpx;
-  right: auto;
-  width: 154rpx;
-  min-width: 154rpx;
-  max-width: 154rpx;
-  padding: 0 18rpx;
-  border-radius: 22rpx;
-  gap: 9rpx;
-}
-
-.stage-tool-button--loading,
-.stage-tool-button--loading[disabled] {
-  background: var(--color-surface-glass-strong);
-  opacity: 1;
-}
-
-.stage-tool-button--loading .stage-tool-button__icon {
-  opacity: 0.62;
-}
-
-.stage-tool-button__spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  box-sizing: border-box;
-  width: 42rpx;
-  height: 42rpx;
-  border: 3rpx solid var(--color-border-strong);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: stage-tool-spinner 720ms linear infinite;
-  pointer-events: none;
 }
 
 .stage-tool-button--undo {
@@ -249,47 +147,9 @@
   white-space: nowrap;
 }
 
-.stage-tool-button__label {
-  font-size: 19rpx;
-  font-weight: 700;
-  letter-spacing: 1rpx;
-  white-space: nowrap;
-}
-
 .stage-tool-button--pressed {
   opacity: 0.7;
   transform: scale(0.97);
-}
-
-@keyframes stage-tool-spinner {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.diy-showcase-controls {
-  position: fixed;
-  z-index: 10021;
-  inset: 0;
-  pointer-events: none;
-}
-
-.diy-showcase__share-hit {
-  position: absolute;
-  z-index: 4;
-  right: 18px;
-  width: 104px;
-  min-width: 104px;
-  height: 36px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  opacity: 0.001;
-  pointer-events: auto;
-}
-
-.diy-showcase__share-hit::after {
-  border: 0;
 }
 
 .diy-stage__empty {

@@ -26,7 +26,7 @@ export const entryPageMethods = {
       entryMaskVisible: true,
       entryMaskLeaving: false,
       entryStatusText: '正在准备 DIY 设计台…',
-      entryStatusDetail: '正在加载盘子与材料',
+      entryStatusDetail: '正在加载材料与编辑器',
       entryErrorText: '',
     })
     this.entryMaskTimeoutTimer = setTimeout(() => {
@@ -50,11 +50,7 @@ export const entryPageMethods = {
       return
     }
     if (!this.data.canvasReady || !this.renderer) {
-      updateMaskText(this, '正在初始化画布…', '准备托盘和交互区域')
-      return
-    }
-    if (!this.renderer.areEditorEntryImagesSettled(this.data.backgroundIndex)) {
-      updateMaskText(this, '正在加载盘子背景…', '准备当前编辑场景')
+      updateMaskText(this, '正在初始化画布…', '准备手串交互区域')
       return
     }
     if (this.data.loadingMaterials) {
@@ -71,7 +67,7 @@ export const entryPageMethods = {
       return
     }
     if (!this.firstCanvasFrameRendered) {
-      updateMaskText(this, '正在合成首屏…', '完成托盘第一帧绘制')
+      updateMaskText(this, '正在合成首屏…', '完成手串第一帧绘制')
       return
     }
 

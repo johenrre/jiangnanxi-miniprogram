@@ -1,10 +1,8 @@
 import type { DiyMaterial } from '@/api/index'
-import type { LooseBraceletPhysics } from '@/pages/diy/engine/physics'
 import type {
   BraceletRenderer,
   DiyCanvas,
-  DiyShowcasePresentation,
-  ShowcasePlateOrigin,
+  EditorOrigin,
 } from '@/pages/diy/engine/renderer'
 import type {
   DiyBead,
@@ -63,12 +61,9 @@ export interface RingLayout {
 export interface DragState {
   uid: string | null
   bead: DiyBead | null
-  mode: 'loose-bead' | 'ring-bead' | 'ring-rotate'
+  mode: 'ring-bead' | 'ring-rotate'
   latestPoint: TouchPoint
   renderedPoint: TouchPoint
-  releaseVelocityX: number
-  releaseVelocityY: number
-  lastMotionTimestamp: number
   snapshot: EditorSnapshot
   originalIndex: number
   insertionIndex: number
@@ -100,20 +95,14 @@ export interface DiyPageData {
   wristMessage: string
   wristFitWarningVisible: boolean
   wristFitWarningText: string
-  isStrung: boolean
-  stringButtonText: string
   canUndo: boolean
   canSave: boolean
   showSaveNameDialog: boolean
   designNameDraft: string
   savingDesign: boolean
-  randomGenerating: boolean
-  backgroundIndex: number
   showSizeGuide: boolean
   showGuide: boolean
   showWristPicker: boolean
-  showShowcase: boolean
-  isClosingShowcase: boolean
   selectedWristCm: number | null
   selectedWristStrands: DiyWristStrands
 }
@@ -129,34 +118,22 @@ export interface DiyPageCustom {
   uidSequence: number
   canvas: DiyCanvas | null
   renderer: BraceletRenderer | null
-  trayBackgroundUrls: string[]
-  showcasePresentation: DiyShowcasePresentation
-  showcaseBrandImagePath: string
-  physics: LooseBraceletPhysics | null
   canvasLeft: number
   canvasTop: number
   canvasWidth: number
   canvasHeight: number
   frameRequestId: number | null
   lastFrameTimestamp: number
-  frameAccumulator: number
   renderDirty: boolean
   pageVisible: boolean
   ringAnimation: RingAnimation | null
   editorRingLayoutCache: RingLayout | null
-  showcaseRingLayoutCache: RingLayout | null
   ringRotationOffset: number
   ringAngularVelocity: number
   ringElasticScale: number
   ringElasticVelocity: number
   ringLayoutDirty: boolean
-  showcaseAnimationStartTime: number
-  showcaseMotionAccumulator: number
-  showcaseTransitionProgress: number
-  showcaseTransitionStartProgress: number
-  showcaseTransitionDirection: 'idle' | 'opening' | 'closing'
-  showcasePlateOrigin: ShowcasePlateOrigin | null
-  showcaseEntryPositions: Map<string, { x: number; y: number; rotation: number }> | null
+  editorOrigin: EditorOrigin | null
   dragState: DragState | null
   firstScreenMaterialImagesReady: boolean
   firstCanvasFrameRendered: boolean
@@ -168,8 +145,6 @@ export interface DiyPageCustom {
   audioWarmupTimer: number | null
   skipEntrySizeGuide: boolean
   templateDesignSequence: number
-  randomGenerationSequence: number
-  lastRandomDesignerId: string
   pendingTemplateDesign: DiyDesignSnapshot | null
   expectsTemplateDesign: boolean
   templateDesignApplying: boolean
@@ -200,16 +175,9 @@ export interface DiyPageCustom {
   requestAnimationFrame(): void
   cancelAnimationFrame(): void
   handleAnimationFrame(timestamp: number): void
-  stepLoosePhysics(deltaMs: number): boolean
-  stepShowcaseAnimation(timestamp: number, deltaMs: number): boolean
-  syncBeadsFromPhysics(): void
   renderEditor(): void
   invalidateRingLayoutCaches(): void
   startRingAnimation(duration?: number): void
-  startRingAnimationToPositions(
-    positions: Map<string, { x: number; y: number; rotation: number }>,
-    duration: number,
-  ): void
   stepRingAnimation(timestamp: number): boolean
   stepRingDragReflow(deltaMs: number): boolean
   stepRingMotion(deltaMs: number): boolean
@@ -218,9 +186,7 @@ export interface DiyPageCustom {
   applyRingTargets(targets: RingTarget[]): void
   applyCurrentRingLayout(beads: DiyBead[]): void
   getEditorRingLayout(): RingLayout
-  getRingLayout(): RingLayout
   buildCurrentRingTargets(beads: DiyBead[]): RingTarget[]
-  rebuildLoosePhysics(scatter?: boolean): void
   createSnapshot(): EditorSnapshot
   pushHistory(snapshot?: EditorSnapshot): void
   restoreSnapshot(snapshot: EditorSnapshot): void
@@ -236,15 +202,8 @@ export interface DiyPageCustom {
   handleMaterialTap(event: WechatMiniprogram.CustomEvent<{ id: string }>): void
   handleMaterialsScrollLower(): void
   handleRetryMaterials(): void
-  handleToggleString(): void
   handleUndo(): void
   handleClear(): void
-  handleRandomDesign(): Promise<void>
-  handleToggleBackground(): void
-  switchShowcaseMode(showShowcase: boolean): void
-  completeShowcaseClose(): void
-  handleOpenShowcase(): void
-  handleCloseShowcase(): void
   handleCanvasTouchStart(event: WechatMiniprogram.TouchEvent): void
   applyPendingDragPoint(): void
   handleCanvasTouchMove(event: WechatMiniprogram.TouchEvent): void

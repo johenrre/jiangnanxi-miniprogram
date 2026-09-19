@@ -51,7 +51,7 @@ const GUIDE_TABS: UsageGuideTab[] = [
 const TUTORIAL_STEPS: TutorialItem[] = [
   {
     title: '挑选素材，开始搭配',
-    description: '从下方分类选择珠子与配饰，轻点加入托盘，再拖动调整位置和顺序。',
+    description: '从下方分类选择珠子与配饰，轻点后直接加入手串，再拖动调整位置和顺序。',
   },
   {
     title: '设置净手围',
@@ -62,24 +62,12 @@ const TUTORIAL_STEPS: TutorialItem[] = [
     description: '同款材质可用下方 − / + 切换毫米尺寸，快速比较体量与视觉比例。',
   },
   {
-    title: '收拢成串',
-    description: '点击“收拢成串”，把托盘中的散珠快速排成完整手串结构。',
-  },
-  {
     title: '保存或加入购物车',
     description: '满意后可先保存到“我的设计”，也可以直接加入购物车继续结算。',
-  },
-  {
-    title: '拍照分享',
-    description: '进入拍照模式生成展示图，可保存到相册或分享给朋友。',
   },
 ]
 
 const TUTORIAL_SHORTCUTS: TutorialItem[] = [
-  {
-    title: '盲盒方案',
-    description: '没有搭配思路时，随机载入设计师作品或精选客订方案，再按喜好微调。',
-  },
   {
     title: '高效创作',
     description: '主石、配饰、尺寸和手围可在同一工坊内快速推演，适合连续尝试多套方案。',

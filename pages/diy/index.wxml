@@ -1,9 +1,9 @@
 <theme-provider>
 <view class="diy-page">
-  <view class="diy-editor {{showShowcase && !isClosingShowcase ? 'diy-editor--showcase' : ''}}">
+  <view class="diy-editor">
     <canvas
       id="diyCanvas"
-      class="diy-fullscreen-canvas {{showShowcase && !isClosingShowcase ? 'diy-fullscreen-canvas--showcase' : ''}}"
+      class="diy-fullscreen-canvas"
       type="2d"
       hidden="{{showSizeGuide || showGuide || showWristPicker || showSaveNameDialog}}"
       disable-scroll="{{true}}"
@@ -28,50 +28,23 @@
 
       <cover-view
         class="wrist-fit-warning"
-        wx:if="{{wristFitWarningVisible && !showShowcase && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog}}"
+        wx:if="{{wristFitWarningVisible && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog}}"
         role="status"
         aria-label="{{wristFitWarningText}}"
       >
         <cover-view class="wrist-fit-warning__text">{{wristFitWarningText}}</cover-view>
       </cover-view>
 
-      <view
-        class="showcase-trigger"
-        wx:if="{{!showShowcase && isStrung && beadCount > 0}}"
-        catchtap="handleOpenShowcase"
-        hover-class="showcase-trigger--pressed"
-        role="button"
-        aria-label="预览成串效果"
-      >
-        <view class="showcase-trigger__icon-shell">
-          <image class="showcase-trigger__icon" src="/assets/icons/search-muted.svg" mode="aspectFit" />
-        </view>
-        <text class="showcase-trigger__label">预览</text>
-      </view>
-
       <cover-view
         class="diy-stage__empty"
-        wx:if="{{!entryMaskVisible && !showShowcase && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog && canvasReady && beadCount === 0}}"
+        wx:if="{{!entryMaskVisible && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog && canvasReady && beadCount === 0}}"
       >
         <cover-view class="diy-stage__empty-eyebrow">START HERE</cover-view>
         <cover-view class="diy-stage__empty-title">从一颗喜欢开始</cover-view>
         <cover-view class="diy-stage__empty-description">轻点下方珠材，把今天的心情串起来</cover-view>
       </cover-view>
       <button
-        class="stage-tool-button stage-tool-button--random {{randomGenerating ? 'stage-tool-button--loading' : ''}}"
-        wx:if="{{!showShowcase}}"
-        bindtap="handleRandomDesign"
-        disabled="{{randomGenerating}}"
-        hover-class="stage-tool-button--pressed"
-        aria-label="随机方案"
-      >
-        <image class="stage-tool-button__icon" src="/assets/icons/blindbox-dark.svg" mode="aspectFit" />
-        <text wx:if="{{!randomGenerating}}" class="stage-tool-button__label">灵感一串</text>
-        <view class="stage-tool-button__spinner" wx:if="{{randomGenerating}}"></view>
-      </button>
-      <button
         class="stage-tool-button stage-tool-button--undo {{canUndo ? '' : 'stage-tool-button--disabled'}}"
-        wx:if="{{!showShowcase}}"
         bindtap="handleUndo"
         disabled="{{!canUndo}}"
         hover-class="stage-tool-button--pressed"
@@ -88,17 +61,11 @@
         canUndo="{{canUndo}}"
         canSave="{{canSave}}"
         savingDesign="{{savingDesign}}"
-        isStrung="{{isStrung}}"
-        stringDisabled="{{randomGenerating}}"
-        stringButtonText="{{stringButtonText}}"
         searchQuery="{{searchQuery}}"
         bindopenwrist="handleOpenWristPicker"
         bindundo="handleUndo"
-        bindrandom="handleRandomDesign"
-        bindbackgroundchange="handleToggleBackground"
         bindclear="handleClear"
         bindsave="handleSaveDesign"
-        bindtogglestring="handleToggleString"
         bindsearchchange="handleSearchInput"
         bindaddtocart="handleAddToCart"
       />
@@ -148,15 +115,6 @@
       bindclosesave="handleCloseSaveName"
       bindconfirmsave="handleConfirmSaveDesign"
     />
-  </view>
-
-  <view class="diy-showcase-controls" wx:if="{{showShowcase && !isClosingShowcase}}">
-    <button
-      class="diy-showcase__share-hit"
-      style="top: {{statusBarHeight + 91}}px;"
-      open-type="share"
-      aria-label="分享作品"
-    ></button>
   </view>
   <phone-login-modal id="phone-login-modal" />
 </view>

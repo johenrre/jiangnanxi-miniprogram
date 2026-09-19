@@ -66,11 +66,7 @@
         "type": "folder"
       },
       {
-        "value": "miniprogram_npm/matter-js/index.js.map",
-        "type": "file"
-      },
-      {
-        "value": "package-lock.json",
+        "value": "pnpm-lock.yaml",
         "type": "file"
       },
       {
