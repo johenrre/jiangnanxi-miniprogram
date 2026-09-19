@@ -38,6 +38,21 @@
   backdrop-filter: blur(24rpx);
 }
 
+.page-header--profile {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-bottom: 0;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.page-header--profile .page-header__title {
+  display: none;
+}
+
 .page-header__bar {
   display: flex;
   align-items: center;

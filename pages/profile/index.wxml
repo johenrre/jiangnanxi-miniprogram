@@ -1,8 +1,14 @@
 <theme-provider>
 <view class="profile-page">
-  <page-header title="我的" showBack="{{false}}" theme="warm" />
+  <page-header title="我的" showBack="{{false}}" theme="profile" />
 
   <view class="profile-hero">
+    <image
+      class="profile-hero__backdrop"
+      src="/assets/bg_1.jpg"
+      mode="aspectFill"
+      aria-hidden="true"
+    />
     <view class="profile-hero__wash" aria-hidden="true"></view>
     <view class="profile-hero__heading">
       <text class="profile-hero__eyebrow">MY CRYSTAL SPACE</text>
@@ -11,40 +17,69 @@
     </view>
 
     <view class="profile-identity">
-      <view class="profile-identity__avatar-shell">
-        <image
-          wx:if="{{isLoggedIn && profile && profile.avatarUrl && !avatarLoadFailed}}"
-          class="profile-identity__avatar"
-          src="{{profile.avatarUrl}}"
-          mode="aspectFill"
-          binderror="handleAvatarError"
-        />
-        <image
-          wx:elif="{{defaultAvatarUrl}}"
-          class="profile-identity__avatar"
-          src="{{defaultAvatarUrl}}"
-          mode="aspectFill"
-          binderror="handleDefaultAvatarError"
-        />
+      <view class="profile-identity__main">
+        <view class="profile-identity__avatar-shell">
+          <image
+            wx:if="{{isLoggedIn && profile && profile.avatarUrl && !avatarLoadFailed}}"
+            class="profile-identity__avatar"
+            src="{{profile.avatarUrl}}"
+            mode="aspectFill"
+            binderror="handleAvatarError"
+          />
+          <image
+            wx:elif="{{defaultAvatarUrl}}"
+            class="profile-identity__avatar"
+            src="{{defaultAvatarUrl}}"
+            mode="aspectFill"
+            binderror="handleDefaultAvatarError"
+          />
+        </view>
+
+        <view class="profile-identity__copy">
+          <text class="profile-identity__name">{{isLoggedIn ? profileDisplayName : '登录后继续创作'}}</text>
+          <text class="profile-identity__description">{{isLoggedIn ? '你的专属晶石档案' : '保存设计，随时回来继续调整'}}</text>
+        </view>
+
+        <button
+          wx:if="{{isLoggedIn}}"
+          class="profile-identity__action"
+          data-url="/pages/profile/profile-edit/index"
+          bindtap="handleEntryTap"
+          hover-class="profile-identity__action--pressed"
+        >编辑</button>
+        <button
+          wx:else
+          class="profile-identity__action profile-identity__action--login"
+          bindtap="handleLogin"
+        >登录</button>
       </view>
 
-      <view class="profile-identity__copy">
-        <text class="profile-identity__name">{{isLoggedIn ? profileDisplayName : '登录后继续创作'}}</text>
-        <text class="profile-identity__description">{{isLoggedIn ? '你的专属晶石档案' : '保存设计，随时回来继续调整'}}</text>
+      <view class="profile-stats">
+        <button
+          class="profile-stat"
+          data-url="/pages/profile/my-designs/index"
+          data-login-copy="登录后可查看我的设计。"
+          bindtap="handleEntryTap"
+          hover-class="profile-stat--pressed"
+        >
+          <text class="profile-stat__number">0</text>
+          <text class="profile-stat__label">作品</text>
+        </button>
+        <button
+          class="profile-stat"
+          data-url="/pages/profile/orders/index"
+          data-login-copy="登录后可查看我的订单。"
+          bindtap="handleEntryTap"
+          hover-class="profile-stat--pressed"
+        >
+          <text class="profile-stat__number profile-stat__number--order">0</text>
+          <text class="profile-stat__label">订单</text>
+        </button>
+        <view class="profile-stat profile-stat--placeholder">
+          <text class="profile-stat__number">0</text>
+          <text class="profile-stat__label">优惠券</text>
+        </view>
       </view>
-
-      <button
-        wx:if="{{isLoggedIn}}"
-        class="profile-identity__action"
-        data-url="/pages/profile/profile-edit/index"
-        bindtap="handleEntryTap"
-        hover-class="profile-identity__action--pressed"
-      >编辑</button>
-      <button
-        wx:else
-        class="profile-identity__action profile-identity__action--login"
-        bindtap="handleLogin"
-      >登录</button>
     </view>
 
     <view wx:if="{{dashboardStatus === 'error'}}" class="profile-error">
