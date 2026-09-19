@@ -2,7 +2,7 @@ import {
   PIXELS_PER_MM,
   applyRingLayout,
   buildRingTargets,
-  calculatePerimeterMm,
+  calculateRingRadiusMm,
   easeOutCubic,
   findRingInsertionIndexForBeads,
   fitRingScalesToOuterRadius,
@@ -13,9 +13,9 @@ import type { DiyBead, RingTarget, TouchPoint } from '@/pages/diy/model/types'
 import type { CanvasQueryResult, DiyPageInstance } from '@/pages/diy/page/types'
 import { getWindowMetrics, normalizeAngleDelta } from '@/pages/diy/page/utils'
 import { appSound } from '@/services/sound'
-import { getMaterialRenderMetrics } from '@/utils/material-render-geometry'
 
 const FIXED_STEP_MS = 1000 / 60
+const GESTURE_MOVE_THRESHOLD_PX = 8
 const RING_ANIMATION_DURATION_MS = 440
 const EDITOR_RING_MAX_OUTER_RADIUS_RATIO = 0.92
 const MAXIMUM_CANVAS_PIXEL_COUNT = 800000
@@ -179,11 +179,17 @@ export const canvasPageMethods = {
       return
     }
 
-    const displayScale = this.getEditorRingLayout().displayScale
+    const layout = this.getEditorRingLayout()
+    const activeBeadUid = this.dragState?.mode === 'bead'
+      || this.dragState?.mode === 'pending-bead'
+      ? this.dragState.uid
+      : null
     this.renderer?.render(
       this.beads,
-      displayScale,
-      this.dragState?.uid ?? null,
+      layout.displayScale,
+      activeBeadUid,
+      layout.centerX,
+      layout.centerY,
     )
     if (!this.firstCanvasFrameRendered && this.renderer) {
       this.firstCanvasFrameRendered = true
@@ -255,7 +261,7 @@ export const canvasPageMethods = {
   stepRingDragReflow(this: DiyPageInstance, deltaMs: number): boolean {
     const dragState = this.dragState
     const targets = dragState?.reflowTargets
-    if (!dragState || !targets) return false
+    if (dragState?.mode !== 'bead' || !dragState.uid || !targets) return false
 
     const frameRatio = Math.max(0.5, deltaMs / FIXED_STEP_MS)
     const smoothing = 1 - Math.pow(0.72, frameRatio)
@@ -293,7 +299,7 @@ export const canvasPageMethods = {
 
   updateRingDragReflow(this: DiyPageInstance, point: TouchPoint): void {
     const dragState = this.dragState
-    if (!dragState) return
+    if (dragState?.mode !== 'bead' || !dragState.uid || !dragState.bead) return
     const draggedBead = dragState.bead
 
     const ringLayout = this.getEditorRingLayout()
@@ -368,7 +374,9 @@ export const canvasPageMethods = {
       centerY: this.canvasHeight / 2,
       radius: getEditorTrayRadius(this.canvasWidth, this.canvasHeight),
     }
-    const naturalRadius = calculatePerimeterMm(this.beads) / (Math.PI * 2) * PIXELS_PER_MM
+    const naturalRadius = this.beads.length > 0
+      ? calculateRingRadiusMm(this.beads) * PIXELS_PER_MM
+      : 0
     const fittedScales = fitRingScalesToOuterRadius(
       this.beads,
       editorPlateOrigin.radius * EDITOR_RING_MAX_OUTER_RADIUS_RATIO,
@@ -414,31 +422,6 @@ export const canvasPageMethods = {
     }
   },
 
-  findBeadAtPoint(this: DiyPageInstance, point: TouchPoint): DiyBead | null {
-    const displayScale = this.getEditorRingLayout().displayScale
-    const orderedBeads = this.beads.slice().sort((left, right) => (
-      right.layer - left.layer || right.y - left.y
-    ))
-    for (const bead of orderedBeads) {
-      const offsetX = point.x - bead.x
-      const offsetY = point.y - bead.y
-      const displaySize = this.renderer?.getBeadDisplaySize(bead, displayScale)
-        ?? getMaterialRenderMetrics(bead, null, PIXELS_PER_MM, displayScale)
-      const cosine = Math.cos(bead.rotation)
-      const sine = Math.sin(bead.rotation)
-      const localX = offsetX * cosine + offsetY * sine
-      const localY = -offsetX * sine + offsetY * cosine
-      const left = Math.min(-18, -displaySize.anchorX - 8)
-      const right = Math.max(18, displaySize.width - displaySize.anchorX + 8)
-      const top = Math.min(-18, -displaySize.anchorY - 8)
-      const bottom = Math.max(18, displaySize.height - displaySize.anchorY + 8)
-      if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
-        return bead
-      }
-    }
-    return null
-  },
-
   isPointOutsideRemovalBoundary(this: DiyPageInstance, point: TouchPoint): boolean {
     const editorPlateOrigin = this.editorOrigin || {
       centerX: this.canvasWidth / 2,
@@ -454,12 +437,30 @@ export const canvasPageMethods = {
   finishTouch(this: DiyPageInstance, event: WechatMiniprogram.TouchEvent): void {
     const dragState = this.dragState
     if (!dragState) return
-    const point = this.getCanvasTouchPoint(event, true) || dragState.latestPoint
-    if (point !== dragState.latestPoint) {
-      dragState.latestPoint = point
+    const screenPoint = this.getCanvasTouchPoint(event, true) || dragState.latestPoint
+    if (screenPoint !== dragState.latestPoint) {
+      dragState.latestPoint = screenPoint
     }
     this.applyPendingDragPoint()
     this.dragState = null
+    if (
+      dragState.mode !== 'bead'
+      || !dragState.uid
+      || !dragState.bead
+      || !dragState.snapshot
+    ) {
+      this.scheduleRender()
+      return
+    }
+
+    const projectedPoint = this.renderer?.projectToBraceletPlane(screenPoint.x, screenPoint.y)
+    const point = dragState.projectedPoint || (projectedPoint
+      ? { ...projectedPoint, timestamp: screenPoint.timestamp }
+      : null)
+    if (!point) {
+      this.startRingAnimation(240)
+      return
+    }
 
     if (this.isPointOutsideRemovalBoundary(point)) {
       this.removeBead(dragState.uid, dragState.snapshot)
@@ -491,22 +492,29 @@ export const canvasPageMethods = {
     const point = this.getCanvasTouchPoint(event)
     if (!point) return
     if (this.ringAnimation) return
-    const bead = this.findBeadAtPoint(point)
-    if (!bead) return
-    const snapshot = this.createSnapshot()
+    const beadUid = this.renderer?.pickBeadUid(point.x, point.y) || null
+    const bead = beadUid
+      ? this.beads.find((candidate) => candidate.uid === beadUid) || null
+      : null
+    const beadIndex = bead ? this.beads.indexOf(bead) : -1
 
     this.dragState = {
-      uid: bead.uid,
+      mode: bead ? 'pending-bead' : 'pending-orbit',
+      uid: bead?.uid || null,
       bead,
+      startPoint: point,
       latestPoint: point,
       renderedPoint: point,
-      snapshot,
-      originalIndex: this.beads.indexOf(bead),
-      insertionIndex: this.beads.indexOf(bead),
+      projectedPoint: null,
+      snapshot: bead ? this.createSnapshot() : null,
+      originalIndex: beadIndex,
+      insertionIndex: beadIndex,
       reflowTargets: null,
     }
-    appSound.play('soft-pop')
-    this.scheduleRender()
+    if (bead) {
+      appSound.play('soft-pop')
+      this.scheduleRender()
+    }
   },
 
   applyPendingDragPoint(this: DiyPageInstance): void {
@@ -514,12 +522,38 @@ export const canvasPageMethods = {
     if (!dragState) return
     const point = dragState.latestPoint
     if (dragState.renderedPoint === point) return
+    const offsetFromStartX = point.x - dragState.startPoint.x
+    const offsetFromStartY = point.y - dragState.startPoint.y
+    if (dragState.mode === 'pending-bead' || dragState.mode === 'pending-orbit') {
+      if (
+        Math.sqrt(offsetFromStartX * offsetFromStartX + offsetFromStartY * offsetFromStartY)
+        < GESTURE_MOVE_THRESHOLD_PX
+      ) return
+      dragState.mode = dragState.mode === 'pending-bead' ? 'bead' : 'orbit'
+    }
+
+    const previousPoint = dragState.renderedPoint
     dragState.renderedPoint = point
+    if (dragState.mode === 'orbit') {
+      if (this.renderer?.orbit(
+        point.x - previousPoint.x,
+        point.y - previousPoint.y,
+        this.beads.length > 0,
+      )) {
+        this.renderDirty = true
+      }
+      return
+    }
 
     const bead = dragState.bead
-    bead.x = point.x
-    bead.y = point.y
-    this.updateRingDragReflow(point)
+    if (!bead) return
+    const projected = this.renderer?.projectToBraceletPlane(point.x, point.y)
+    if (!projected) return
+    const projectedPoint = { ...projected, timestamp: point.timestamp }
+    dragState.projectedPoint = projectedPoint
+    bead.x = projectedPoint.x
+    bead.y = projectedPoint.y
+    this.updateRingDragReflow(projectedPoint)
     this.renderDirty = true
   },
 

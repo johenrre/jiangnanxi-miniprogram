@@ -59,11 +59,14 @@ export interface RingLayout {
 }
 
 export interface DragState {
-  uid: string
-  bead: DiyBead
+  mode: 'pending-bead' | 'pending-orbit' | 'bead' | 'orbit'
+  uid: string | null
+  bead: DiyBead | null
+  startPoint: TouchPoint
   latestPoint: TouchPoint
   renderedPoint: TouchPoint
-  snapshot: EditorSnapshot
+  projectedPoint: TouchPoint | null
+  snapshot: EditorSnapshot | null
   originalIndex: number
   insertionIndex: number
   reflowTargets: Map<string, RingTarget> | null
@@ -182,7 +185,6 @@ export interface DiyPageCustom {
   restoreSnapshot(snapshot: EditorSnapshot): void
   removeBead(uid: string, historySnapshot?: EditorSnapshot, recordHistory?: boolean): void
   getCanvasTouchPoint(event: WechatMiniprogram.TouchEvent, useChangedTouches?: boolean): TouchPoint | null
-  findBeadAtPoint(point: TouchPoint): DiyBead | null
   isPointOutsideRemovalBoundary(point: TouchPoint): boolean
   finishTouch(event: WechatMiniprogram.TouchEvent): void
   handleCategoryChange(event: WechatMiniprogram.CustomEvent<{ id: string }>): void

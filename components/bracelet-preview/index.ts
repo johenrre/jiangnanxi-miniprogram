@@ -89,7 +89,6 @@ function buildPreviewLayout(
       sizeMm: material.size,
       stringingWidthMm: material.stringingWidthMm,
       stringingPosition: material.stringingPosition,
-      isIrregular: material.isIrregular,
       imageScale: material.imageScale,
     }) * baseScale)
   ), beadSize)
@@ -110,16 +109,16 @@ function buildPreviewLayout(
       sizeMm: material.size,
       stringingWidthMm: material.stringingWidthMm,
       stringingPosition: material.stringingPosition,
-      isIrregular: material.isIrregular,
       imageScale: material.imageScale,
     }) * baseScale
     const stringingRadius = radius + material.stringingOffsetMm * baseScale
     const anchorY = material.stringingPosition === 'top'
       ? getStringingWidthMm(material) * baseScale / 2
       : renderWidth / 2
+    const anchorX = renderWidth / 2
     const centerX = physicalSize / 2 + Math.cos(angle) * stringingRadius
     const centerY = physicalSize / 2 + Math.sin(angle) * stringingRadius
-    const left = centerX - renderWidth / 2
+    const left = centerX - anchorX
     const top = centerY - anchorY
     const rotation = getInwardFacingRotation(angle)
     // The same width contract is shared with DIY Canvas: choose size or
@@ -155,7 +154,7 @@ function buildPreviewLayout(
         `z-index:${Math.round(material.layer * 10000 + centerY)}`,
       ].join(';'),
       rotatorStyle: [
-        `transform-origin:${renderWidth / 2}px ${anchorY}px`,
+        `transform-origin:${anchorX}px ${anchorY}px`,
         `transform:rotate(${rotation}rad)`,
       ].join(';'),
       imageStyle: usesAccessoryLayout && !usesTopAnchor

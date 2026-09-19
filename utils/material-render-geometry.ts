@@ -5,7 +5,6 @@ export interface StringingGeometryInput {
 
 export interface MaterialRenderGeometryInput extends StringingGeometryInput {
   stringingPosition: 'center' | 'top'
-  isIrregular: boolean
   imageScale: number
 }
 
@@ -32,9 +31,7 @@ export function getStringingWidthMm(material: StringingGeometryInput): number {
 
 export function getMaterialRenderWidthMm(material: MaterialRenderGeometryInput): number {
   const sizeMm = positiveNumber(material.sizeMm)
-  const baseWidth = material.isIrregular && material.stringingPosition === 'center'
-    ? getStringingWidthMm(material)
-    : sizeMm || getStringingWidthMm(material)
+  const baseWidth = sizeMm || getStringingWidthMm(material)
   return baseWidth * (positiveNumber(material.imageScale) || 1)
 }
 

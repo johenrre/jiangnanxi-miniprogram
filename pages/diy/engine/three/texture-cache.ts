@@ -16,6 +16,7 @@ export class ThreeTextureCache {
     private readonly THREE: ThreeNamespace,
     private readonly canvas: DiyWebglCanvas,
     private readonly invalidate: () => void,
+    private readonly anisotropy = 1,
   ) {}
 
   get(source: string): TextureAsset | null {
@@ -79,11 +80,16 @@ export class ThreeTextureCache {
       if (this.destroyed || asset.status !== 'loading') return
       try {
         const texture = new this.THREE.Texture(image)
-        texture.generateMipmaps = false
-        if (this.THREE.LinearFilter !== undefined) {
+        texture.generateMipmaps = true
+        if (this.THREE.LinearMipmapLinearFilter !== undefined) {
+          texture.minFilter = this.THREE.LinearMipmapLinearFilter
+        } else if (this.THREE.LinearFilter !== undefined) {
           texture.minFilter = this.THREE.LinearFilter
+        }
+        if (this.THREE.LinearFilter !== undefined) {
           texture.magFilter = this.THREE.LinearFilter
         }
+        texture.anisotropy = this.anisotropy
         if (
           texture.encoding !== undefined
           && this.THREE.LinearEncoding !== undefined

@@ -24,6 +24,7 @@ import {
   buildCartWristRangeText,
   type CartMaterialBreakdownItem,
 } from '@/pages/cart/shared/item-view'
+import { getStringingWidthMm } from '@/utils/material-render-geometry'
 
 type SettlementStatus = 'login' | 'loading' | 'ready' | 'missing' | 'error'
 
@@ -72,11 +73,10 @@ function buildDiyPreviewItem(snapshot: DiySettlementPreviewSnapshot): Settlement
       price: bead.price,
     }
   })
-  const perimeterMm = snapshot.beads.reduce((total, bead) => (
-    total + (bead.stringingWidthMm && bead.stringingWidthMm > 0
-      ? bead.stringingWidthMm
-      : Math.max(0, bead.sizeMm))
-  ), 0)
+  const perimeterMm = snapshot.beads.reduce(
+    (total, bead) => total + getStringingWidthMm(bead),
+    0,
+  )
   const unitPriceCents = snapshot.beads.reduce(
     (total, bead) => total + Math.round(Math.max(0, bead.price) * 100),
     0,

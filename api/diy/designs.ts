@@ -1,5 +1,6 @@
 import { requestApi, toNumber, toText } from '@/api/client'
 import { markCartItemSelected } from '@/api/cart/items'
+import { getStringingWidthMm } from '@/utils/material-render-geometry'
 
 export interface DiyDesignBeadInput {
   materialId: string
@@ -30,17 +31,7 @@ export interface AddedDiyCartItem {
 }
 
 function calculatePerimeter(beads: DiyDesignBeadInput[]): number {
-  return beads.reduce(
-    (sum, bead) => {
-      const explicitStringingWidthMm = Number(bead.stringingWidthMm)
-      const stringingWidthMm = Number.isFinite(explicitStringingWidthMm)
-        && explicitStringingWidthMm > 0
-        ? explicitStringingWidthMm
-        : Math.max(0, Number(bead.sizeMm) || 0)
-      return sum + stringingWidthMm
-    },
-    0,
-  )
+  return beads.reduce((sum, bead) => sum + getStringingWidthMm(bead), 0)
 }
 
 export async function saveDiyDesign(

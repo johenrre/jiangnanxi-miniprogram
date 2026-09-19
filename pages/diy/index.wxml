@@ -57,10 +57,12 @@
 
     <view class="diy-chrome diy-chrome--toolbar">
       <diy-toolbar
+        selectedWristCm="{{selectedWristCm}}"
         canUndo="{{canUndo}}"
         canSave="{{canSave}}"
         savingDesign="{{savingDesign}}"
         searchQuery="{{searchQuery}}"
+        bindopenwrist="handleOpenWristPicker"
         bindundo="handleUndo"
         bindclear="handleClear"
         bindsave="handleSaveDesign"

@@ -1,29 +1,17 @@
 import type { DiyBead } from '@/pages/diy/model/types'
-import { PIXELS_PER_MM } from '@/pages/diy/engine/geometry'
+import { BraceletView } from '@/pages/diy/engine/three/bracelet-view'
 import { PhotoBeadPlane } from '@/pages/diy/engine/three/photo-bead-plane'
 import { ThreeSceneRuntime } from '@/pages/diy/engine/three/scene-runtime'
 import { ThreeTextureCache } from '@/pages/diy/engine/three/texture-cache'
-import type { BeadDisplaySize, DiyWebglCanvas } from '@/pages/diy/engine/three/types'
-import { resolveCanvasImageUrl } from '@/utils/material-image'
-import { getMaterialRenderMetrics } from '@/utils/material-render-geometry'
-
-function compareBeadDepth(
-  left: DiyBead,
-  right: DiyBead,
-  activeBeadUid: string | null,
-): number {
-  const leftIsActive = left.uid === activeBeadUid
-  const rightIsActive = right.uid === activeBeadUid
-  if (leftIsActive !== rightIsActive) return leftIsActive ? 1 : -1
-  return left.layer - right.layer || left.y - right.y
-}
+import type { DiyWebglCanvas } from '@/pages/diy/engine/three/types'
 
 export class Bracelet3DRenderer {
   private readonly runtime: ThreeSceneRuntime
   private readonly textureCache: ThreeTextureCache
+  private readonly braceletView: BraceletView
   private readonly planeGeometry: any
+  private readonly hitGeometry: any
   private readonly planeByUid = new Map<string, PhotoBeadPlane>()
-  private readonly sortedBeads: DiyBead[] = []
   private destroyed = false
 
   constructor(
@@ -38,66 +26,84 @@ export class Bracelet3DRenderer {
       this.runtime.THREE,
       canvas,
       invalidate,
+      this.runtime.getTextureAnisotropy(),
     )
+    this.braceletView = new BraceletView(this.runtime)
     this.planeGeometry = new this.runtime.THREE.PlaneGeometry(1, 1)
+    this.hitGeometry = new this.runtime.THREE.SphereGeometry(1, 12, 12)
   }
 
   resize(logicalWidth: number, logicalHeight: number, pixelRatio: number): void {
     this.runtime.resize(logicalWidth, logicalHeight, pixelRatio)
   }
 
-  getBeadDisplaySize(bead: DiyBead, displayScale: number): BeadDisplaySize {
-    const plane = this.planeByUid.get(bead.uid)
-    if (plane) return plane.getDisplaySize(bead, displayScale)
-    const source = resolveCanvasImageUrl(bead)
-    const asset = source ? this.textureCache.get(source) : null
-    const intrinsicSize = asset?.status === 'ready'
-      ? { width: asset.width, height: asset.height }
-      : null
-    return getMaterialRenderMetrics(bead, intrinsicSize, PIXELS_PER_MM, displayScale)
-  }
-
   preloadImages(sources: string[]): Promise<void> {
     return this.textureCache.preload(sources)
+  }
+
+  orbit(deltaX: number, deltaY: number, hasBeads: boolean): boolean {
+    return this.braceletView.orbit(deltaX, deltaY, hasBeads)
+  }
+
+  pickBeadUid(x: number, y: number): string | null {
+    return this.braceletView.pickBeadUid(x, y, this.planeByUid.values())
+  }
+
+  projectToBraceletPlane(x: number, y: number): { x: number; y: number } | null {
+    return this.braceletView.projectToLocalScreen(x, y)
+  }
+
+  resetView(): void {
+    this.braceletView.reset()
   }
 
   render(
     beads: DiyBead[],
     displayScale = 1,
     activeBeadUid: string | null = null,
+    centerX = 0,
+    centerY = 0,
   ): void {
     if (this.destroyed) return
+    this.braceletView.setCenter(centerX, centerY)
+    if (beads.length === 0) this.braceletView.reset()
     const nextUids = new Set(beads.map((bead) => bead.uid))
     this.planeByUid.forEach((plane, uid) => {
       if (nextUids.has(uid)) return
-      this.runtime.scene.remove(plane.mesh)
+      this.braceletView.remove(plane)
       plane.dispose()
       this.planeByUid.delete(uid)
     })
 
-    this.sortedBeads.length = beads.length
+    let ringRadiusTotal = 0
+    let contentRadius = 1
+    let maximumBeadRadius = 1
     for (let index = 0; index < beads.length; index += 1) {
-      this.sortedBeads[index] = beads[index]
-    }
-    this.sortedBeads.sort((left, right) => (
-      compareBeadDepth(left, right, activeBeadUid)
-    ))
-
-    for (let index = 0; index < this.sortedBeads.length; index += 1) {
-      const bead = this.sortedBeads[index]
+      const bead = beads[index]
       let plane = this.planeByUid.get(bead.uid)
       if (!plane) {
         plane = new PhotoBeadPlane(
           this.runtime.THREE,
           this.planeGeometry,
+          this.hitGeometry,
           this.textureCache,
         )
         this.planeByUid.set(bead.uid, plane)
-        this.runtime.scene.add(plane.mesh)
+        this.braceletView.add(plane)
       }
-      const renderOrder = bead.uid === activeBeadUid ? 1000 : 10 + index
-      plane.sync(bead, displayScale, renderOrder, this.runtime)
+      const renderOrder = bead.uid === activeBeadUid ? 1000 : 10
+      const size = plane.sync(bead, displayScale, renderOrder, centerX, centerY)
+      const localX = bead.x - centerX
+      const localY = centerY - bead.y
+      const distance = Math.sqrt(localX * localX + localY * localY)
+      const visualRadius = Math.sqrt(size.width * size.width + size.height * size.height) / 2
+      ringRadiusTotal += distance
+      maximumBeadRadius = Math.max(maximumBeadRadius, visualRadius)
+      contentRadius = Math.max(contentRadius, distance + visualRadius)
     }
+    const ringRadius = beads.length >= 2 ? ringRadiusTotal / beads.length : 0
+    this.braceletView.syncStage(ringRadius, contentRadius, maximumBeadRadius)
+    this.braceletView.updateBillboards(this.planeByUid.values())
     this.runtime.render()
   }
 
@@ -109,12 +115,14 @@ export class Bracelet3DRenderer {
     if (this.destroyed) return
     this.destroyed = true
     this.planeByUid.forEach((plane) => {
-      this.runtime.scene.remove(plane.mesh)
+      this.braceletView.remove(plane)
       plane.dispose()
     })
     this.planeByUid.clear()
     this.planeGeometry.dispose?.()
+    this.hitGeometry.dispose?.()
     this.textureCache.destroy()
+    this.braceletView.destroy()
     this.runtime.destroy()
   }
 }
