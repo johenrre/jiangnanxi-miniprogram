@@ -30,6 +30,14 @@
   padding-bottom: 2rpx;
 }
 
+.page-header--market {
+  padding-bottom: 10rpx;
+  border-bottom-color: rgba(255, 255, 255, 0.55);
+  background: rgba(246, 246, 246, 0.72);
+  -webkit-backdrop-filter: blur(24rpx);
+  backdrop-filter: blur(24rpx);
+}
+
 .page-header__bar {
   display: flex;
   align-items: center;
@@ -83,6 +91,13 @@
 
 .page-header--warm .page-header__title {
   font-size: 37rpx;
+}
+
+.page-header--market .page-header__title {
+  color: #111111;
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .page-header__badge {

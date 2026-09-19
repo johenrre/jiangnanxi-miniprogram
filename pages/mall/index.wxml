@@ -1,6 +1,6 @@
 <theme-provider>
 <view class="mall-page">
-  <page-header title="商城" showBack="{{false}}" theme="warm" />
+  <page-header title="商城" showBack="{{false}}" theme="market" />
 
   <view class="mall-hero {{!heroImageUrl || heroLoadFailed ? 'mall-hero--fallback' : ''}}">
     <image
@@ -10,15 +10,10 @@
       mode="aspectFill"
       binderror="handleHeroImageError"
     />
-    <view class="mall-hero__copy">
-      <text class="mall-hero__eyebrow">CURATED CRYSTALS</text>
-      <text class="mall-hero__title">日常晶石，慢慢挑</text>
-      <text class="mall-hero__description">天然材质 · 手工细作</text>
-    </view>
   </view>
 
   <view class="mall-filter" wx:if="{{categories.length > 0}}">
-    <view class="mall-primary">
+    <scroll-view class="mall-primary" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="mall-primary__track">
         <view
           wx:for="{{categories}}"
@@ -36,9 +31,9 @@
           <view wx:if="{{selectedPrimaryCategoryId === item.id}}" class="mall-primary__indicator"></view>
         </view>
       </view>
-    </view>
+    </scroll-view>
 
-    <view class="mall-secondary">
+    <scroll-view class="mall-secondary" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="mall-secondary__track">
         <view
           wx:for="{{secondaryCategories}}"
@@ -56,7 +51,7 @@
           <view wx:if="{{selectedSecondaryCategoryId === item.id}}" class="mall-secondary__indicator"></view>
         </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 
   <view class="mall-products" wx:if="{{status === 'ready' && visibleProducts.length > 0}}">
