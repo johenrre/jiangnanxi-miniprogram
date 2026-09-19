@@ -22,29 +22,9 @@ function resumeCanvasAfterDialog(page: DiyPageInstance): void {
 }
 
 export const dialogPageMethods = {
-  handleOpenSizeGuide(this: DiyPageInstance): void {
-    suspendCanvasForDialog(this)
-    this.setData({
-      showSizeGuide: true,
-      showGuide: false,
-      showWristPicker: false,
-      showSaveNameDialog: false,
-    })
-  },
-
-  handleCloseSizeGuide(this: DiyPageInstance): void {
-    this.setData(
-      { showSizeGuide: false },
-      () => {
-        this.handleOpenWristPicker()
-      },
-    )
-  },
-
   handleOpenGuide(this: DiyPageInstance): void {
     suspendCanvasForDialog(this)
     this.setData({
-      showSizeGuide: false,
       showGuide: true,
       showWristPicker: false,
       showSaveNameDialog: false,
@@ -62,7 +42,6 @@ export const dialogPageMethods = {
     appSound.play('soft-pop')
     suspendCanvasForDialog(this)
     this.setData({
-      showSizeGuide: false,
       showGuide: false,
       showWristPicker: true,
       showSaveNameDialog: false,
@@ -137,7 +116,6 @@ export const dialogPageMethods = {
     }
     suspendCanvasForDialog(this)
     this.setData({
-      showSizeGuide: false,
       showGuide: false,
       showWristPicker: false,
       designNameDraft: '',

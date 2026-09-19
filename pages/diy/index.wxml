@@ -5,7 +5,7 @@
       id="diyCanvas"
       class="diy-fullscreen-canvas"
       type="webgl"
-      hidden="{{showSizeGuide || showGuide || showWristPicker || showSaveNameDialog}}"
+      hidden="{{showGuide || showWristPicker || showSaveNameDialog}}"
       disable-scroll="{{true}}"
       catchtouchstart="handleCanvasTouchStart"
       catchtouchmove="handleCanvasTouchMove"
@@ -28,7 +28,7 @@
 
       <cover-view
         class="wrist-fit-warning"
-        wx:if="{{wristFitWarningVisible && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog}}"
+        wx:if="{{wristFitWarningVisible && !showGuide && !showWristPicker && !showSaveNameDialog}}"
         role="status"
         aria-label="{{wristFitWarningText}}"
       >
@@ -37,7 +37,7 @@
 
       <cover-view
         class="diy-stage__empty"
-        wx:if="{{!entryMaskVisible && !showSizeGuide && !showGuide && !showWristPicker && !showSaveNameDialog && canvasReady && beadCount === 0}}"
+        wx:if="{{!entryMaskVisible && !showGuide && !showWristPicker && !showSaveNameDialog && canvasReady && beadCount === 0}}"
       >
         <cover-view class="diy-stage__empty-eyebrow">START HERE</cover-view>
         <cover-view class="diy-stage__empty-title">从一颗喜欢开始</cover-view>
@@ -57,12 +57,10 @@
 
     <view class="diy-chrome diy-chrome--toolbar">
       <diy-toolbar
-        selectedWristCm="{{selectedWristCm}}"
         canUndo="{{canUndo}}"
         canSave="{{canSave}}"
         savingDesign="{{savingDesign}}"
         searchQuery="{{searchQuery}}"
-        bindopenwrist="handleOpenWristPicker"
         bindundo="handleUndo"
         bindclear="handleClear"
         bindsave="handleSaveDesign"
@@ -92,7 +90,6 @@
 
     <diy-modals
       class="diy-modal-host"
-      showSizeGuide="{{showSizeGuide}}"
       showGuide="{{showGuide}}"
       showWristPicker="{{showWristPicker}}"
       showSaveNameDialog="{{showSaveNameDialog}}"
@@ -105,7 +102,6 @@
       entryErrorText="{{entryErrorText}}"
       selectedWristCm="{{selectedWristCm}}"
       selectedWristStrands="{{selectedWristStrands}}"
-      bindclosesizeguide="handleCloseSizeGuide"
       bindcloseguide="handleCloseGuide"
       bindclosewrist="handleCloseWristPicker"
       bindretryentry="handleRetryEntry"

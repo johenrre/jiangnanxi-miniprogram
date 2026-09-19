@@ -89,13 +89,7 @@ export const entryPageMethods = {
           this.entryMaskRemovalTimer = null
           this.setData(
             { entryMaskVisible: false, entryMaskLeaving: false },
-            () => {
-              if (this.skipEntrySizeGuide) {
-                this.scheduleRender()
-                return
-              }
-              this.handleOpenSizeGuide()
-            },
+            () => this.scheduleRender(),
           )
         }, MASK_FADE_DURATION_MS)
       })

@@ -1,5 +1,5 @@
 {
-  "entryPagePath": "pages/launch/index",
+  "entryPagePath": "pages/diy/index",
   "pages": [
     "pages/launch/index",
     "pages/home/index",

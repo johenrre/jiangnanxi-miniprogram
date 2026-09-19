@@ -53,7 +53,6 @@ const COMMON_WRIST_SIZES = [
 
 Component({
   properties: {
-    showSizeGuide: { type: Boolean, value: false },
     showGuide: { type: Boolean, value: false },
     showWristPicker: {
       type: Boolean,
@@ -121,7 +120,6 @@ Component({
   })(),
 
   methods: {
-    handleCloseSizeGuide() { this.triggerEvent('closesizeguide') },
     handleCloseGuide() { this.triggerEvent('closeguide') },
     handleCloseWrist() { this.triggerEvent('closewrist') },
     handleCloseSave() { this.triggerEvent('closesave') },

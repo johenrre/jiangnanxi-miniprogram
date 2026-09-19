@@ -27,8 +27,7 @@ const EDITOR_RING_RADIUS_SCALE = 1.24
 
 function isCanvasCoveredByOverlay(page: DiyPageInstance): boolean {
   return (
-    page.data.showSizeGuide
-    || page.data.showGuide
+    page.data.showGuide
     || page.data.showWristPicker
     || page.data.showSaveNameDialog
   )

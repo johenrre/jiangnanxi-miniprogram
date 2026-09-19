@@ -136,7 +136,6 @@ Page<DiyPageData, DiyPageCustom>({
   entryMaskTimeoutTimer: null,
   wristFitWarningTimer: null,
   audioWarmupTimer: null,
-  skipEntrySizeGuide: false,
   templateDesignSequence: 0,
   pendingTemplateDesign: null,
   expectsTemplateDesign: false,
@@ -165,7 +164,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.firstScreenMaterialImagesReady = false
     this.firstCanvasFrameRendered = false
     this.pendingTemplateDesign = null
-    this.skipEntrySizeGuide = hasSharedDesign
     this.templateDesignSequence = 0
     this.expectsTemplateDesign = Boolean(pendingDesign)
     this.templateDesignApplying = false
@@ -353,7 +351,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.templateDesignApplied = false
     this.renderer?.clear()
     this.setData({
-      showSizeGuide: false,
       showGuide: false,
       showWristPicker: false,
       showSaveNameDialog: false,

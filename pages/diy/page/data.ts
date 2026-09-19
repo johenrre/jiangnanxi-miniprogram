@@ -31,7 +31,6 @@ export function createDiyPageData(): DiyPageData {
     showSaveNameDialog: false,
     designNameDraft: '',
     savingDesign: false,
-    showSizeGuide: false,
     showGuide: false,
     showWristPicker: false,
     selectedWristCm: null,

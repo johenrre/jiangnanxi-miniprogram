@@ -99,7 +99,6 @@ export interface DiyPageData {
   showSaveNameDialog: boolean
   designNameDraft: string
   savingDesign: boolean
-  showSizeGuide: boolean
   showGuide: boolean
   showWristPicker: boolean
   selectedWristCm: number | null
@@ -137,7 +136,6 @@ export interface DiyPageCustom {
   entryMaskTimeoutTimer: number | null
   wristFitWarningTimer: number | null
   audioWarmupTimer: number | null
-  skipEntrySizeGuide: boolean
   templateDesignSequence: number
   pendingTemplateDesign: DiyDesignSnapshot | null
   expectsTemplateDesign: boolean
@@ -201,8 +199,6 @@ export interface DiyPageCustom {
   handleCanvasTouchMove(event: WechatMiniprogram.TouchEvent): void
   handleCanvasTouchEnd(event: WechatMiniprogram.TouchEvent): void
   handleCanvasTouchCancel(event: WechatMiniprogram.TouchEvent): void
-  handleOpenSizeGuide(): void
-  handleCloseSizeGuide(): void
   handleOpenGuide(): void
   handleCloseGuide(): void
   handleOpenWristPicker(): void

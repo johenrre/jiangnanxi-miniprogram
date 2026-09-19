@@ -1,31 +1,3 @@
-<view class="diy-modal diy-modal--centered" wx:if="{{showSizeGuide}}">
-  <view class="diy-modal__backdrop" bindtap="handleCloseSizeGuide"></view>
-  <view
-    class="size-guide-card"
-    bindtap="handleCloseSizeGuide"
-    hover-class="size-guide-card--pressed"
-    role="button"
-    aria-label="珠子尺寸调整提示，轻触关闭"
-  >
-    <text class="size-guide-card__title">调整珠子大小</text>
-    <text class="size-guide-card__description">点击“−”缩小，点击“＋”放大</text>
-
-    <view class="size-guide-visual" aria-hidden="{{true}}">
-      <view class="size-guide-visual__bead size-guide-visual__bead--small"></view>
-      <view class="size-guide-visual__arrow"></view>
-      <view class="size-guide-visual__bead size-guide-visual__bead--medium"></view>
-      <view class="size-guide-visual__arrow"></view>
-      <view class="size-guide-visual__bead size-guide-visual__bead--large"></view>
-    </view>
-
-    <view class="size-guide-control" aria-hidden="{{true}}">
-      <text class="size-guide-control__action">−</text>
-      <text class="size-guide-control__value">8 mm</text>
-      <text class="size-guide-control__action">＋</text>
-    </view>
-  </view>
-</view>
-
 <usage-guide-modal
   visible="{{showGuide}}"
   initial-tab="tutorial"

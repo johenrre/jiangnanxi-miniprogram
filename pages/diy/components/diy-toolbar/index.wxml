@@ -2,14 +2,6 @@
   <view class="diy-tools">
     <view class="diy-tools__cluster">
       <button
-        class="tool-button tool-button--wrist"
-        bindtap="handleOpenWrist"
-        hover-class="tool-button--pressed"
-      >
-        <image class="tool-button__icon tool-button__icon--wrist" src="/assets/icons/ruler-dark.svg" mode="aspectFit" />
-        <text class="tool-button__label">{{selectedWristCm ? selectedWristCm + ' cm' : '设置手围'}}</text>
-      </button>
-      <button
         class="tool-button tool-button--round"
         bindtap="handleClear"
         hover-class="tool-button--pressed"
