@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <circle cx="12" cy="4.4" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="17.2" cy="6.6" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="19.6" cy="11.7" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="17.4" cy="17" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="12" cy="19.5" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="6.7" cy="17" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="4.4" cy="11.7" r="1.55" stroke="#607D76" stroke-width="1.55"/>
-  <circle cx="6.8" cy="6.6" r="1.55" stroke="#607D76" stroke-width="1.55"/>
+  <circle cx="12" cy="4.4" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="17.2" cy="6.6" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="19.6" cy="11.7" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="17.4" cy="17" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="12" cy="19.5" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="6.7" cy="17" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="4.4" cy="11.7" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
+  <circle cx="6.8" cy="6.6" r="1.55" stroke="#F2A05F" stroke-width="1.55"/>
 </svg>

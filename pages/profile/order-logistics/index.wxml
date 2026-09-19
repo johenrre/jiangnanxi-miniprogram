@@ -8,7 +8,6 @@
         <view class="logistics-progress__ring"></view>
       </view>
       <view class="logistics-progress__copy">
-        <text class="logistics-progress__eyebrow">{{trackingEyebrow}}</text>
         <text class="logistics-progress__title">{{trackingTitle}}</text>
         <text class="logistics-progress__description">{{trackingDescription}}</text>
       </view>
@@ -88,12 +87,14 @@
   <content-state
     wx:elif="{{status === 'empty'}}"
     status="empty"
+    icon="/assets/icons/empty-logistics.svg"
     title="暂未填写物流"
     description="商家发货并填写快递单号后会显示在这里。"
   />
   <content-state
     wx:elif="{{status === 'login'}}"
     status="login"
+    icon="/assets/icons/empty-logistics.svg"
     title="登录后查看物流"
     description="登录后可查看自己的订单物流信息。"
     actionText="登录"
@@ -102,6 +103,7 @@
   <content-state
     wx:else
     status="error"
+    icon="/assets/icons/empty-logistics.svg"
     title="物流信息加载失败"
     description="{{errorMessage}}"
     actionText="重新加载"

@@ -11,7 +11,6 @@
     />
     <view class="profile-hero__wash" aria-hidden="true"></view>
     <view class="profile-hero__heading">
-      <text class="profile-hero__eyebrow">MY CRYSTAL SPACE</text>
       <text class="profile-hero__title">{{isLoggedIn ? '欢迎回来' : '留住每一次灵感'}}</text>
       <text class="profile-hero__subtitle">{{isLoggedIn ? '设计、订单和服务，都在这里。' : '登录后同步你的设计与订单。'}}</text>
     </view>
@@ -95,7 +94,6 @@
   <view class="profile-section">
     <view class="profile-section__heading">
       <view>
-        <text class="profile-section__eyebrow">ACCOUNT / SERVICE</text>
         <text class="profile-section__title">账户与服务</text>
       </view>
       <text class="profile-section__hint">管理你的晶石生活</text>

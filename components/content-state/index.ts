@@ -12,6 +12,10 @@ Component({
       type: String,
       value: '',
     },
+    icon: {
+      type: String,
+      value: '/assets/icons/empty-generic.svg',
+    },
     actionText: {
       type: String,
       value: '',

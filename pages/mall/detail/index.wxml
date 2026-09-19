@@ -45,7 +45,6 @@
 
     <view class="mall-detail-content">
       <view class="mall-detail-content__heading">
-        <text class="mall-detail-content__eyebrow">PRODUCT NOTES</text>
         <text class="mall-detail-content__title">商品详情</text>
         <text class="mall-detail-content__description">自然光记录材质与手作过程，实物会保留天然晶石的细微差异。</text>
       </view>

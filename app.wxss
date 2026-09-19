@@ -5,7 +5,7 @@ page {
   background: var(--color-bg-page);
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 24rpx;
+  font-size: 26rpx;
   -webkit-font-smoothing: antialiased;
 }
 

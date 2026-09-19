@@ -39,7 +39,6 @@
     <view class="design-detail-card">
       <view class="design-detail-head">
         <view class="design-detail-head__copy">
-          <text class="design-detail-head__eyebrow">{{design.section === 'designer' ? 'DESIGNER PIECE' : 'CUSTOM STORY'}}</text>
           <text class="design-detail-head__title">{{design.name}}</text>
           <text wx:if="{{design.subtitle}}" class="design-detail-head__description">{{design.subtitle}}</text>
         </view>

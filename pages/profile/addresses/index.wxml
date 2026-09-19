@@ -36,12 +36,14 @@
   <content-state
     wx:elif="{{status === 'empty'}}"
     status="empty"
+    icon="/assets/icons/empty-address.svg"
     title="还没有收货地址"
     description="新增地址后，下单时可以直接选择。"
   />
   <content-state
     wx:elif="{{status === 'login'}}"
     status="login"
+    icon="/assets/icons/empty-address.svg"
     title="登录后管理收货地址"
     description="收货信息仅用于订单配送。"
     actionText="登录"
@@ -50,6 +52,7 @@
   <content-state
     wx:else
     status="error"
+    icon="/assets/icons/empty-address.svg"
     title="收货地址加载失败"
     description="{{errorMessage}}"
     actionText="重新加载"
@@ -107,7 +110,7 @@
       </view>
       <view class="address-form__field">
         <text class="address-form__label">设为默认</text>
-        <switch checked="{{form.isDefault}}" color="#607d76" bindchange="handleDefaultChange" />
+        <switch checked="{{form.isDefault}}" color="#f2a05f" bindchange="handleDefaultChange" />
       </view>
       <button class="address-form__save" loading="{{submitting}}" disabled="{{submitting}}" bindtap="handleSaveAddress">保存地址</button>
     </view>

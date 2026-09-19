@@ -22,7 +22,7 @@
   padding: 0;
   border: 1rpx solid var(--color-border);
   border-radius: 50%;
-  background: rgba(252, 251, 247, 0.86);
+  background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 8rpx 22rpx var(--color-shadow-soft);
   -webkit-backdrop-filter: blur(12rpx);
   backdrop-filter: blur(12rpx);
@@ -65,7 +65,7 @@
   left: 0;
   z-index: 3;
   height: 120rpx;
-  background: linear-gradient(180deg, rgba(246, 244, 239, 0), var(--color-bg-page));
+  background: linear-gradient(180deg, rgba(246, 246, 246, 0), var(--color-bg-page));
   content: "";
   pointer-events: none;
 }
@@ -86,12 +86,12 @@
   align-items: center;
   justify-content: center;
   padding-top: 46rpx;
-  filter: drop-shadow(0 22rpx 38rpx rgba(71, 84, 80, 0.14));
+  filter: drop-shadow(0 22rpx 38rpx rgba(0, 0, 0, 0.1));
 }
 
 .design-detail-hero__image {
   padding: 104rpx 24rpx 56rpx;
-  filter: drop-shadow(0 20rpx 38rpx rgba(71, 84, 80, 0.13));
+  filter: drop-shadow(0 20rpx 38rpx rgba(0, 0, 0, 0.09));
 }
 
 .design-detail-hero__fallback {
@@ -100,14 +100,14 @@
   justify-content: center;
   flex-direction: column;
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   gap: 22rpx;
 }
 
 .design-detail-hero__ring {
   width: 330rpx;
   height: 330rpx;
-  border: 46rpx solid rgba(111, 143, 136, 0.13);
+  border: 46rpx solid rgba(173, 149, 104, 0.13);
   border-radius: 50%;
 }
 
@@ -134,21 +134,13 @@
   flex: 1;
 }
 
-.design-detail-head__eyebrow,
 .design-detail-head__title,
 .design-detail-head__description {
   display: block;
 }
 
-.design-detail-head__eyebrow {
-  color: #9b817b;
-  font-size: 14rpx;
-  font-weight: 700;
-  letter-spacing: 4rpx;
-}
-
 .design-detail-head__title {
-  margin-top: 10rpx;
+  margin-top: 0;
   color: var(--color-text-primary);
   font-family: var(--font-body);
   font-size: 40rpx;
@@ -162,7 +154,7 @@
 .design-detail-head__description {
   margin-top: 13rpx;
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 1.7;
   overflow-wrap: anywhere;
   word-break: break-all;
@@ -171,8 +163,8 @@
 .design-detail-head__price {
   padding-top: 27rpx;
   flex: none;
-  color: var(--color-accent-blush-strong);
-  font-size: 30rpx;
+  color: var(--color-accent-jade);
+  font-size: 32rpx;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -191,16 +183,16 @@
 
 .design-detail-section__title {
   display: block;
-  color: #4b5552;
+  color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
 }
 
 .design-detail-section__count {
   color: var(--color-text-muted);
-  font-size: 19rpx;
+  font-size: 22rpx;
 }
 
 .design-detail-section__description {
@@ -208,7 +200,7 @@
   margin-top: 8rpx;
   margin-bottom: 22rpx;
   color: var(--color-text-muted);
-  font-size: 19rpx;
+  font-size: 22rpx;
   line-height: 1.5;
 }
 
@@ -219,9 +211,9 @@
   height: 122rpx;
   margin-top: 18rpx;
   border-radius: 20rpx;
-  background: #efefea;
+  background: #f5f5f5;
   color: var(--color-text-muted);
-  font-size: 20rpx;
+  font-size: 23rpx;
 }
 
 .design-detail-photos {
@@ -259,9 +251,9 @@
 .design-detail-materials__head {
   min-height: 60rpx;
   padding: 0 14rpx;
-  background: #e9efeb;
-  color: #687772;
-  font-size: 17rpx;
+  background: #f5f5f5;
+  color: var(--color-text-secondary);
+  font-size: 20rpx;
   font-weight: 600;
   text-align: center;
 }
@@ -288,25 +280,25 @@
   height: 44rpx;
   flex: 0 0 44rpx;
   border-radius: 50%;
-  background: #e4e8e3;
+  background: #eeeeee;
 }
 
 .design-detail-material__image--fallback {
-  border: 7rpx solid rgba(111, 143, 136, 0.13);
+  border: 7rpx solid rgba(173, 149, 104, 0.13);
 }
 
 .design-detail-material__name {
   overflow: hidden;
-  color: #4f5b57;
-  font-size: 18rpx;
+  color: var(--color-text-primary);
+  font-size: 21rpx;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .design-detail-material__cell {
-  color: #7f8a86;
-  font-size: 16rpx;
+  color: var(--color-text-secondary);
+  font-size: 19rpx;
   text-align: center;
 }
 
@@ -325,7 +317,7 @@
   flex: 0 0 68rpx;
   overflow: hidden;
   border-radius: 50%;
-  background: #e2eae6;
+  background: #eeeeee;
 }
 
 .design-detail-author__copy {
@@ -339,15 +331,15 @@
 }
 
 .design-detail-author__name {
-  color: #4b5552;
-  font-size: 24rpx;
+  color: var(--color-text-primary);
+  font-size: 27rpx;
   font-weight: 600;
 }
 
 .design-detail-author__role {
   margin-top: 6rpx;
   color: var(--color-text-muted);
-  font-size: 18rpx;
+  font-size: 21rpx;
 }
 
 .design-detail-scroll-space {
@@ -392,7 +384,7 @@
   border: 1rpx solid var(--color-border);
   border-radius: 18rpx;
   color: var(--color-primary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 76rpx;
 }
 
@@ -416,7 +408,7 @@
   border-radius: 16rpx;
   background: var(--color-accent-blush);
   color: var(--color-white);
-  font-size: 15rpx;
+  font-size: 18rpx;
   line-height: 1;
 }
 
@@ -426,16 +418,16 @@
   flex: 1;
   border-radius: 18rpx;
   background: var(--color-primary);
-  box-shadow: 0 10rpx 24rpx rgba(79, 105, 98, 0.15);
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.1);
   color: var(--color-white);
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   line-height: 76rpx;
 }
 
 .design-detail-loading__hero {
   height: 760rpx;
-  background: linear-gradient(105deg, #e5e8e3 20%, var(--color-bg-muted) 45%, #e5e8e3 70%);
+  background: linear-gradient(105deg, #eeeeee 20%, #f7f7f7 45%, #eeeeee 70%);
   background-size: 220% 100%;
   animation: detail-skeleton 1.2s ease-in-out infinite;
 }
@@ -455,7 +447,7 @@
 .design-detail-loading__line,
 .design-detail-loading__empty {
   border-radius: 999rpx;
-  background: linear-gradient(105deg, #e5e7e2 20%, var(--color-bg-muted) 45%, #e5e7e2 70%);
+  background: linear-gradient(105deg, #eeeeee 20%, #f7f7f7 45%, #eeeeee 70%);
   background-size: 220% 100%;
   animation: detail-skeleton 1.2s ease-in-out infinite;
 }
@@ -509,14 +501,14 @@
 .design-detail-state__title {
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 31rpx;
+  font-size: 33rpx;
   font-weight: 500;
 }
 
 .design-detail-state__description {
   margin-top: 16rpx;
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 1.7;
 }
 
@@ -527,7 +519,7 @@
   border-radius: 18rpx;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 23rpx;
+  font-size: 26rpx;
   font-weight: 600;
   line-height: 70rpx;
 }

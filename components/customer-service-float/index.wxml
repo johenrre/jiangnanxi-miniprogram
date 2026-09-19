@@ -39,7 +39,6 @@
       role="button"
       aria-label="关闭"
     >×</view>
-    <text class="customer-modal__eyebrow">CUSTOM SERVICE</text>
     <text class="customer-modal__title">添加客服</text>
     <text class="customer-modal__tip">长按识别二维码添加客服</text>
 

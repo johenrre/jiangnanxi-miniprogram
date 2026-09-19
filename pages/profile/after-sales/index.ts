@@ -182,7 +182,7 @@ Page({
         title: '更新退货物流？',
         content: '请确认新的快递公司和单号填写正确，商家将按此信息核对退货。',
         confirmText: '确认更新',
-        confirmColor: '#607d76',
+        confirmColor: '#e18a4b',
         success: (result) => {
           if (result.confirm) submit()
         },

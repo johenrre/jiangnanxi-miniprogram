@@ -5,7 +5,6 @@
   <view wx:if="{{status === 'ready'}}">
     <view class="my-designs-summary">
       <view>
-        <text class="my-designs-summary__eyebrow">SAVED DESIGNS</text>
         <text class="my-designs-summary__title">已保存 {{total}} / 50</text>
       </view>
       <text class="my-designs-summary__description">最多保存 50 个，删除后可继续添加</text>
@@ -81,12 +80,14 @@
   <content-state
     wx:elif="{{status === 'empty'}}"
     status="empty"
+    icon="/assets/icons/empty-design.svg"
     title="还没有保存设计"
     description="完成并保存一个 DIY 方案后，它会出现在这里。"
   />
   <content-state
     wx:elif="{{status === 'login'}}"
     status="login"
+    icon="/assets/icons/empty-design.svg"
     title="登录后查看我的设计"
     description="已保存方案会跟随账户同步。"
     actionText="登录"
@@ -95,6 +96,7 @@
   <content-state
     wx:else
     status="error"
+    icon="/assets/icons/empty-design.svg"
     title="我的设计加载失败"
     description="{{errorMessage}}"
     actionText="重新加载"

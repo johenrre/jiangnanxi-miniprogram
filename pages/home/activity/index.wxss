@@ -37,7 +37,7 @@ page {
   left: 0;
   padding: 18rpx 26rpx calc(18rpx + env(safe-area-inset-bottom));
   border-top: 1rpx solid var(--color-border-hairline);
-  background: rgba(248, 247, 243, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 -14rpx 38rpx var(--color-shadow-soft);
   -webkit-backdrop-filter: blur(18rpx);
   backdrop-filter: blur(18rpx);
@@ -51,9 +51,9 @@ page {
   height: 90rpx;
   border-radius: 22rpx;
   background: var(--color-primary);
-  box-shadow: 0 10rpx 24rpx rgba(70, 100, 92, 0.18);
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.12);
   color: var(--color-white);
-  font-size: 23rpx;
+  font-size: 26rpx;
   font-weight: 700;
   gap: 14rpx;
   letter-spacing: 1rpx;

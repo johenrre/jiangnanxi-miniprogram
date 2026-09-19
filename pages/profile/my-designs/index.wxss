@@ -13,24 +13,16 @@
   gap: 24rpx;
 }
 
-.my-designs-summary__eyebrow,
 .my-designs-summary__title,
 .my-designs-summary__description {
   display: block;
 }
 
-.my-designs-summary__eyebrow {
-  color: #9b817b;
-  font-size: 15rpx;
-  font-weight: 700;
-  letter-spacing: 4rpx;
-}
-
 .my-designs-summary__title {
-  margin-top: 8rpx;
+  margin-top: 0;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 31rpx;
+  font-size: 33rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
 }
@@ -39,7 +31,7 @@
   max-width: 250rpx;
   align-self: flex-end;
   color: var(--color-text-muted);
-  font-size: 18rpx;
+  font-size: 21rpx;
   line-height: 1.5;
   text-align: right;
 }
@@ -119,14 +111,14 @@
   justify-content: center;
   flex-direction: column;
   color: var(--color-text-muted);
-  font-size: 18rpx;
+  font-size: 21rpx;
   gap: 15rpx;
 }
 
 .my-design-card__ring {
   width: 122rpx;
   height: 122rpx;
-  border: 20rpx solid rgba(111, 143, 136, 0.14);
+  border: 20rpx solid rgba(173, 149, 104, 0.14);
   border-radius: 50%;
 }
 
@@ -145,7 +137,7 @@
   overflow: hidden;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 25rpx;
+  font-size: 28rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
   text-overflow: ellipsis;
@@ -154,8 +146,8 @@
 
 .my-design-card__date {
   margin-top: 8rpx;
-  color: #9aa19e;
-  font-size: 16rpx;
+  color: var(--color-text-muted);
+  font-size: 19rpx;
   letter-spacing: 0.4rpx;
 }
 
@@ -168,8 +160,8 @@
   margin: 0;
   padding: 0;
   background: transparent;
-  color: #9b817b;
-  font-size: 17rpx;
+  color: var(--color-text-muted);
+  font-size: 20rpx;
   font-weight: 500;
   line-height: 72rpx;
   text-align: right;

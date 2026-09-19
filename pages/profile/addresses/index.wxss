@@ -37,14 +37,14 @@
 
 .address-card__name {
   color: var(--color-text-primary);
-  font-size: 26rpx;
+  font-size: 29rpx;
   font-weight: 600;
 }
 
 .address-card__phone {
   margin-left: 16rpx;
   color: var(--color-text-secondary);
-  font-size: 21rpx;
+  font-size: 24rpx;
 }
 
 .address-card__default {
@@ -53,7 +53,7 @@
   border-radius: 11rpx;
   background: var(--color-bg-primary-soft);
   color: var(--color-primary);
-  font-size: 17rpx;
+  font-size: 20rpx;
   font-weight: 600;
   line-height: 40rpx;
 }
@@ -61,8 +61,8 @@
 .address-card__address {
   display: block;
   margin-top: 17rpx;
-  color: #65736e;
-  font-size: 21rpx;
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
   line-height: 1.7;
 }
 
@@ -86,7 +86,7 @@
   flex: 0 0 auto;
   border-radius: 13rpx;
   color: var(--color-primary);
-  font-size: 18rpx;
+  font-size: 21rpx;
   line-height: 48rpx;
   white-space: nowrap;
 }
@@ -109,9 +109,9 @@
   height: 84rpx;
   border-radius: 19rpx;
   background: var(--color-primary);
-  box-shadow: 0 13rpx 30rpx rgba(79, 105, 98, 0.17);
+  box-shadow: 0 13rpx 30rpx rgba(0, 0, 0, 0.12);
   color: var(--color-white);
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   letter-spacing: 1rpx;
   line-height: 84rpx;
@@ -123,7 +123,7 @@
   inset: 0;
   display: flex;
   align-items: flex-end;
-  background: rgba(45, 53, 50, 0.34);
+  background: rgba(0, 0, 0, 0.36);
   -webkit-backdrop-filter: blur(8rpx);
   backdrop-filter: blur(8rpx);
 }
@@ -136,7 +136,7 @@
   border: 1rpx solid rgba(255, 255, 255, 0.62);
   border-radius: 38rpx 38rpx 0 0;
   background: var(--color-bg-section);
-  box-shadow: 0 -24rpx 64rpx rgba(62, 72, 68, 0.16);
+  box-shadow: 0 -24rpx 64rpx rgba(0, 0, 0, 0.14);
   animation: address-sheet-in 220ms cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
@@ -146,7 +146,7 @@
   height: 7rpx;
   margin: -13rpx auto 22rpx;
   border-radius: 999rpx;
-  background: rgba(96, 125, 118, 0.2);
+  background: rgba(0, 0, 0, 0.12);
   content: "";
 }
 
@@ -163,7 +163,7 @@
   min-width: 0;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 34rpx;
+  font-size: 36rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
 }
@@ -188,8 +188,8 @@
   overflow: hidden;
   border: 1rpx solid var(--color-border);
   border-radius: 999rpx;
-  background: #eeefeb;
-  color: #71807b;
+  background: #f3f3f3;
+  color: var(--color-text-secondary);
   line-height: 1;
   transform: translateY(-50%);
 }
@@ -212,7 +212,7 @@
   width: 20rpx;
   height: 2rpx;
   border-radius: 999rpx;
-  background: #71807b;
+  background: var(--color-text-secondary);
   transform-origin: center;
 }
 
@@ -233,7 +233,7 @@
   align-items: center;
   border: 1rpx solid var(--color-border);
   border-radius: 17rpx;
-  background: #eef3f0;
+  background: #f7f7f7;
   text-align: left;
 }
 
@@ -283,22 +283,22 @@
 }
 
 .address-form__wechat-import-copy text:first-child {
-  color: #465650;
-  font-size: 21rpx;
+  color: var(--color-text-primary);
+  font-size: 24rpx;
   font-weight: 600;
 }
 
 .address-form__wechat-import-copy text:last-child {
-  color: #89948f;
-  font-size: 16rpx;
+  color: var(--color-text-muted);
+  font-size: 19rpx;
 }
 
 .address-form__wechat-import-arrow {
   width: 13rpx;
   height: 13rpx;
   margin-right: 5rpx;
-  border-top: 2rpx solid #879791;
-  border-right: 2rpx solid #879791;
+  border-top: 2rpx solid var(--color-text-muted);
+  border-right: 2rpx solid var(--color-text-muted);
   transform: rotate(45deg);
 }
 
@@ -318,8 +318,8 @@
 .address-form__label {
   width: 132rpx;
   flex: 0 0 132rpx;
-  color: #4f5b57;
-  font-size: 23rpx;
+  color: var(--color-text-primary);
+  font-size: 26rpx;
   font-weight: 600;
 }
 
@@ -329,12 +329,12 @@
   min-width: 0;
   flex: 1;
   color: var(--color-text-primary);
-  font-size: 23rpx;
+  font-size: 26rpx;
   text-align: right;
 }
 
 .address-form__picker--placeholder {
-  color: #a0a8a4;
+  color: var(--color-text-muted);
 }
 
 .address-form__textarea {
@@ -350,7 +350,7 @@
   background: var(--color-primary);
   box-shadow: 0 11rpx 25rpx var(--color-shadow-primary);
   color: var(--color-white);
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   line-height: 84rpx;
 }

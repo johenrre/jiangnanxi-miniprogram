@@ -152,6 +152,7 @@
       <content-state
         wx:else
         status="empty"
+        icon="/assets/icons/empty-after-sales.svg"
         title="暂无售后记录"
         description="定制商品仅支持在商家发货前申请售后。"
       />
@@ -185,6 +186,7 @@
       <content-state
         wx:else
         status="empty"
+        icon="/assets/icons/empty-after-sales.svg"
         title="暂无可申请订单"
         description="只有已付款且尚未发货的订单可申请售后。"
       />
@@ -200,12 +202,14 @@
   <content-state
     wx:elif="{{status === 'empty'}}"
     status="empty"
+    icon="/assets/icons/empty-after-sales.svg"
     title="暂无售后信息"
     description="当前没有售后记录，也没有可申请售后的订单。"
   />
   <content-state
     wx:elif="{{status === 'login'}}"
     status="login"
+    icon="/assets/icons/empty-after-sales.svg"
     title="登录后查看售后"
     description="登录后可查看处理进度并从符合条件的订单发起申请。"
     actionText="登录"
@@ -214,6 +218,7 @@
   <content-state
     wx:else
     status="error"
+    icon="/assets/icons/empty-after-sales.svg"
     title="售后信息加载失败"
     description="{{errorMessage}}"
     actionText="重新加载"

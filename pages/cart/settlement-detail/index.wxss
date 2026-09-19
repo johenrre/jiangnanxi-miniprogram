@@ -4,7 +4,7 @@
   overflow: hidden;
   flex-direction: column;
   background:
-    radial-gradient(circle at 88% 7%, rgba(167, 200, 192, 0.13), transparent 25%),
+    radial-gradient(circle at 88% 7%, rgba(173, 149, 104, 0.1), transparent 25%),
     var(--color-bg-page);
   color: var(--color-text-primary);
 }
@@ -56,7 +56,7 @@
   align-items: center;
   justify-content: center;
   padding-top: 20rpx;
-  filter: drop-shadow(0 22rpx 38rpx rgba(71, 84, 80, 0.14));
+  filter: drop-shadow(0 22rpx 38rpx rgba(0, 0, 0, 0.1));
 }
 
 .settlement-hero__image,
@@ -69,7 +69,7 @@
 
 .settlement-hero__image {
   padding: 86rpx 30rpx 120rpx;
-  filter: drop-shadow(0 20rpx 38rpx rgba(71, 84, 80, 0.13));
+  filter: drop-shadow(0 20rpx 38rpx rgba(0, 0, 0, 0.09));
 }
 
 .settlement-hero__fallback {
@@ -79,14 +79,14 @@
   padding-bottom: 70rpx;
   flex-direction: column;
   color: var(--color-text-secondary);
-  font-size: 21rpx;
+  font-size: 24rpx;
   gap: 18rpx;
 }
 
 .settlement-hero__ring {
   width: 300rpx;
   height: 300rpx;
-  border: 42rpx solid rgba(111, 143, 136, 0.13);
+  border: 42rpx solid rgba(173, 149, 104, 0.13);
   border-radius: 50%;
 }
 
@@ -116,21 +116,21 @@
 
 .settlement-summary__label {
   color: var(--color-text-muted);
-  font-size: 15rpx;
+  font-size: 18rpx;
 }
 
 .settlement-summary__value {
   margin-top: 5rpx;
   color: var(--color-primary-pressed);
-  font-size: 21rpx;
+  font-size: 24rpx;
   font-weight: 650;
   white-space: nowrap;
 }
 
 .settlement-summary__price {
   flex: 0 0 auto;
-  color: var(--color-accent-blush-strong);
-  font-size: 30rpx;
+  color: var(--color-text-primary);
+  font-size: 32rpx;
   font-weight: 700;
 }
 
@@ -149,14 +149,14 @@
 .settlement-section__title {
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 31rpx;
+  font-size: 33rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
 }
 
 .settlement-section__meta {
-  color: #929a97;
-  font-size: 16rpx;
+  color: var(--color-text-muted);
+  font-size: 19rpx;
 }
 
 .settlement-option {
@@ -179,15 +179,15 @@
   width: 146rpx;
   flex: 0 0 146rpx;
   color: var(--color-text-secondary);
-  font-size: 18rpx;
+  font-size: 21rpx;
 }
 
 .settlement-option__value {
   min-width: 0;
   overflow: hidden;
   flex: 1;
-  color: #46534f;
-  font-size: 21rpx;
+  color: var(--color-text-primary);
+  font-size: 24rpx;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -196,7 +196,7 @@
 .settlement-option__price {
   flex: 0 0 auto;
   color: var(--color-primary);
-  font-size: 19rpx;
+  font-size: 22rpx;
   font-weight: 600;
 }
 
@@ -206,7 +206,7 @@
   border-radius: 16rpx;
   background: var(--color-bg-muted);
   color: var(--color-text-muted);
-  font-size: 19rpx;
+  font-size: 22rpx;
   text-align: center;
 }
 
@@ -214,7 +214,7 @@
   display: block;
   color: var(--color-accent-blush);
   font-family: var(--font-body);
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
   text-align: center;
@@ -251,8 +251,8 @@
   border: 1rpx solid var(--color-border);
   border-radius: 16rpx;
   background: var(--color-bg-warm);
-  color: #5c6864;
-  font-size: 18rpx;
+  color: var(--color-text-secondary);
+  font-size: 21rpx;
 }
 
 .settlement-material + .settlement-material {
@@ -279,7 +279,7 @@
   flex: 0 0 52rpx;
   border: 1rpx solid var(--color-border);
   border-radius: 50%;
-  background: #e7ebe6;
+  background: #eeeeee;
 }
 
 .settlement-material__image {
@@ -291,7 +291,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: 19rpx;
+  font-size: 22rpx;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -301,7 +301,7 @@
   display: block;
   margin-top: 7rpx;
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
   line-height: 1.4;
 }
 
@@ -315,13 +315,13 @@
 
 .settlement-material__quantity {
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
 }
 
 .settlement-material__subtotal {
   margin-top: 7rpx;
-  color: var(--color-accent-blush-strong);
-  font-size: 21rpx;
+  color: var(--color-text-primary);
+  font-size: 24rpx;
   font-weight: 700;
 }
 
@@ -331,7 +331,7 @@
   border-radius: 16rpx;
   background: var(--color-bg-muted);
   color: var(--color-text-muted);
-  font-size: 19rpx;
+  font-size: 22rpx;
   text-align: center;
 }
 
@@ -339,7 +339,7 @@
   display: block;
   margin-top: 16rpx;
   color: var(--color-text-faint);
-  font-size: 16rpx;
+  font-size: 19rpx;
   line-height: 1.6;
 }
 
@@ -360,36 +360,36 @@
   height: 82rpx;
   flex: 1;
   border-radius: 20rpx;
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   line-height: 82rpx;
 }
 
 .settlement-footer__button--secondary {
-  border: 1rpx solid rgba(96, 125, 118, 0.2);
+  border: 1rpx solid var(--color-border);
   background: var(--color-bg-surface);
-  color: #697672;
+  color: var(--color-text-secondary);
 }
 
 .settlement-footer__button--secondary:active {
-  background: #eceee9;
+  background: #f5f5f5;
   transform: scale(0.98);
 }
 
 .settlement-footer__button--redesign {
-  border: 1rpx solid rgba(87, 124, 116, 0.34);
-  background: #eef4f1;
+  border: 1rpx solid var(--color-border-strong);
+  background: var(--color-bg-surface);
   color: var(--color-primary);
 }
 
 .settlement-footer__button--redesign:active {
-  background: #e2ece7;
+  background: #f5f5f5;
   transform: scale(0.98);
 }
 
 .settlement-footer__button--primary {
-  background: var(--color-text-heading);
-  box-shadow: 0 10rpx 24rpx rgba(63, 76, 73, 0.15);
+  background: var(--color-accent-red);
+  box-shadow: 0 10rpx 24rpx rgba(255, 49, 82, 0.18);
   color: var(--color-white);
 }
 
@@ -405,7 +405,7 @@
 .settlement-loading__row,
 .settlement-loading__panel {
   border-radius: 22rpx;
-  background: linear-gradient(105deg, #e5e7e2 20%, var(--color-bg-muted) 45%, #e5e7e2 70%);
+  background: linear-gradient(105deg, #eeeeee 20%, #f7f7f7 45%, #eeeeee 70%);
   background-size: 220% 100%;
   animation: settlement-skeleton 1.2s ease-in-out infinite;
 }
@@ -459,14 +459,14 @@
   margin-top: 24rpx;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 31rpx;
+  font-size: 33rpx;
   font-weight: 500;
 }
 
 .settlement-state__description {
   margin-top: 14rpx;
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 1.7;
 }
 
@@ -477,7 +477,7 @@
   border-radius: 18rpx;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 23rpx;
+  font-size: 26rpx;
   font-weight: 600;
   line-height: 72rpx;
 }

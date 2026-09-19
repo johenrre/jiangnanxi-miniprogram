@@ -72,7 +72,7 @@
   </view>
 
   <content-state wx:elif="{{status === 'loading'}}" status="loading" title="正在加载申请信息" description="正在同步订单和售后配置" />
-  <content-state wx:else status="error" title="申请信息加载失败" description="{{errorMessage}}" actionText="重新加载" bindaction="handleRetry" />
+  <content-state wx:else status="error" icon="/assets/icons/empty-after-sales.svg" title="申请信息加载失败" description="{{errorMessage}}" actionText="重新加载" bindaction="handleRetry" />
 
   <view wx:if="{{status === 'ready'}}" class="submit-bar">
     <button class="submit-button" loading="{{submitting}}" disabled="{{submitting || uploading}}" bindtap="handleSubmit">{{submitText}}</button>

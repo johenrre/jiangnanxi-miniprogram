@@ -1,6 +1,6 @@
 {
   "navigationStyle": "custom",
-  "backgroundColor": "#f5f5f5",
+  "backgroundColor": "#f5f4f3",
   "usingComponents": {
     "page-header": "/components/page-header/index",
     "customer-service-float": "/components/customer-service-float/index",

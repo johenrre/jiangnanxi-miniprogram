@@ -21,7 +21,6 @@ Page({
     orderNo: '',
     logistics: null as OrderLogistics | null,
     isCompleted: false,
-    trackingEyebrow: 'LOGISTICS UPDATE',
     trackingTitle: '商家已发货',
     trackingDescription: '包裹已交由快递公司，请留意配送电话。',
     confirmingReceipt: false,
@@ -96,7 +95,6 @@ Page({
       this.setData({
         logistics,
         isCompleted,
-        trackingEyebrow: logistics.trackingIsSigned || isCompleted ? 'DELIVERY COMPLETE' : 'LOGISTICS UPDATE',
         trackingTitle,
         trackingDescription,
         status: logistics.expressNo ? 'ready' : 'empty',

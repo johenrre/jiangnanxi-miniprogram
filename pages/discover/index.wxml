@@ -1,7 +1,6 @@
 <theme-provider>
 <view class="discover-page">
   <view class="discover-header" style="padding-top: {{menuButtonTopPx}}px;">
-    <text class="discover-header__eyebrow">CURATED STORIES</text>
     <text class="discover-header__title">灵感</text>
     <text class="discover-header__description">从真实搭配与设计师作品里，找到属于你的灵感。</text>
     <view class="discover-filters">

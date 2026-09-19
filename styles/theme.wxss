@@ -1,44 +1,47 @@
-/* 江南禧主风格：白色内容区、浅灰底、深灰文字，红色仅用于操作和选中态。 */
+/* 江南禧主风格：白色内容区、暖灰底、深灰文字、杏橙交互与少量珊瑚红强调。 */
 page,
 .theme-root,
 .theme-jiangnanxi {
-  --font-body: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", Arial, Roboto, "PingFang SC", miui, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-body: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
   --font-number: "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
   --font-display: "STSong", "Songti SC", serif;
-  --color-bg-page: #f6f6f6;
+  --color-bg-page: #f5f4f3;
   --color-bg-surface: #ffffff;
   --color-bg-section: #ffffff;
-  --color-bg-warm: #fafafa;
-  --color-bg-muted: #f5f5f5;
-  --color-bg-media: #fafafa;
-  --color-bg-primary-soft: #f5f5f5;
-  --color-text-heading: #333333;
-  --color-text-primary: #333333;
-  --color-text-secondary: #666666;
-  --color-text-muted: #999999;
-  --color-text-faint: #999999;
-  --color-primary: #b50102;
-  --color-primary-light: #fe2442;
-  --color-primary-muted: #fe2442;
-  --color-primary-pressed: #920102;
-  --color-accent-jade: #d4af37;
-  --color-accent-blush: #fe2442;
-  --color-accent-blush-strong: #b50102;
+  --color-bg-warm: #fbf8f5;
+  --color-bg-muted: #f1f0ef;
+  --color-bg-media: #f4f1ed;
+  --color-bg-primary-soft: #fff1e7;
+  --color-text-heading: #272321;
+  --color-text-primary: #332e2b;
+  --color-text-secondary: #6f6864;
+  --color-text-muted: #9d9692;
+  --color-text-faint: #b8b2ae;
+  --color-primary: #e18a4b;
+  --color-primary-light: #f0a56b;
+  --color-primary-muted: #f2b47a;
+  --color-primary-pressed: #c97339;
+  --color-accent-jade: #d6a861;
+  --color-accent-blush: #f17c87;
+  --color-accent-blush-strong: #eb5268;
+  --color-accent-red: #ff3152;
+  --color-accent-orange: #f2a05f;
+  --color-accent-yellow: #f4cb4f;
   --color-white: #ffffff;
-  --color-divider: #eeeeee;
-  --color-border-hairline: rgba(0, 0, 0, 0.08);
-  --color-border-soft: rgba(0, 0, 0, 0.04);
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-strong: rgba(0, 0, 0, 0.16);
+  --color-divider: #ece8e5;
+  --color-border-hairline: rgba(72, 56, 48, 0.08);
+  --color-border-soft: rgba(72, 56, 48, 0.045);
+  --color-border: rgba(72, 56, 48, 0.09);
+  --color-border-strong: rgba(72, 56, 48, 0.17);
   --color-shadow-soft: rgba(0, 0, 0, 0.025);
   --color-shadow: rgba(0, 0, 0, 0.06);
-  --color-shadow-primary: rgba(0, 0, 0, 0.08);
+  --color-shadow-primary: rgba(194, 103, 42, 0.2);
   --color-modal-backdrop: rgba(0, 0, 0, 0.6);
   --color-modal-shadow: rgba(0, 0, 0, 0.16);
   --color-surface-glass: rgba(255, 255, 255, 0.82);
   --color-surface-glass-strong: rgba(255, 255, 255, 0.96);
   --color-nav-surface: rgba(255, 255, 255, 0.96);
-  --color-nav-indicator: #b50102;
+  --color-nav-indicator: #ff3152;
   --color-nav-ring: rgba(255, 255, 255, 0.98);
   --color-nav-shadow: rgba(0, 0, 0, 0.06);
   --color-nav-shadow-soft: rgba(0, 0, 0, 0.02);
@@ -83,6 +86,38 @@ page,
   --color-nav-ring: rgba(248, 247, 243, 0.98);
   --color-nav-shadow: rgba(71, 84, 80, 0.11);
   --color-nav-shadow-soft: rgba(71, 84, 80, 0.04);
+}
+
+/* DIY 正在等待重构，维持本轮调整前的视觉变量，避免被其他页面的主题优化带动。 */
+.theme-jiangnanxi .diy-page {
+  --color-bg-page: #f6f6f6;
+  --color-bg-surface: #ffffff;
+  --color-bg-section: #ffffff;
+  --color-bg-warm: #fafafa;
+  --color-bg-muted: #f5f5f5;
+  --color-bg-media: #fafafa;
+  --color-bg-primary-soft: #f5f5f5;
+  --color-text-heading: #333333;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-text-faint: #999999;
+  --color-primary: #2f2f2f;
+  --color-primary-light: #666666;
+  --color-primary-muted: #ad9568;
+  --color-primary-pressed: #171717;
+  --color-accent-jade: #ad9568;
+  --color-accent-blush: #c27a6a;
+  --color-accent-blush-strong: #9c5f54;
+  --color-divider: #eeeeee;
+  --color-border-hairline: rgba(0, 0, 0, 0.08);
+  --color-border-soft: rgba(0, 0, 0, 0.04);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.16);
+  --color-shadow-soft: rgba(0, 0, 0, 0.025);
+  --color-shadow: rgba(0, 0, 0, 0.06);
+  --color-shadow-primary: rgba(0, 0, 0, 0.08);
+  font-size: 24rpx;
 }
 
 /* 页面里原先固定的 INS 配色，按主题覆盖。 */

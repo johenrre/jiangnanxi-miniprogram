@@ -6,10 +6,6 @@
       <view class="order-hero order-hero--{{order.statusTone}}">
         <view class="order-hero__wash"></view>
         <view class="order-hero__copy">
-          <view class="order-hero__kicker">
-            <view class="order-hero__dot"></view>
-            <text class="order-hero__eyebrow">{{order.statusEyebrow}}</text>
-          </view>
           <text class="order-hero__title">{{order.statusLabel}}</text>
           <text class="order-hero__description">{{order.statusDescription}}</text>
           <view class="order-hero__amount">
@@ -75,7 +71,7 @@
               <view class="product-row__fallback-ring"></view>
             </view>
             <view class="product-row__copy">
-              <text class="product-row__type">{{item.isDiy ? 'DIY CUSTOM' : 'CRYSTAL GOODS'}}</text>
+              <text class="product-row__type">{{item.isDiy ? 'DIY 定制' : '珠宝商品'}}</text>
               <text class="product-row__title">{{item.title}}</text>
               <text class="product-row__unit">{{item.unitPriceText}} × {{item.quantity}}</text>
             </view>
@@ -178,6 +174,7 @@
     <content-state
       wx:elif="{{status === 'login'}}"
       status="login"
+      icon="/assets/icons/empty-order.svg"
       title="登录后查看订单详情"
       description="订单详情只对下单账号开放。"
       actionText="登录"
@@ -186,6 +183,7 @@
     <content-state
       wx:else
       status="error"
+      icon="/assets/icons/empty-order.svg"
       title="订单详情加载失败"
       description="{{errorMessage}}"
       actionText="重新加载"

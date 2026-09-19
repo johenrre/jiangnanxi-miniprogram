@@ -54,7 +54,7 @@
   height: 100%;
   border: 5rpx solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
-  background: #e1eae6;
+  background: #eeeeee;
   box-shadow: 0 10rpx 28rpx var(--color-shadow);
   color: var(--color-primary);
   font-family: var(--font-body);
@@ -72,7 +72,7 @@
   border-radius: 14rpx;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 17rpx;
+  font-size: 20rpx;
   font-weight: 600;
   line-height: 36rpx;
 }
@@ -80,7 +80,7 @@
 .profile-edit-avatar-card__hint {
   margin-top: 22rpx;
   color: var(--color-text-muted);
-  font-size: 20rpx;
+  font-size: 23rpx;
 }
 
 .profile-edit-form {
@@ -107,8 +107,8 @@
 .profile-edit-field__label {
   width: 130rpx;
   flex: 0 0 130rpx;
-  color: #4c5753;
-  font-size: 23rpx;
+  color: var(--color-text-primary);
+  font-size: 26rpx;
   font-weight: 600;
 }
 
@@ -117,7 +117,7 @@
   min-width: 0;
   flex: 1;
   color: var(--color-text-primary);
-  font-size: 23rpx;
+  font-size: 26rpx;
   text-align: right;
 }
 
@@ -132,7 +132,7 @@
   height: 84rpx;
   margin-top: 28rpx;
   border-radius: 19rpx;
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   line-height: 84rpx;
 }
@@ -140,7 +140,7 @@
 .profile-edit-save,
 .profile-edit-login__button {
   background: var(--color-primary);
-  box-shadow: 0 11rpx 25rpx rgba(79, 105, 98, 0.13);
+  box-shadow: 0 11rpx 25rpx rgba(0, 0, 0, 0.1);
   color: var(--color-white);
 }
 

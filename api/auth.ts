@@ -101,7 +101,7 @@ export function hasAuthSession(): boolean {
   if (!token) return false
 
   const session = wx.getStorageSync(AUTH_SESSION_KEY) as StoredSession | undefined
-  if (!session?.user?.phone) {
+  if (!session?.user) {
     clearAuthSession()
     return false
   }
@@ -160,8 +160,8 @@ export async function loginWithWechat(phoneCode: string): Promise<AccountProfile
 }
 
 /**
- * 点击登录后通过 wx.login 恢复已有且已绑定手机号的账户。
- * 返回 false 表示这是新用户或尚未绑定手机号，调用方再切换到手机号登录按钮。
+ * 点击登录后通过 wx.login 登录微信账户。
+ * 兼容旧后端：返回 false 时调用方仍可切换到保留的手机号授权流程。
  */
 export async function loginExistingWechatUser(): Promise<boolean> {
   clearAuthSession()
@@ -180,11 +180,6 @@ export async function loginExistingWechatUser(): Promise<boolean> {
       timeout: 30000,
       requiresAuth: false,
     })
-    const user = normalizeAccountProfile(session.user)
-    if (!user?.phone) {
-      clearAuthSession()
-      return false
-    }
     persistSession(session)
     return true
   } catch (error) {

@@ -133,12 +133,14 @@
   <content-state
     wx:elif="{{status === 'empty'}}"
     status="empty"
+    icon="/assets/icons/empty-order.svg"
     title="当前没有订单"
     description="切换其他状态，或完成下单后再来查看。"
   />
   <content-state
     wx:elif="{{status === 'login'}}"
     status="login"
+    icon="/assets/icons/empty-order.svg"
     title="登录后查看订单"
     description="付款、制作、发货和售后进度会显示在这里。"
     actionText="登录"
@@ -147,6 +149,7 @@
   <content-state
     wx:else
     status="error"
+    icon="/assets/icons/empty-order.svg"
     title="订单加载失败"
     description="{{errorMessage}}"
     actionText="重新加载"

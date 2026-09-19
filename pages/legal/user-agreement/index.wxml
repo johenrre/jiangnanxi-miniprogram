@@ -3,8 +3,6 @@
     <page-header title="协议与隐私" showBack="{{true}}" theme="warm" />
 
     <view class="agreement-hero">
-      <text class="agreement-hero__eyebrow">AGREEMENT / PRIVACY</text>
-      <text class="agreement-hero__title">协议与隐私</text>
       <text class="agreement-hero__meta">用户协议更新日期：{{updatedAt}}</text>
       <text class="agreement-hero__description">了解服务规则，以及我们如何处理使用服务所必要的信息。</text>
     </view>

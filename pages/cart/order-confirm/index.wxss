@@ -38,22 +38,22 @@
 
 .confirm-card__title {
   display: block;
-  color: #4b5552;
+  color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 500;
   letter-spacing: 1rpx;
 }
 
 .confirm-card__action {
   color: var(--color-primary);
-  font-size: 20rpx;
+  font-size: 23rpx;
   font-weight: 600;
 }
 
 .confirm-card__meta {
   color: var(--color-text-muted);
-  font-size: 19rpx;
+  font-size: 22rpx;
 }
 
 .confirm-address {
@@ -69,8 +69,8 @@
   height: 5rpx;
   background: repeating-linear-gradient(
     90deg,
-    #99b2ab 0 34rpx,
-    #e8d5cf 34rpx 68rpx,
+    #f2a05f 0 34rpx,
+    #f4cb4f 34rpx 68rpx,
     transparent 68rpx 76rpx
   );
   content: "";
@@ -86,13 +86,13 @@
 
 .confirm-address__name {
   color: var(--color-text-primary);
-  font-size: 25rpx;
+  font-size: 28rpx;
   font-weight: 600;
 }
 
 .confirm-address__phone {
-  color: #6e7c78;
-  font-size: 21rpx;
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
 }
 
 .confirm-address__default {
@@ -100,15 +100,15 @@
   border-radius: 8rpx;
   background: var(--color-bg-primary-soft);
   color: var(--color-primary);
-  font-size: 15rpx;
+  font-size: 18rpx;
   font-weight: 600;
 }
 
 .confirm-address__detail {
   display: block;
   margin-top: 12rpx;
-  color: #6e7a76;
-  font-size: 21rpx;
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
   line-height: 1.65;
 }
 
@@ -119,8 +119,8 @@
   padding: 19rpx;
   border-radius: 14rpx;
   background: var(--color-bg-muted);
-  color: #71807b;
-  font-size: 21rpx;
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
 }
 
 .confirm-product {
@@ -173,7 +173,7 @@
 
 .confirm-product__type {
   color: var(--color-primary-light);
-  font-size: 16rpx;
+  font-size: 19rpx;
   font-weight: 650;
   letter-spacing: 1rpx;
 }
@@ -183,7 +183,7 @@
   overflow: hidden;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 26rpx;
+  font-size: 29rpx;
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -207,21 +207,21 @@
 }
 
 .confirm-service-group__title {
-  color: #53615d;
-  font-size: 22rpx;
+  color: var(--color-text-primary);
+  font-size: 25rpx;
   font-weight: 600;
 }
 
 .confirm-service-group__benefit {
-  color: #8d746a;
-  font-size: 17rpx;
+  color: var(--color-text-muted);
+  font-size: 20rpx;
 }
 
 .confirm-service-group__list {
   overflow: hidden;
   border: 1rpx solid var(--color-border-soft);
   border-radius: 17rpx;
-  background: #f6f5f0;
+  background: #f7f7f7;
 }
 
 .confirm-service {
@@ -251,7 +251,7 @@
 }
 
 .confirm-service--selected {
-  background: #e8efeb;
+  background: #f5f1e9;
 }
 
 .confirm-service__image {
@@ -259,7 +259,7 @@
   height: 86rpx;
   flex: 0 0 86rpx;
   border-radius: 14rpx;
-  background: #ecece7;
+  background: #eeeeee;
 }
 
 .confirm-service__radio {
@@ -269,7 +269,7 @@
   width: 32rpx;
   height: 32rpx;
   flex: 0 0 32rpx;
-  border: 2rpx solid #a6b2ae;
+  border: 2rpx solid #cccccc;
   border-radius: 50%;
   background: var(--color-bg-surface);
 }
@@ -298,19 +298,19 @@
 .confirm-service__threshold {
   display: block;
   margin-top: 5rpx;
-  color: #9a8176;
-  font-size: 17rpx;
+  color: var(--color-text-muted);
+  font-size: 20rpx;
   line-height: 1.4;
 }
 
 .confirm-service__threshold--reached {
-  color: #66887f;
+  color: var(--color-primary-muted);
   font-weight: 600;
 }
 
 .confirm-service__title {
   color: var(--color-text-primary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   font-weight: 600;
   line-height: 1.35;
 }
@@ -318,13 +318,13 @@
 .confirm-service__subtitle {
   margin-top: 5rpx;
   color: var(--color-text-muted);
-  font-size: 18rpx;
+  font-size: 21rpx;
   line-height: 1.45;
 }
 
 .confirm-service__price {
-  color: var(--color-accent-blush-strong);
-  font-size: 20rpx;
+  color: var(--color-text-primary);
+  font-size: 23rpx;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -349,22 +349,22 @@
 }
 
 .confirm-greeting__title {
-  color: #53615d;
-  font-size: 22rpx;
+  color: var(--color-text-primary);
+  font-size: 25rpx;
   font-weight: 600;
 }
 
 .confirm-greeting__required {
   padding: 3rpx 8rpx;
   border-radius: 7rpx;
-  color: #9b625b;
-  background: rgba(217, 163, 154, 0.14);
-  font-size: 15rpx;
+  color: var(--color-accent-blush-strong);
+  background: rgba(194, 122, 106, 0.1);
+  font-size: 18rpx;
 }
 
 .confirm-greeting__count {
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
 }
 
 .confirm-greeting__input {
@@ -376,20 +376,20 @@
   border: 1rpx solid var(--color-border);
   border-radius: 15rpx;
   color: var(--color-text-primary);
-  background: #f8f7f3;
-  font-size: 21rpx;
+  background: #fafafa;
+  font-size: 24rpx;
   line-height: 1.65;
 }
 
 .confirm-greeting__placeholder {
-  color: #a2aaa6;
+  color: var(--color-text-muted);
 }
 
 .confirm-greeting__hint {
   display: block;
   margin-top: 10rpx;
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
   line-height: 1.55;
 }
 
@@ -401,20 +401,20 @@
   padding: 18rpx 19rpx;
   border: 1rpx solid var(--color-border);
   border-radius: 16rpx;
-  background: #f6f5f0;
+  background: #fafafa;
   color: var(--color-text-primary);
-  font-size: 21rpx;
+  font-size: 24rpx;
   line-height: 1.6;
 }
 
 .confirm-remark__placeholder {
-  color: #a2aaa6;
+  color: var(--color-text-muted);
 }
 
 .confirm-product__unit {
   margin-top: 7rpx;
   color: var(--color-text-muted);
-  font-size: 18rpx;
+  font-size: 21rpx;
 }
 
 .confirm-product__options {
@@ -427,16 +427,16 @@
 .confirm-product__option {
   display: flex;
   justify-content: space-between;
-  color: #73807c;
-  font-size: 17rpx;
+  color: var(--color-text-secondary);
+  font-size: 20rpx;
   line-height: 1.65;
   gap: 10rpx;
 }
 
 .confirm-product__total {
   margin-top: 11rpx;
-  color: var(--color-accent-blush-strong);
-  font-size: 26rpx;
+  color: var(--color-text-primary);
+  font-size: 29rpx;
   font-weight: 700;
   text-align: right;
 }
@@ -447,9 +447,9 @@
   justify-content: space-between;
   margin-top: 18rpx;
   padding: 18rpx;
-  border: 1rpx solid rgba(111, 143, 136, 0.22);
+  border: 1rpx solid rgba(173, 149, 104, 0.24);
   border-radius: 16rpx;
-  background: #e9efeb;
+  background: #f7f3eb;
 }
 
 .confirm-delivery__title,
@@ -458,20 +458,20 @@
 }
 
 .confirm-delivery__title {
-  color: #4b5854;
-  font-size: 23rpx;
+  color: var(--color-text-primary);
+  font-size: 26rpx;
   font-weight: 600;
 }
 
 .confirm-delivery__subtitle {
   margin-top: 6rpx;
   color: var(--color-text-secondary);
-  font-size: 18rpx;
+  font-size: 21rpx;
 }
 
 .confirm-delivery__price {
   color: var(--color-primary);
-  font-size: 21rpx;
+  font-size: 24rpx;
   font-weight: 700;
 }
 
@@ -483,8 +483,8 @@
 
 .confirm-fees__row {
   margin-top: 20rpx;
-  color: #6e7a76;
-  font-size: 21rpx;
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
 }
 
 .confirm-fees__total {
@@ -492,13 +492,13 @@
   margin-top: 22rpx;
   padding-top: 19rpx;
   border-top: 1rpx solid var(--color-border-soft);
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
 }
 
 .confirm-fees__total text:last-child {
-  color: var(--color-accent-blush-strong);
-  font-size: 33rpx;
+  color: var(--color-text-primary);
+  font-size: 35rpx;
   font-weight: 700;
 }
 
@@ -511,7 +511,7 @@
 }
 
 .confirm-payment-result--success {
-  border-color: rgba(111, 143, 136, 0.19);
+  border-color: rgba(173, 149, 104, 0.24);
   background: var(--color-bg-primary-soft);
 }
 
@@ -522,27 +522,27 @@
 }
 
 .confirm-payment-result__title {
-  color: #6d5752;
-  font-size: 22rpx;
+  color: var(--color-text-primary);
+  font-size: 25rpx;
   font-weight: 600;
 }
 
 .confirm-payment-result__message {
   margin-top: 8rpx;
-  color: #876f69;
-  font-size: 19rpx;
+  color: var(--color-text-secondary);
+  font-size: 22rpx;
   line-height: 1.55;
 }
 
 .confirm-payment-result--success .confirm-payment-result__title,
 .confirm-payment-result--success .confirm-payment-result__message {
-  color: #56716a;
+  color: var(--color-text-primary);
 }
 
 .confirm-payment-result__order {
   margin-top: 10rpx;
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
   word-break: break-all;
 }
 
@@ -558,7 +558,7 @@
   margin: 0;
   padding: 0 22rpx;
   border-radius: 15rpx;
-  font-size: 19rpx;
+  font-size: 22rpx;
   font-weight: 600;
   line-height: 54rpx;
 }
@@ -571,7 +571,7 @@
 
 .confirm-payment-result__action--cancel {
   border: 1rpx solid rgba(155, 98, 91, 0.24);
-  color: #8d625c;
+  color: var(--color-accent-blush-strong);
   background: rgba(255, 255, 255, 0.5);
 }
 
@@ -608,13 +608,13 @@
 
 .confirm-footer__label {
   color: var(--color-text-muted);
-  font-size: 17rpx;
+  font-size: 20rpx;
 }
 
 .confirm-footer__price {
   margin-top: 4rpx;
-  color: var(--color-accent-blush-strong);
-  font-size: 33rpx;
+  color: var(--color-text-primary);
+  font-size: 35rpx;
   font-weight: 700;
 }
 
@@ -623,10 +623,10 @@
   height: 78rpx;
   flex: 0 0 240rpx;
   border-radius: 18rpx;
-  background: var(--color-primary);
-  box-shadow: 0 10rpx 24rpx rgba(79, 105, 98, 0.15);
+  background: var(--color-accent-red);
+  box-shadow: 0 10rpx 24rpx var(--color-shadow-primary);
   color: var(--color-white);
-  font-size: 24rpx;
+  font-size: 27rpx;
   font-weight: 600;
   line-height: 78rpx;
 }
@@ -643,7 +643,7 @@
   height: 186rpx;
   margin-bottom: 18rpx;
   border-radius: 22rpx;
-  background: linear-gradient(105deg, #e5e7e2 20%, var(--color-bg-muted) 45%, #e5e7e2 70%);
+  background: linear-gradient(105deg, #eeeeee 20%, #f7f7f7 45%, #eeeeee 70%);
   background-size: 220% 100%;
   animation: confirm-skeleton 1.2s ease-in-out infinite;
 }
@@ -687,14 +687,14 @@
   margin-top: 24rpx;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 31rpx;
+  font-size: 33rpx;
   font-weight: 500;
 }
 
 .confirm-state__description {
   margin-top: 14rpx;
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 1.7;
 }
 
@@ -705,7 +705,7 @@
   border-radius: 18rpx;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 23rpx;
+  font-size: 26rpx;
   font-weight: 600;
   line-height: 70rpx;
 }

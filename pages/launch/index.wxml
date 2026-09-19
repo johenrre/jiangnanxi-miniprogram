@@ -15,7 +15,6 @@
       mode="aspectFit"
       binderror="handleBrandLogoError"
     />
-    <text class="launch-page__english">CRYSTAL DIY</text>
     <text class="launch-page__name">{{appDisplayName}}</text>
     <text class="launch-page__slogan">以天然晶石，慢慢串起你的灵感</text>
   </view>

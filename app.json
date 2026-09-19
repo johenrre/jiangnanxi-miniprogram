@@ -28,7 +28,7 @@
   },
   "window": {
     "navigationStyle": "custom",
-    "backgroundColor": "#f6f6f6",
+    "backgroundColor": "#f5f4f3",
     "backgroundTextStyle": "dark"
   },
   "resolveAlias": {
@@ -37,7 +37,7 @@
   "tabBar": {
     "custom": true,
     "color": "#999999",
-    "selectedColor": "#b50102",
+    "selectedColor": "#ff3152",
     "backgroundColor": "#ffffff",
     "list": [
       {

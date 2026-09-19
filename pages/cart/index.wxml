@@ -3,7 +3,6 @@
   <page-header title="购物车" theme="warm" fallbackUrl="/pages/profile/index" />
 
   <view class="cart-header">
-    <text class="cart-header__eyebrow">YOUR SELECTION</text>
     <text class="cart-header__description">把喜欢的设计留在这里，确认细节后再从容下单。</text>
   </view>
 
@@ -19,7 +18,7 @@
   </view>
 
   <view class="cart-state" wx:elif="{{status === 'login'}}">
-    <text class="cart-state__mark">人</text>
+    <image class="cart-state__icon cart-state__icon--account" src="/assets/profile/default-avatar.svg" mode="aspectFit" />
     <text class="cart-state__title">登录后查看购物车</text>
     <text class="cart-state__description">登录后可同步已选设计，并继续确认商品和结算。</text>
     <button class="cart-state__button" bindtap="handleLogin">登录</button>

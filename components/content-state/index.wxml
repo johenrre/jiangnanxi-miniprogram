@@ -1,8 +1,7 @@
 <view class="content-state content-state--{{status}}">
   <view wx:if="{{status === 'loading'}}" class="content-state__spinner"></view>
-  <view wx:else class="content-state__mark">
-    <view class="content-state__mark-ring"></view>
-    <view class="content-state__mark-core"></view>
+  <view wx:else class="content-state__icon-shell">
+    <image class="content-state__icon" src="{{icon}}" mode="aspectFit" />
   </view>
   <text class="content-state__title">{{title}}</text>
   <text wx:if="{{description}}" class="content-state__description">{{description}}</text>

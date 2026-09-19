@@ -30,7 +30,7 @@
   padding: 0 13rpx;
   border: 1rpx solid var(--color-border);
   border-radius: 12rpx;
-  background: rgba(248, 247, 243, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 5rpx 14rpx var(--color-shadow-soft);
   -webkit-backdrop-filter: blur(10rpx);
   backdrop-filter: blur(10rpx);
@@ -38,7 +38,7 @@
 
 .mall-detail-gallery__counter-text {
   color: var(--color-primary);
-  font-size: 17rpx;
+  font-size: 20rpx;
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
@@ -63,8 +63,8 @@
 
 .mall-detail-summary__meta {
   justify-content: space-between;
-  color: #89938f;
-  font-size: 18rpx;
+  color: var(--color-text-muted);
+  font-size: 21rpx;
 }
 
 .mall-detail-summary__category {
@@ -90,14 +90,14 @@
 .mall-detail-summary__subtitle {
   margin-top: 11rpx;
   color: var(--color-text-secondary);
-  font-size: 21rpx;
+  font-size: 24rpx;
   line-height: 1.65;
 }
 
 .mall-detail-summary__price-row {
   align-items: flex-end;
   margin-top: 22rpx;
-  color: var(--color-accent-blush-strong);
+  color: var(--color-text-primary);
   gap: 14rpx;
 }
 
@@ -110,16 +110,16 @@
   margin-right: 8rpx;
   padding: 0 9rpx;
   border-radius: 8rpx;
-  background: rgba(217, 163, 154, 0.15);
-  color: var(--color-accent-blush-strong);
-  font-size: 15rpx;
+  background: #f5f1e9;
+  color: #8f774c;
+  font-size: 18rpx;
   font-weight: 600;
   line-height: 30rpx;
 }
 
 .mall-detail-summary__currency {
   margin-right: 5rpx;
-  font-size: 22rpx;
+  font-size: 25rpx;
   font-weight: 600;
 }
 
@@ -131,8 +131,8 @@
 
 .mall-detail-summary__original-price {
   padding-bottom: 2rpx;
-  color: #a2a8a5;
-  font-size: 20rpx;
+  color: var(--color-text-muted);
+  font-size: 23rpx;
   text-decoration: line-through;
 }
 
@@ -141,7 +141,7 @@
   padding-top: 22rpx;
   border-top: 1rpx solid var(--color-border-soft);
   color: var(--color-text-secondary);
-  font-size: 18rpx;
+  font-size: 21rpx;
   gap: 15rpx;
 }
 
@@ -154,31 +154,23 @@
 
 .mall-detail-content {
   padding: 34rpx 24rpx 0;
-  background: #fbfaf6;
+  background: var(--color-bg-surface);
 }
 
 .mall-detail-content__heading {
   padding: 0 8rpx 28rpx;
 }
 
-.mall-detail-content__eyebrow,
 .mall-detail-content__title,
 .mall-detail-content__description {
   display: block;
 }
 
-.mall-detail-content__eyebrow {
-  color: #9b817b;
-  font-size: 13rpx;
-  font-weight: 700;
-  letter-spacing: 4rpx;
-}
-
 .mall-detail-content__title {
-  margin-top: 11rpx;
+  margin-top: 0;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: 500;
   letter-spacing: 2rpx;
 }
@@ -187,7 +179,7 @@
   max-width: 610rpx;
   margin-top: 12rpx;
   color: var(--color-text-secondary);
-  font-size: 20rpx;
+  font-size: 23rpx;
   line-height: 1.65;
 }
 
@@ -201,7 +193,7 @@
 
 .mall-detail-safe-space {
   height: calc(142rpx + env(safe-area-inset-bottom));
-  background: #fbfaf6;
+  background: var(--color-bg-surface);
 }
 
 .mall-detail-actions {
@@ -228,7 +220,7 @@
   min-width: 0;
   flex: 1 1 0;
   border-radius: 18rpx;
-  font-size: 23rpx;
+  font-size: 26rpx;
   font-weight: 600;
   line-height: 78rpx;
   transition: opacity 100ms ease, transform 100ms ease;
@@ -260,7 +252,7 @@
 
 .mall-detail-actions__cart-label {
   color: var(--color-primary);
-  font-size: 14rpx;
+  font-size: 18rpx;
   line-height: 1;
 }
 
@@ -300,7 +292,7 @@
 .mall-detail-empty__ring {
   width: 104rpx;
   height: 104rpx;
-  border: 16rpx solid rgba(111, 143, 136, 0.12);
+  border: 16rpx solid rgba(173, 149, 104, 0.12);
   border-radius: 50%;
 }
 
@@ -308,13 +300,13 @@
   margin-top: 28rpx;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 30rpx;
+  font-size: 32rpx;
 }
 
 .mall-detail-empty__description {
   margin-top: 12rpx;
   color: var(--color-text-secondary);
-  font-size: 21rpx;
+  font-size: 24rpx;
 }
 
 .mall-detail-empty__button {
@@ -324,7 +316,7 @@
   border-radius: 18rpx;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 22rpx;
+  font-size: 25rpx;
   line-height: 70rpx;
 }
 
