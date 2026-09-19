@@ -1,5 +1,5 @@
 import { loadDiyMaterials, type DiyMaterial } from '@/api/index'
-import { BEAD_LOADING_PLACEHOLDER_PATH } from '@/pages/diy/engine/renderer'
+import { BEAD_LOADING_PLACEHOLDER_PATH } from '@/pages/diy/engine/three/index'
 import type { MaterialGroup } from '@/pages/diy/model/types'
 import type { DiyPageInstance, SubcategoryTab } from '@/pages/diy/page/types'
 import { formatMoney } from '@/pages/diy/page/utils'

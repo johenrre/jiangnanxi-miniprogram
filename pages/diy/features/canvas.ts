@@ -8,7 +8,7 @@ import {
   fitRingScalesToOuterRadius,
   getEditorTrayRadius,
 } from '@/pages/diy/engine/geometry'
-import { BraceletRenderer } from '@/pages/diy/engine/renderer'
+import { Bracelet3DRenderer } from '@/pages/diy/engine/three/index'
 import type { DiyBead, RingTarget, TouchPoint } from '@/pages/diy/model/types'
 import type { CanvasQueryResult, DiyPageInstance } from '@/pages/diy/page/types'
 import { getWindowMetrics, normalizeAngleDelta } from '@/pages/diy/page/utils'
@@ -18,18 +18,9 @@ import { getMaterialRenderMetrics } from '@/utils/material-render-geometry'
 const FIXED_STEP_MS = 1000 / 60
 const RING_ANIMATION_DURATION_MS = 440
 const EDITOR_RING_MAX_OUTER_RADIUS_RATIO = 0.92
-const MAXIMUM_RING_ANGULAR_VELOCITY = 0.012
-const MINIMUM_RING_ANGULAR_VELOCITY = 0.00004
-const MINIMUM_RING_RELEASE_VELOCITY = 0.00018
-const RING_ANGULAR_DRAG_PER_MS = 0.0028
-const RING_MAXIMUM_COMPRESSION = 0.3
-const RING_SPRING_STIFFNESS = 0.00028
-const RING_SPRING_DAMPING = 0.017
-const RING_MINIMUM_ELASTIC_SCALE = 0.3
-const RING_MAXIMUM_ELASTIC_SCALE = 1.012
 const MAXIMUM_CANVAS_PIXEL_COUNT = 800000
-const MINIMUM_CANVAS_PIXEL_RATIO = 3
-const MAXIMUM_CANVAS_PIXEL_RATIO = 3
+const MINIMUM_CANVAS_PIXEL_RATIO = 1
+const MAXIMUM_CANVAS_PIXEL_RATIO = 2
 
 export const EDITOR_BEAD_DISPLAY_SCALE = 1.2
 const EDITOR_RING_RADIUS_SCALE = 1.24
@@ -79,8 +70,8 @@ export const canvasPageMethods = {
         radius: getEditorTrayRadius(anchorWidth, anchorHeight),
       }
       this.invalidateRingLayoutCaches()
-      // Use the device's pixel ratio up to 3x for this clarity test. This
-      // intentionally favors sharpness so its rendering cost can be measured.
+      // Bound the WebGL backing store so older devices do not pay an
+      // unnecessary memory cost for a small editor surface.
       const devicePixelRatio = Math.max(1, getWindowMetrics().pixelRatio || 1)
       const budgetedPixelRatio = Math.sqrt(
         MAXIMUM_CANVAS_PIXEL_COUNT / Math.max(1, width * height),
@@ -94,7 +85,7 @@ export const canvasPageMethods = {
         reusableRenderer.resize(width, height, pixelRatio)
         this.renderer = reusableRenderer
       } else {
-        this.renderer = new BraceletRenderer(
+        this.renderer = new Bracelet3DRenderer(
           canvas,
           width,
           height,
@@ -127,7 +118,6 @@ export const canvasPageMethods = {
     this.canvas = null
     this.ringAnimation = null
     this.dragState = null
-    this.resetRingMotion()
   },
 
   scheduleRender(this: DiyPageInstance): void {
@@ -166,14 +156,8 @@ export const canvasPageMethods = {
     let animationActive = false
     if (this.ringAnimation) {
       animationActive = this.stepRingAnimation(timestamp)
-    } else if (this.dragState?.mode === 'ring-bead') {
+    } else if (this.dragState) {
       animationActive = this.stepRingDragReflow(deltaMs)
-    }
-    if (
-      !this.ringAnimation
-      && this.dragState?.mode !== 'ring-bead'
-    ) {
-      animationActive = this.stepRingMotion(deltaMs) || animationActive
     }
     this.lastFrameTimestamp = timestamp
 
@@ -217,7 +201,6 @@ export const canvasPageMethods = {
     // Ring transitions own a fresh RAF so a pending frame cannot make the
     // bracelet appear to snap directly to its target.
     this.cancelAnimationFrame()
-    this.resetRingMotion()
     const targets = this.buildCurrentRingTargets(this.beads)
     const items = []
     for (let index = 0; index < this.beads.length; index += 1) {
@@ -273,7 +256,7 @@ export const canvasPageMethods = {
   stepRingDragReflow(this: DiyPageInstance, deltaMs: number): boolean {
     const dragState = this.dragState
     const targets = dragState?.reflowTargets
-    if (!dragState?.uid || dragState.mode !== 'ring-bead' || !targets) return false
+    if (!dragState || !targets) return false
 
     const frameRatio = Math.max(0.5, deltaMs / FIXED_STEP_MS)
     const smoothing = 1 - Math.pow(0.72, frameRatio)
@@ -309,72 +292,10 @@ export const canvasPageMethods = {
     return stillMoving
   },
 
-  stepRingMotion(this: DiyPageInstance, deltaMs: number): boolean {
-    const isDirectlyRotating = this.dragState?.mode === 'ring-rotate'
-    let rotationChanged = false
-    if (!isDirectlyRotating && Math.abs(this.ringAngularVelocity) > 0) {
-      this.ringRotationOffset = normalizeAngleDelta(
-        this.ringRotationOffset + this.ringAngularVelocity * deltaMs,
-      )
-      this.ringAngularVelocity *= Math.exp(-RING_ANGULAR_DRAG_PER_MS * deltaMs)
-      if (Math.abs(this.ringAngularVelocity) < MINIMUM_RING_ANGULAR_VELOCITY) {
-        this.ringAngularVelocity = 0
-      }
-      rotationChanged = true
-    }
-
-    const speedRatio = Math.min(
-      1,
-      Math.abs(this.ringAngularVelocity) / MAXIMUM_RING_ANGULAR_VELOCITY,
-    )
-    const targetScale = 1 - RING_MAXIMUM_COMPRESSION * speedRatio
-    const previousScale = this.ringElasticScale
-    // Integrate the elastic response in fixed-size slices. A single 40–50ms
-    // Euler step after a dropped frame visibly overshoots on older iPhones.
-    let remainingSpringMs = Math.min(50, Math.max(0, deltaMs))
-    while (remainingSpringMs > 0) {
-      const springStepMs = Math.min(FIXED_STEP_MS, remainingSpringMs)
-      const springAcceleration = (
-        targetScale - this.ringElasticScale
-      ) * RING_SPRING_STIFFNESS - this.ringElasticVelocity * RING_SPRING_DAMPING
-      this.ringElasticVelocity += springAcceleration * springStepMs
-      this.ringElasticScale = Math.max(
-        RING_MINIMUM_ELASTIC_SCALE,
-        Math.min(
-          RING_MAXIMUM_ELASTIC_SCALE,
-          this.ringElasticScale + this.ringElasticVelocity * springStepMs,
-        ),
-      )
-      remainingSpringMs -= springStepMs
-    }
-
-    const springSettled = Math.abs(targetScale - this.ringElasticScale) < 0.00015
-      && Math.abs(this.ringElasticVelocity) < 0.00001
-    if (springSettled) {
-      this.ringElasticScale = targetScale
-      this.ringElasticVelocity = 0
-    }
-
-    const scaleChanged = Math.abs(this.ringElasticScale - previousScale) > 0.00001
-    if (this.ringLayoutDirty || rotationChanged || scaleChanged) {
-      this.applyCurrentRingLayout(this.beads)
-    }
-
-    return (!isDirectlyRotating && this.ringAngularVelocity !== 0) || !springSettled
-  },
-
-  resetRingMotion(this: DiyPageInstance): void {
-    this.ringAngularVelocity = 0
-    this.ringElasticScale = 1
-    this.ringElasticVelocity = 0
-    this.ringLayoutDirty = false
-  },
-
   updateRingDragReflow(this: DiyPageInstance, point: TouchPoint): void {
     const dragState = this.dragState
-    if (!dragState?.uid || dragState.mode !== 'ring-bead') return
+    if (!dragState) return
     const draggedBead = dragState.bead
-    if (!draggedBead) return
 
     const ringLayout = this.getEditorRingLayout()
     const insertionIndex = findRingInsertionIndexForBeads(
@@ -383,7 +304,7 @@ export const canvasPageMethods = {
       ringLayout.centerX,
       ringLayout.centerY,
       this.beads,
-      this.ringRotationOffset,
+      0,
       dragState.uid,
     )
     if (insertionIndex === dragState.insertionIndex) return
@@ -434,11 +355,10 @@ export const canvasPageMethods = {
       beads,
       layout.centerX,
       layout.centerY,
-      this.ringRotationOffset,
-      layout.radiusScale * this.ringElasticScale,
+      0,
+      layout.radiusScale,
       layout.displayScale,
     )
-    this.ringLayoutDirty = false
     this.renderDirty = true
   },
 
@@ -471,8 +391,8 @@ export const canvasPageMethods = {
       beads,
       layout.centerX,
       layout.centerY,
-      this.ringRotationOffset,
-      layout.radiusScale * this.ringElasticScale,
+      0,
+      layout.radiusScale,
       layout.displayScale,
     )
   },
@@ -542,22 +462,12 @@ export const canvasPageMethods = {
     this.applyPendingDragPoint()
     this.dragState = null
 
-    if (dragState.mode === 'ring-rotate') {
-      if (Math.abs(this.ringAngularVelocity) < MINIMUM_RING_RELEASE_VELOCITY) {
-        this.ringAngularVelocity = 0
-      }
-      this.scheduleRender()
-      return
-    }
-    if (!dragState.uid) return
-
     if (this.isPointOutsideRemovalBoundary(point)) {
       this.removeBead(dragState.uid, dragState.snapshot)
       return
     }
 
     const draggedBead = dragState.bead
-    if (!draggedBead) return
     const ringLayout = this.getEditorRingLayout()
     const insertionIndex = findRingInsertionIndexForBeads(
       point.x,
@@ -565,7 +475,7 @@ export const canvasPageMethods = {
       ringLayout.centerX,
       ringLayout.centerY,
       this.beads,
-      this.ringRotationOffset,
+      0,
       dragState.uid,
     )
     const currentIndex = this.beads.indexOf(draggedBead)
@@ -583,24 +493,21 @@ export const canvasPageMethods = {
     if (!point) return
     if (this.ringAnimation) return
     const bead = this.findBeadAtPoint(point)
+    if (!bead) return
     const snapshot = this.createSnapshot()
 
-    this.ringAngularVelocity = 0
     this.dragState = {
-      uid: bead?.uid || null,
+      uid: bead.uid,
       bead,
-      mode: bead ? 'ring-bead' : 'ring-rotate',
       latestPoint: point,
       renderedPoint: point,
       snapshot,
-      originalIndex: bead ? this.beads.indexOf(bead) : -1,
-      insertionIndex: bead ? this.beads.indexOf(bead) : -1,
+      originalIndex: this.beads.indexOf(bead),
+      insertionIndex: this.beads.indexOf(bead),
       reflowTargets: null,
     }
-    if (bead) {
-      appSound.play('soft-pop')
-      this.scheduleRender()
-    }
+    appSound.play('soft-pop')
+    this.scheduleRender()
   },
 
   applyPendingDragPoint(this: DiyPageInstance): void {
@@ -608,45 +515,12 @@ export const canvasPageMethods = {
     if (!dragState) return
     const point = dragState.latestPoint
     if (dragState.renderedPoint === point) return
-    const previousRenderedPoint = dragState.renderedPoint
     dragState.renderedPoint = point
 
-    if (dragState.mode === 'ring-rotate') {
-      const ringLayout = this.getEditorRingLayout()
-      const angle = Math.atan2(
-        point.y - ringLayout.centerY,
-        point.x - ringLayout.centerX,
-      )
-      const previousAngle = Math.atan2(
-        previousRenderedPoint.y - ringLayout.centerY,
-        previousRenderedPoint.x - ringLayout.centerX,
-      )
-      const angleDelta = normalizeAngleDelta(angle - previousAngle)
-      const elapsedMs = Math.max(
-        4,
-        Math.min(80, point.timestamp - previousRenderedPoint.timestamp),
-      )
-      const instantaneousVelocity = Math.max(
-        -MAXIMUM_RING_ANGULAR_VELOCITY,
-        Math.min(MAXIMUM_RING_ANGULAR_VELOCITY, angleDelta / elapsedMs),
-      )
-      const velocityBlend = 1 - Math.exp(-elapsedMs / 42)
-      this.ringAngularVelocity += (
-        instantaneousVelocity - this.ringAngularVelocity
-      ) * velocityBlend
-      this.ringRotationOffset = normalizeAngleDelta(this.ringRotationOffset + angleDelta)
-      this.ringLayoutDirty = true
-      return
-    }
-
-    if (!dragState.uid) return
     const bead = dragState.bead
-    if (!bead) return
     bead.x = point.x
     bead.y = point.y
-    if (dragState.mode === 'ring-bead') {
-      this.updateRingDragReflow(point)
-    }
+    this.updateRingDragReflow(point)
     this.renderDirty = true
   },
 

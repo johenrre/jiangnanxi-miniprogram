@@ -1,9 +1,7 @@
 import type { DiyBead, RingTarget } from '@/pages/diy/model/types'
 import { getInwardFacingRotation } from '@/utils/bracelet-orientation'
 import {
-  getMaterialRenderWidthMm,
   getStringingWidthMm,
-  type MaterialRenderGeometryInput,
   type StringingGeometryInput,
 } from '@/utils/material-render-geometry'
 
@@ -25,29 +23,12 @@ export interface RecommendedWristRange {
 
 export type StringingSizedMaterial = StringingGeometryInput
 
-export type CollisionSizedMaterial = MaterialRenderGeometryInput
-
 export function getEditorTrayRadius(width: number, height: number): number {
   return Math.max(0, Math.min(width, height) / 2 - EDITOR_TRAY_INSET_PX)
 }
 
 export function getBeadFootprintMm(bead: StringingSizedMaterial): number {
   return getStringingWidthMm(bead)
-}
-
-export function getBeadCollisionWidthMm(material: CollisionSizedMaterial): number {
-  if (material.stringingPosition === 'top') return getStringingWidthMm(material)
-  return getMaterialRenderWidthMm(material)
-}
-
-export function getBeadCollisionRadiusPx(
-  material: CollisionSizedMaterial,
-  displayScale = 1,
-): number {
-  return getBeadCollisionWidthMm(material)
-    * PIXELS_PER_MM
-    * Math.max(0.1, displayScale)
-    / 2
 }
 
 export function calculatePerimeterMm(beads: StringingSizedMaterial[]): number {

@@ -1,9 +1,9 @@
 import type { DiyMaterial } from '@/api/index'
 import type {
-  BraceletRenderer,
-  DiyCanvas,
+  Bracelet3DRenderer,
+  DiyWebglCanvas,
   EditorOrigin,
-} from '@/pages/diy/engine/renderer'
+} from '@/pages/diy/engine/three/index'
 import type {
   DiyBead,
   EditorSnapshot,
@@ -25,7 +25,7 @@ export interface SubcategoryTab {
 }
 
 export interface CanvasQueryResult {
-  node?: DiyCanvas
+  node?: DiyWebglCanvas
   width?: number
   height?: number
   left?: number
@@ -59,9 +59,8 @@ export interface RingLayout {
 }
 
 export interface DragState {
-  uid: string | null
-  bead: DiyBead | null
-  mode: 'ring-bead' | 'ring-rotate'
+  uid: string
+  bead: DiyBead
   latestPoint: TouchPoint
   renderedPoint: TouchPoint
   snapshot: EditorSnapshot
@@ -116,8 +115,8 @@ export interface DiyPageCustom {
   beads: DiyBead[]
   history: EditorSnapshot[]
   uidSequence: number
-  canvas: DiyCanvas | null
-  renderer: BraceletRenderer | null
+  canvas: DiyWebglCanvas | null
+  renderer: Bracelet3DRenderer | null
   canvasLeft: number
   canvasTop: number
   canvasWidth: number
@@ -128,11 +127,6 @@ export interface DiyPageCustom {
   pageVisible: boolean
   ringAnimation: RingAnimation | null
   editorRingLayoutCache: RingLayout | null
-  ringRotationOffset: number
-  ringAngularVelocity: number
-  ringElasticScale: number
-  ringElasticVelocity: number
-  ringLayoutDirty: boolean
   editorOrigin: EditorOrigin | null
   dragState: DragState | null
   firstScreenMaterialImagesReady: boolean
@@ -180,8 +174,6 @@ export interface DiyPageCustom {
   startRingAnimation(duration?: number): void
   stepRingAnimation(timestamp: number): boolean
   stepRingDragReflow(deltaMs: number): boolean
-  stepRingMotion(deltaMs: number): boolean
-  resetRingMotion(): void
   updateRingDragReflow(point: TouchPoint): void
   applyRingTargets(targets: RingTarget[]): void
   applyCurrentRingLayout(beads: DiyBead[]): void

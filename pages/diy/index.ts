@@ -126,11 +126,6 @@ Page<DiyPageData, DiyPageCustom>({
   pageVisible: false,
   ringAnimation: null,
   editorRingLayoutCache: null,
-  ringRotationOffset: 0,
-  ringAngularVelocity: 0,
-  ringElasticScale: 1,
-  ringElasticVelocity: 0,
-  ringLayoutDirty: false,
   editorOrigin: null,
   dragState: null,
   firstScreenMaterialImagesReady: false,
@@ -234,7 +229,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.audioWarmupTimer = null
     this.cancelAnimationFrame()
     this.dragState = null
-    this.resetRingMotion()
     if (this.beads.length > 0) {
       this.applyRingTargets(this.buildCurrentRingTargets(this.beads))
     }
@@ -350,7 +344,6 @@ Page<DiyPageData, DiyPageCustom>({
     this.cancelAnimationFrame()
     this.ringAnimation = null
     this.dragState = null
-    this.resetRingMotion()
     this.beads = []
     this.invalidateRingLayoutCaches()
     this.history = []
@@ -415,7 +408,6 @@ Page<DiyPageData, DiyPageCustom>({
         || design !== this.pendingTemplateDesign
       ) return
 
-      this.resetRingMotion()
       this.ringAnimation = null
       this.dragState = null
       this.history = []
@@ -491,7 +483,6 @@ Page<DiyPageData, DiyPageCustom>({
       bead.rotation = currentPosition.rotation
     })
     if (this.beads.length > 0) this.startRingAnimation()
-    else this.resetRingMotion()
     this.updateEditorSummary()
     this.scheduleRender()
   },
@@ -504,10 +495,7 @@ Page<DiyPageData, DiyPageCustom>({
     this.beads = this.beads.filter((bead) => bead.uid !== uid)
     this.invalidateRingLayoutCaches()
 
-    if (this.beads.length === 0) {
-      this.ringRotationOffset = 0
-      this.resetRingMotion()
-    } else {
+    if (this.beads.length > 0) {
       this.startRingAnimation(420)
     }
     this.updateEditorSummary()
@@ -541,8 +529,6 @@ Page<DiyPageData, DiyPageCustom>({
         this.beads = []
         this.invalidateRingLayoutCaches()
         this.ringAnimation = null
-        this.ringRotationOffset = 0
-        this.resetRingMotion()
         this.updateEditorSummary()
         this.scheduleRender()
       },

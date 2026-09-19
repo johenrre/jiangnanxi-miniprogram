@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      threejs-miniprogram:
+        specifier: 0.0.8
+        version: 0.0.8
     devDependencies:
       miniprogram-api-typings:
         specifier: ^2.8.3-1
@@ -313,6 +317,9 @@ packages:
   sax@1.6.0:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
+
+  threejs-miniprogram@0.0.8:
+    resolution: {integrity: sha512-S5IgBMuX57kQsbeSv/5YDc87s+WKvPLYT+Go5FUbSdcjf6/Lq/LoY1uoVxfa00fjLHN+cMuumZ1Op/JmFKUmbw==}
 
   timm@1.7.1:
     resolution: {integrity: sha512-IjZc9KIotudix8bMaBW6QvMuq64BrJWFs1+4V0lXwWGQZwH+LnX87doAYhem4caOEusRP9/g6jVDQmZ8XOk1nw==}
@@ -714,6 +721,8 @@ snapshots:
   regenerator-runtime@0.13.11: {}
 
   sax@1.6.0: {}
+
+  threejs-miniprogram@0.0.8: {}
 
   timm@1.7.1: {}
 
