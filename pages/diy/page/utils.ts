@@ -1,13 +1,8 @@
-import type { DiyBead } from '@/pages/diy/model/types'
 import type { WindowMetrics } from '@/pages/diy/page/types'
 
 export function formatMoney(value: number): string {
   const fixed = value.toFixed(2)
   return fixed.replace(/\.00$/, '').replace(/(\.\d)0$/, '$1')
-}
-
-export function cloneBeads(beads: DiyBead[]): DiyBead[] {
-  return beads.map((bead) => ({ ...bead }))
 }
 
 export function normalizeAngleDelta(angle: number): number {

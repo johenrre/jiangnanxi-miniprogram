@@ -2,12 +2,12 @@
 
 ```text
 diy/
-├─ index.*       页面注册、生命周期和各模块组装
+├─ index.*       页面注册与模块组装；不承载业务实现
 ├─ components/   WXML 组件及其样式
 ├─ engine/       手串几何与分层 WebGL 渲染内核
-├─ features/     材料、画布、弹窗、进入页等交互模块
+├─ features/     材料、编辑动作、设计导入、画布、弹窗和进入页
 ├─ model/        DIY 领域数据结构
-├─ page/         页面 Data、实例类型和页面级工具
+├─ page/         生命周期、响应式 Data、非响应式运行状态、类型和常量
 └─ services/     音频等跨页面生命周期能力
 ```
 
@@ -15,8 +15,10 @@ diy/
 
 - `engine/three` 隔离 Three.js、小程序 WebGL、相机/射线、手串视角、线圈、写真平面和纹理缓存。
 - `engine` 不依赖页面实例，只处理绘制与几何。
-- `features` 负责组合页面状态、引擎和服务。
-- `index.ts` 只保留生命周期、模块组装及少量跨模块业务。
+- `features/editor.ts` 负责珠子增删、汇总数据和手围约束；`features/design.ts` 负责分享及重新设计方案导入。
+- `features/canvas.ts` 集中高频帧、拖动和旋转状态，不在动画帧里调用 `setData`。
+- `page/lifecycle.ts` 负责页面生命周期；`page/runtime.ts` 只创建不参与 WXML 渲染的运行时状态。
+- `index.ts` 只注册页面并组装模块，不放业务方法。
 - 可复用到其他页面的能力放在项目根目录 `utils` 或独立服务中。
 
 当前编辑模型：珠子加入后直接进入手串圆环；`canvas_image` 透明渲染图由 WebGL 平面绘制。`stringing_position=center` 的珠材沿线圈切向摆放，`stringing_position=top` 的配饰以图片顶部中央连接在线圈并保持主体向外；`stringing_width_mm` 决定环上占位，`stringing_offset_mm` 负责径向微调，`size` 与 `image_scale` 决定视觉尺寸。空白处拖动只旋转手串 Group，同层写真平面按实时相机深度决定遮挡；拖珠通过独立命中壳拾取，并投影回旋转后的手串局部平面完成换位和拖出删除。

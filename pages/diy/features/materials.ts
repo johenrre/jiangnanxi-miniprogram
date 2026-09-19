@@ -1,12 +1,12 @@
 import { loadDiyMaterials, type DiyMaterial } from '@/api/index'
 import { BEAD_LOADING_PLACEHOLDER_PATH } from '@/pages/diy/engine/three/index'
 import type { MaterialGroup } from '@/pages/diy/model/types'
+import { INITIAL_MATERIAL_GROUP_LIMIT } from '@/pages/diy/page/constants'
 import type { DiyPageInstance, SubcategoryTab } from '@/pages/diy/page/types'
 import { formatMoney } from '@/pages/diy/page/utils'
 import { appSound } from '@/services/sound'
 import { resolveCanvasImageUrl } from '@/utils/material-image'
 
-export const INITIAL_GROUP_LIMIT = 10
 const GROUP_LIMIT_INCREMENT = 24
 const FIRST_SCREEN_IMAGE_LIMIT = 10
 const DEFAULT_MATERIAL_SIZE_MM = 8
@@ -21,10 +21,6 @@ function formatSubcategoryLabel(category: string, subcategory: string): string {
     return `${subcategory.replace(/色系$/, '')}水晶`
   }
   return subcategory
-}
-
-function getMaterialSubcategory(material: DiyMaterial): string {
-  return material.subcategory
 }
 
 function buildMaterialUsageCounts(beads: Array<{ materialId: string }>): Map<string, number> {
@@ -140,7 +136,9 @@ export const materialPageMethods = {
     const categoryMaterials = this.materials.filter((material) => (
       material.category === this.data.currentCategory
     ))
-    const subcategoryNames = Array.from(new Set(categoryMaterials.map(getMaterialSubcategory)))
+    const subcategoryNames = Array.from(new Set(
+      categoryMaterials.map((material) => material.subcategory),
+    ))
     const subcategories: SubcategoryTab[] = [
       { id: USING_MATERIALS_SUBCATEGORY_ID, label: '正在使用' },
       { id: 'all', label: '全部' },
@@ -161,14 +159,14 @@ export const materialPageMethods = {
     const filteredMaterials = filterSource.filter((material) => {
       const matchesSubcategory = usingMaterialIds
         ? usingMaterialIds.has(material.id)
-        : currentSubcategory === 'all' || getMaterialSubcategory(material) === currentSubcategory
+        : currentSubcategory === 'all' || material.subcategory === currentSubcategory
       const matchesSearch = !query
         || material.name.toLowerCase().includes(query)
         || material.materialType.toLowerCase().includes(query)
       return matchesSubcategory && matchesSearch
     })
 
-    this.visibleGroupLimit = INITIAL_GROUP_LIMIT
+    this.visibleGroupLimit = INITIAL_MATERIAL_GROUP_LIMIT
     this.allVisibleGroups = buildMaterialGroups(
       filteredMaterials,
       this.selectedSizeByGroup,

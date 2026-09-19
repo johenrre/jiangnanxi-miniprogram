@@ -6,7 +6,6 @@ import type {
 } from '@/pages/diy/engine/three/index'
 import type {
   DiyBead,
-  EditorSnapshot,
   MaterialGroup,
   RingTarget,
   TouchPoint,
@@ -66,8 +65,6 @@ export interface DragState {
   latestPoint: TouchPoint
   renderedPoint: TouchPoint
   projectedPoint: TouchPoint | null
-  snapshot: EditorSnapshot | null
-  originalIndex: number
   insertionIndex: number
   reflowTargets: Map<string, RingTarget> | null
 }
@@ -108,14 +105,13 @@ export interface DiyPageData {
   selectedWristStrands: DiyWristStrands
 }
 
-export interface DiyPageCustom {
+export interface DiyRuntimeState {
   materials: DiyMaterial[]
   materialById: Record<string, DiyMaterial>
   selectedSizeByGroup: Record<string, number>
   allVisibleGroups: MaterialGroup[]
   visibleGroupLimit: number
   beads: DiyBead[]
-  history: EditorSnapshot[]
   uidSequence: number
   canvas: DiyWebglCanvas | null
   renderer: Bracelet3DRenderer | null
@@ -144,6 +140,9 @@ export interface DiyPageCustom {
   expectsTemplateDesign: boolean
   templateDesignApplying: boolean
   templateDesignApplied: boolean
+}
+
+export interface DiyPageMethods {
   acceptTemplateDesign(design: DiyDesignSnapshot): void
   loadMaterials(forceRefresh?: boolean): Promise<void>
   loadDiyPresentation(): Promise<void>
@@ -164,7 +163,7 @@ export interface DiyPageCustom {
   showWristFitWarning(message?: string): void
   showCurrentWristFitWarning(): boolean
   tryApplyTemplateDesign(): Promise<void>
-  addMaterialToBracelet(material: DiyMaterial, recordHistory?: boolean): boolean
+  addMaterialToBracelet(material: DiyMaterial): boolean
   updateEditorSummary(): void
   scheduleRender(): void
   requestAnimationFrame(): void
@@ -180,10 +179,7 @@ export interface DiyPageCustom {
   applyCurrentRingLayout(beads: DiyBead[]): void
   getEditorRingLayout(): RingLayout
   buildCurrentRingTargets(beads: DiyBead[]): RingTarget[]
-  createSnapshot(): EditorSnapshot
-  pushHistory(snapshot?: EditorSnapshot): void
-  restoreSnapshot(snapshot: EditorSnapshot): void
-  removeBead(uid: string, historySnapshot?: EditorSnapshot, recordHistory?: boolean): void
+  removeBead(uid: string): void
   getCanvasTouchPoint(event: WechatMiniprogram.TouchEvent, useChangedTouches?: boolean): TouchPoint | null
   isPointOutsideRemovalBoundary(point: TouchPoint): boolean
   finishTouch(event: WechatMiniprogram.TouchEvent): void
@@ -217,5 +213,7 @@ export interface DiyPageCustom {
   handleConfirmSaveDesign(): Promise<void>
   handleAddToCart(): Promise<void>
 }
+
+export interface DiyPageCustom extends DiyRuntimeState, DiyPageMethods {}
 
 export type DiyPageInstance = WechatMiniprogram.Page.Instance<DiyPageData, DiyPageCustom>

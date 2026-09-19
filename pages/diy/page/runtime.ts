@@ -1,0 +1,41 @@
+import { INITIAL_MATERIAL_GROUP_LIMIT } from '@/pages/diy/page/constants'
+import type { DiyRuntimeState } from '@/pages/diy/page/types'
+
+export function createDiyRuntimeState(): DiyRuntimeState {
+  return {
+    materials: [],
+    materialById: {},
+    selectedSizeByGroup: {},
+    allVisibleGroups: [],
+    visibleGroupLimit: INITIAL_MATERIAL_GROUP_LIMIT,
+    beads: [],
+    uidSequence: 0,
+    canvas: null,
+    renderer: null,
+    canvasLeft: 0,
+    canvasTop: 0,
+    canvasWidth: 0,
+    canvasHeight: 0,
+    frameRequestId: null,
+    lastFrameTimestamp: 0,
+    renderDirty: true,
+    pageVisible: false,
+    ringAnimation: null,
+    editorRingLayoutCache: null,
+    editorOrigin: null,
+    dragState: null,
+    firstScreenMaterialImagesReady: false,
+    firstCanvasFrameRendered: false,
+    entryMaskOpenedAt: 0,
+    entryMaskRevealTimer: null,
+    entryMaskRemovalTimer: null,
+    entryMaskTimeoutTimer: null,
+    wristFitWarningTimer: null,
+    audioWarmupTimer: null,
+    templateDesignSequence: 0,
+    pendingTemplateDesign: null,
+    expectsTemplateDesign: false,
+    templateDesignApplying: false,
+    templateDesignApplied: false,
+  }
+}

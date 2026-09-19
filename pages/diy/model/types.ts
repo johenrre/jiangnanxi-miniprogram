@@ -43,10 +43,6 @@ export interface RingTarget {
   angle: number
 }
 
-export interface EditorSnapshot {
-  beads: DiyBead[]
-}
-
 export interface TouchPoint {
   x: number
   y: number

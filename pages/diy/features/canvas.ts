@@ -447,7 +447,6 @@ export const canvasPageMethods = {
       dragState.mode !== 'bead'
       || !dragState.uid
       || !dragState.bead
-      || !dragState.snapshot
     ) {
       this.scheduleRender()
       return
@@ -463,7 +462,7 @@ export const canvasPageMethods = {
     }
 
     if (this.isPointOutsideRemovalBoundary(point)) {
-      this.removeBead(dragState.uid, dragState.snapshot)
+      this.removeBead(dragState.uid)
       return
     }
 
@@ -482,7 +481,6 @@ export const canvasPageMethods = {
     if (currentIndex < 0) return
     this.beads.splice(currentIndex, 1)
     this.beads.splice(Math.min(insertionIndex, this.beads.length), 0, draggedBead)
-    if (insertionIndex !== dragState.originalIndex) this.pushHistory(dragState.snapshot)
     this.invalidateRingLayoutCaches()
     appSound.play('discard')
     this.startRingAnimation(420)
@@ -506,8 +504,6 @@ export const canvasPageMethods = {
       latestPoint: point,
       renderedPoint: point,
       projectedPoint: null,
-      snapshot: bead ? this.createSnapshot() : null,
-      originalIndex: beadIndex,
       insertionIndex: beadIndex,
       reflowTargets: null,
     }
